@@ -10,7 +10,8 @@ python = "^3.8"
 uvicorn = {version = "^0.23.2", extras = ["standard"]}
 fastapi = "^0.104.0"
 supabase = "^1.2.0"
-
+prometheus_fastapi_instrumentator = "^6.1.0"
+python-dotenv = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]

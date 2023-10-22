@@ -1,5 +1,5 @@
 from fastapi import Request, APIRouter
-from controller.labs import get_hours
+#from controller.labs import get_hours
 import os
 from dotenv import load_dotenv
 from supabase import create_client
@@ -21,13 +21,13 @@ async def root():
     return response
 
 
-@router.get("/hours/{labid}")
-def hours(
-    request: Request,
-    labid: str,
-    sid: str
-):
-    return get_hours(
-        labid=labid,
-        sid = sid,
-    )
+#@router.get("/hours/{labid}")
+#def hours(
+#    request: Request,
+#    labid: str,
+#    sid: str
+#):
+#    return get_hours(
+#        labid=labid,
+#        sid = sid,
+#    )
