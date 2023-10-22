@@ -1,11 +1,8 @@
 import os
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
-from .routes import router
 from prometheus_fastapi_instrumentator import Instrumentator
 from routes import router
-
-
 
 app = FastAPI()
 instrumentator = Instrumentator().instrument(app)
