@@ -15,7 +15,6 @@ async def get_block(bloque_id:int):
 async def newblock(bloque: Bloque):
     print(bloque.model_dump())  # Asegúrate de que los datos se imprimen correctamente
     response = supabase.table('Bloque').insert({
-        "id":bloque.id,
         "hora_inicio":bloque.hora_inicio,
         "hora_fin":bloque.hora_fin    
         }).execute()
@@ -30,3 +29,15 @@ async def delete_block(bloque_id:int):
     else:
         return {'message':'No existe el bloque con esta id'}
 
+async def new_room(sala: Sala):
+    print(sala.model_dump())
+    response = supabase.table('Sala').insert({
+        "capacidad":sala.capacidad,
+        "nombre":sala.nombre
+    }).execute()
+    return response
+
+async def get_rooms():
+    response = supabase.table('Sala').select('*').execute()
+    print(response)
+    return response

@@ -1,9 +1,3 @@
-import sys
-import os
-current_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_dir,"..", "database"))
-sys.path.append(os.path.join(current_dir, "..", "core"))
-
 from ..database.models import *
 from ..core.methods import *
 from fastapi import Request, APIRouter
@@ -29,3 +23,12 @@ async def deleteBlock(bloque_id:int):
     result = await delete_block(bloque_id)
     return result
 
+@router.post("/salas")
+async def newRoom(sala:Sala):
+    result = await new_room(sala)
+    return result
+
+@router.get("/salas")
+async def getRoom():
+    result = await get_rooms()
+    return result
