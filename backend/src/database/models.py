@@ -1,5 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
+
 class Bloque(BaseModel):
     id: Optional[int] = None
     hora_inicio: str

@@ -2,7 +2,7 @@ from ..database.models import *
 from ..core.methods import *
 from fastapi import Request, APIRouter
 router = APIRouter()
-
+################################### BLOQUES ROUTES ################################### 
 @router.get("/bloques")
 async def getBlocks():
     result = await get_blocks()
@@ -23,6 +23,8 @@ async def deleteBlock(bloque_id:int):
     result = await delete_block(bloque_id)
     return result
 
+################################### SALAS ROUTES ################################### 
+
 @router.post("/salas", status_code=201)
 async def newRoom(sala:Sala):
     result = await new_room(sala)
@@ -31,4 +33,10 @@ async def newRoom(sala:Sala):
 @router.get("/salas")
 async def getRoom():
     result = await get_rooms()
+    return result
+
+@router.delete("/salas/{sala_nombre}")
+async def deleteRoom(sala_nombre:str):
+    print("wena po entre")
+    result = await delete_room(sala_nombre)
     return result
