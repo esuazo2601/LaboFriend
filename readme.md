@@ -11,7 +11,7 @@
 ```
 pip install poetry
 ```
-1. Ubicarse en la carpeta /backend y ejecutar:
+2. Ubicarse en la carpeta /backend y ejecutar:
 ```
 poetry install
 ``` 
