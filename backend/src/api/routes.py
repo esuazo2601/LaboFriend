@@ -32,3 +32,8 @@ async def newRoom(sala:Sala):
 async def getRoom():
     result = await get_rooms()
     return result
+
+@router.delete("/salas/{sala_id}")
+async def deleteRoom(sala_id:int):
+    result = await delete_room(sala_id)
+    return result

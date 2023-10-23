@@ -41,3 +41,11 @@ async def get_rooms():
     response = supabase.table('Sala').select('*').execute()
     print(response)
     return response
+
+async def delete_room(sala_id:int):
+    response = supabase.table('Sala').select('*').eq('id', sala_id).execute()
+    if response.data:
+        supabase.table('Sala').delete().eq('id',sala_id).execute()
+        return {f'message':'Sala con id: {sala_id} fue borrada'}
+    else:
+        return {'message':'No se encuentra la sala con esta id'}
