@@ -10,18 +10,22 @@ from fastapi import Request, APIRouter
 router = APIRouter()
 
 @router.get("/bloques")
-def getBlocks():
-    return get_blocks()
+async def getBlocks():
+    result = await get_blocks()
+    return result
 
 @router.get("/bloques/{bloque_id}")
-def getBlock(bloque_id:int):
-    return get_block(bloque_id)
+async def getBlock(bloque_id:int):
+    result = await get_block(bloque_id)
+    return result
 
 @router.post("/bloques")
-def newBlock(bloque:Bloque):
-    return newblock(bloque)
+async def newBlock(bloque:Bloque):
+    result = await newblock(bloque)
+    return result
 
 @router.delete ("/bloques/{bloque_id}")
-def deleteBlock(bloque_id:int):
-    delete_block(bloque_id)
+async def deleteBlock(bloque_id:int):
+    result = await delete_block(bloque_id)
+    return result
 

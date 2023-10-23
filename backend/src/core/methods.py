@@ -5,7 +5,7 @@ from ..database.models import *
 async def get_blocks():
     response = supabase.table('Bloque').select("*").execute()
     print(response)
-    return response
+    return response.data
 
 async def get_block(bloque_id:int):
     response,count = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
