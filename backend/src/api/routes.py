@@ -13,7 +13,7 @@ async def getBlock(bloque_id:int):
     result = await get_block(bloque_id)
     return result
 
-@router.post("/bloques")
+@router.post("/bloques", status_code=201)
 async def newBlock(bloque:Bloque):
     result = await newblock(bloque)
     return result
@@ -23,7 +23,7 @@ async def deleteBlock(bloque_id:int):
     result = await delete_block(bloque_id)
     return result
 
-@router.post("/salas")
+@router.post("/salas", status_code=201)
 async def newRoom(sala:Sala):
     result = await new_room(sala)
     return result
