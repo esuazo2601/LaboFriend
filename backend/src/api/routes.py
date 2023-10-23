@@ -37,6 +37,5 @@ async def getRoom():
 
 @router.delete("/salas/{sala_nombre}")
 async def deleteRoom(sala_nombre:str):
-    print("wena po entre")
     result = await delete_room(sala_nombre)
     return result
