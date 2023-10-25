@@ -48,6 +48,10 @@ class Microorganismo(BaseModel):
     procedencia: str
     detalles: str
 
+class ActualizarMicroorganismo(BaseModel):
+    procedencia:Optional[str] = None
+    detalles:Optional[str] = None
+
 class Producto_en_sala(BaseModel):
     id_producto:int
     cantidad:int

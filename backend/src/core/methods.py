@@ -1,5 +1,6 @@
 from ..database.dbconfig import supabase
 from ..database.models import *
+from fastapi import HTTPException
 
 #BLOCK METHODS
 async def get_blocks():
@@ -49,3 +50,53 @@ async def delete_room(sala_id:int):
         return {f'message':'Sala con id: {sala_id} fue borrada'}
     else:
         return {'message':'No se encuentra la sala con esta id'}
+    
+async def add_microorg(microorganismo:Microorganismo):
+    response = supabase.table('Microorganismo').insert({
+        "nombre_cientifico":microorganismo.nombre_cientifico,
+        "nombre_comun":microorganismo.nombre_comun,
+        "procedencia":microorganismo.procedencia,
+        "detalles":microorganismo.detalles
+    }).execute()
+    return response
+
+async def add_microorg(microorganismo:Microorganismo):
+    response = supabase.table('Microorganismo').insert({
+        "nombre_cientifico":microorganismo.nombre_cientifico,
+        "nombre_comun":microorganismo.nombre_comun,
+        "procedencia":microorganismo.procedencia,
+        "detalles":microorganismo.detalles
+    }).execute()
+    return response
+
+async def delete_microorg(id:int):
+    response = supabase.table('Microorganismo').delete().eq('id',id).execute()
+    if response:
+        return response
+    else:
+        return {'message':f'No se encontró microorganismo de id: {id}'}
+
+
+async def get_microorg_cm(nombre_comun:str):
+    response = supabase.table('Microorganismo').select('').eq('nombre_comun',nombre_comun).execute()
+    return response
+
+async def get_microorg_cin(nombre_cientifico:str):
+    response = supabase.table('Microorganismo').select('').eq('nombre_cientifico',nombre_cientifico).execute()
+    return response
+
+async def update_microorg(id:int,nuevo:ActualizarMicroorganismo):
+    print(f"id {id} , detalles {nuevo.detalles}, procedencia {nuevo.procedencia}")
+    if nuevo.procedencia and nuevo.detalles:
+        response = supabase.table('Microorganismo').update({"detalles":nuevo.detalles, "procedencia":nuevo.procedencia}).eq('id',id).execute()
+        return response
+    elif nuevo.detalles:
+        print("Entre aqui al else de detalles")
+        response = supabase.table('Microorganismo').update({"detalles":nuevo.detalles}).eq('id',id).execute()
+        return response
+    elif nuevo.procedencia:
+        response = supabase.table('Microorganismo').update({"procedencia":nuevo.procedencia}).eq('id',id).execute()
+        return response
+    else:
+        print("Entre aqui al execption")
+        raise HTTPException(status_code=406,detail="No se especifica que se cambia")
