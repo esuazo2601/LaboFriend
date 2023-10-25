@@ -38,9 +38,14 @@ class Inv_microorganismo(BaseModel):
 
 class Investigacion(BaseModel):
     id: Optional[int] = None
-    descripcion: str
     titulo: str
+    descripcion: str
     fecha: str
+
+class ActualizarInvestigacion(BaseModel):
+    titulo: Optional[str] = None
+    descripcion: Optional[str] = None
+    fecha: Optional[str] = None
 
 class Microorganismo(BaseModel):
     id: Optional[int] = None
