@@ -1,8 +1,10 @@
 from ..database.models import *
 from ..core.methods import *
-from fastapi import Request, APIRouter
+from fastapi import APIRouter
+from fastapi import HTTPException
 router = APIRouter()
 
+################################### BLOQUES ROUTES ################################### 
 @router.get("/bloques")
 async def getBlocks():
     result = await get_blocks()
@@ -23,6 +25,8 @@ async def deleteBlock(bloque_id:int):
     result = await delete_block(bloque_id)
     return result
 
+################################### SALAS ROUTES ################################### 
+
 @router.post("/salas", status_code=201)
 async def newRoom(sala:Sala):
     result = await new_room(sala)
@@ -33,16 +37,12 @@ async def getRoom():
     result = await get_rooms()
     return result
 
-@router.delete("/salas/{sala_id}")
-async def deleteRoom(sala_id:int):
-    result = await delete_room(sala_id)
+@router.delete("/salas/{sala_nombre}")
+async def deleteRoom(sala_nombre:str):
+    result = await delete_room(sala_nombre)
     return result
 
-@router.post("/microorganismo", status_code=201)
-async def addMicroorg(microorganismo:Microorganismo):
-    result = await add_microorg(microorganismo)
-    return result
-
+################################### MICROORGANISMO ROUTES ################################### 
 @router.post("/microorganismo", status_code=201)
 async def addMicroorg(microorganismo:Microorganismo):
     result = await add_microorg(microorganismo)
@@ -53,6 +53,7 @@ async def getMicroorgCin(nombre_cientifico:str):
     result = await get_microorg_cin(nombre_cientifico)
     if len(result.data)==0:
         raise HTTPException(status_code=404,detail="No se encontro el microorganismo")
+    
     return result
 
 @router.get("/microorganismo/{nombre_comun}", status_code=302)
@@ -60,7 +61,7 @@ async def getMicroorgCm(nombre_comun:str):
     result = await get_microorg_cm(nombre_comun)
     if len(result.data)==0:
         raise HTTPException(status_code=404,detail="No se encontro el microorganismo")
-
+    
 
 @router.delete("/microorganismo/{id_microorg}", status_code=202)
 async def deleteMicroorg(id_microorg:int):
@@ -70,4 +71,41 @@ async def deleteMicroorg(id_microorg:int):
 @router.put("/microorganismo_update/{id}", status_code=202)
 async def updateMicroorg(id:int,nuevo:ActualizarMicroorganismo ):
     result = await update_microorg(id,nuevo)
+    return result
+################################### INVESTIGACIÓN ROUTES ################################### 
+
+@router.post("/investigacion", status_code=201)
+async def addInvestigacion(investigacion:Investigacion):
+    result = await add_investigacion(investigacion)
+    return result
+
+@router.get("/investigacion_id/{id_inv}", status_code=302)
+async def getInvestigacionId(id_inv:int):
+    result = await get_investigacion_id(id_inv)
+    if len(result.data)==0:
+        raise HTTPException(status_code=404,detail="No se encontro la investigacion")
+    return result
+
+@router.get("/investigacion_name/{name_inv}", status_code=302)
+async def getInvestigacionNm(name_inv:str):
+    result = await get_investigacion_nm(name_inv)
+    if len(result.data)==0:
+        raise HTTPException(status_code=404,detail="No se encontro la investigacion")
+    return result
+
+@router.get("/investigacion_date/{date_inv}", status_code=302)
+async def getInvestigacionDate(date_inv:str):
+    result = await get_investigacion_date(date_inv)
+    if len(result.data)==0:
+        raise HTTPException(status_code=404,detail="No se encontro la investigacion")
+    return result
+
+@router.delete("/investigacion/{id_inv}", status_code=202)
+async def deleteInvestigacion(id_inv:int):
+    result = await delete_inv(id_inv)
+    return result
+
+@router.put("/investigacion_update/{id}", status_code=202)
+async def updateInv(id:int,nuevo:ActualizarInvestigacion):
+    result = await update_inv(id,nuevo)
     return result

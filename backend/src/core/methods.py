@@ -1,17 +1,18 @@
 from ..database.dbconfig import supabase
 from ..database.models import *
 from fastapi import HTTPException
+from datetime import datetime,timedelta
 
-#BLOCK METHODS
+################################### BLOQUES METHODS ################################### 
 async def get_blocks():
     response = supabase.table('Bloque').select("*").execute()
     print(response)
     return response.data
 
 async def get_block(bloque_id:int):
-    response,count = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
+    response = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
     print(response)
-    return response,count
+    return response
 
 async def newblock(bloque: Bloque):
     print(bloque.model_dump())  # Asegúrate de que los datos se imprimen correctamente
@@ -26,9 +27,11 @@ async def delete_block(bloque_id:int):
     print (data)
     if data.data:
         response = supabase.table('Bloque').delete().eq("id",bloque_id).execute()
-        return {'message':f'Se elimino el bloque con id: {11}'},response
+        return {'message':f'Se elimino el bloque con id: {bloque_id}'},response
     else:
         return {'message':'No existe el bloque con esta id'}
+
+################################### SALAS METHODS ################################### 
 
 async def new_room(sala: Sala):
     print(sala.model_dump())
@@ -43,22 +46,15 @@ async def get_rooms():
     print(response)
     return response
 
-async def delete_room(sala_id:int):
-    response = supabase.table('Sala').select('*').eq('id', sala_id).execute()
+async def delete_room(sala_nombre:str):
+    response = supabase.table('Sala').select('*').eq('nombre', sala_nombre).execute()
     if response.data:
-        supabase.table('Sala').delete().eq('id',sala_id).execute()
-        return {f'message':'Sala con id: {sala_id} fue borrada'}
+        supabase.table('Sala').delete().eq('nombre', sala_nombre).execute()
+        return {'message':f'Sala con nombre: {sala_nombre} fue borrada'}
     else:
-        return {'message':'No se encuentra la sala con esta id'}
+        return {'message':'No se encuentra la sala con esta id'} 
     
-async def add_microorg(microorganismo:Microorganismo):
-    response = supabase.table('Microorganismo').insert({
-        "nombre_cientifico":microorganismo.nombre_cientifico,
-        "nombre_comun":microorganismo.nombre_comun,
-        "procedencia":microorganismo.procedencia,
-        "detalles":microorganismo.detalles
-    }).execute()
-    return response
+################################### MICROORGANISMOS METHODS ################################### 
 
 async def add_microorg(microorganismo:Microorganismo):
     response = supabase.table('Microorganismo').insert({
@@ -75,28 +71,81 @@ async def delete_microorg(id:int):
         return response
     else:
         return {'message':f'No se encontró microorganismo de id: {id}'}
-
+    
 
 async def get_microorg_cm(nombre_comun:str):
-    response = supabase.table('Microorganismo').select('').eq('nombre_comun',nombre_comun).execute()
+    response = supabase.table('Microorganismo').select('*').eq('nombre_comun',nombre_comun).execute()
     return response
 
 async def get_microorg_cin(nombre_cientifico:str):
-    response = supabase.table('Microorganismo').select('').eq('nombre_cientifico',nombre_cientifico).execute()
+    response = supabase.table('Microorganismo').select('*').eq('nombre_cientifico',nombre_cientifico).execute()
     return response
 
 async def update_microorg(id:int,nuevo:ActualizarMicroorganismo):
-    print(f"id {id} , detalles {nuevo.detalles}, procedencia {nuevo.procedencia}")
     if nuevo.procedencia and nuevo.detalles:
         response = supabase.table('Microorganismo').update({"detalles":nuevo.detalles, "procedencia":nuevo.procedencia}).eq('id',id).execute()
         return response
     elif nuevo.detalles:
-        print("Entre aqui al else de detalles")
         response = supabase.table('Microorganismo').update({"detalles":nuevo.detalles}).eq('id',id).execute()
         return response
     elif nuevo.procedencia:
         response = supabase.table('Microorganismo').update({"procedencia":nuevo.procedencia}).eq('id',id).execute()
         return response
     else:
-        print("Entre aqui al execption")
+        raise HTTPException(status_code=406,detail="No se especifica que se cambia")
+
+################################### INVESTIGACION METHODS ################################### 
+
+async def add_investigacion(investigacion:Investigacion):
+    response = supabase.table('Investigacion').insert({
+        "titulo":investigacion.titulo,
+        "descripcion":investigacion.descripcion,
+        "fecha":investigacion.fecha
+        
+    }).execute()
+    return response
+
+async def get_investigacion_id(id_inv:int):
+    response = supabase.table('Investigacion').select('*').eq('id',id_inv).execute()
+    return response
+
+async def get_investigacion_nm(name_inv:str):
+    response = supabase.table('Investigacion').select('*').eq('titulo',name_inv).execute()
+    return response
+
+async def get_investigacion_date(fecha: str):
+    # Convierte la fecha proporcionada en un objeto datetime
+    fecha_obj = datetime.strptime(fecha, '%Y-%m-%d')
+
+    # Calcula la fecha de inicio (medianoche) y fecha de finalización (un minuto antes de la medianoche del día siguiente)
+    fecha_inicio = fecha_obj.replace(hour=0, minute=0, second=0, microsecond=0)
+    fecha_fin = fecha_inicio + timedelta(days=1)
+
+    # Consulta la base de datos utilizando operadores de filtro personalizados
+    response = supabase.table('Investigacion').select('*').filter(
+        'fecha', 'gte', fecha_inicio.strftime('%Y-%m-%d %H:%M:%S')
+    ).filter(
+        'fecha', 'lt', fecha_fin.strftime('%Y-%m-%d %H:%M:%S')
+    ).execute()
+    
+    return response
+
+async def delete_inv(id:int):
+    response = supabase.table('Investigacion').delete().eq('id',id).execute()
+    if response:
+        return response
+    else:
+        return {'message':f'No se encontró la investigación de id: {id}'}
+
+async def update_inv(id:int,nuevo:ActualizarInvestigacion):
+    if nuevo.titulo:
+        response = supabase.table('Investigacion').update({"titulo":nuevo.titulo}).eq('id',id).execute()
+        return response
+    if nuevo.descripcion:
+        response = supabase.table('Investigacion').update({"descripcion":nuevo.descripcion}).eq('id',id).execute()
+        return response
+    if nuevo.fecha:
+        response = supabase.table('Investigacion').update({"fecha":nuevo.fecha}).eq('id',id).execute()
+        return response
+    else:
         raise HTTPException(status_code=406,detail="No se especifica que se cambia")
