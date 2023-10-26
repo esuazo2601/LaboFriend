@@ -111,10 +111,9 @@ async def updateInv(id:int,nuevo:ActualizarInvestigacion):
 
 ################################### PRODUCTO ROUTES ################################### 
 
-#UPSERT MAYBE?
 @router.post("/producto", status_code=201)
 async def addProducto(producto:Producto):
-    result = await add_producto(producto)
+    result = await upsert_producto(producto)
     return result
 
 @router.get("/producto_name/{nombre_producto}", status_code=302)
@@ -136,10 +135,8 @@ async def updateProducto(id:int,nuevo:ActualizarProducto ):
     result = await update_producto(id,nuevo)
     return result 
 
-#DE VERDAD QUEREMOS DELETEAR COMPLETAMENTE EL REGISTRO?
-
-""" @router.delete("/microorganismo/{id_microorg}", status_code=202)
-async def deleteMicroorg(id_microorg:int):
-    result = await delete_microorg(id_microorg)
+@router.delete("/producto/{id_producto}", status_code=202)
+async def deleteProduct(id_producto:int):
+    result = await delete_product(id_producto)
     return result
-"""
+
