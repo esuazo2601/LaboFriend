@@ -12,6 +12,9 @@ class Producto(BaseModel):
     cantidad_total: int
     tipo: str
 
+class ActualizarProducto(BaseModel):
+    cantidad_total: int
+
 class Agenda(BaseModel):
     id: Optional[int] = None
     id_estudiante: int

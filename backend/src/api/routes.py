@@ -53,7 +53,6 @@ async def getMicroorgCin(nombre_cientifico:str):
     result = await get_microorg_cin(nombre_cientifico)
     if len(result.data)==0:
         raise HTTPException(status_code=404,detail="No se encontro el microorganismo")
-    
     return result
 
 @router.get("/microorganismo/{nombre_comun}", status_code=302)
@@ -61,7 +60,7 @@ async def getMicroorgCm(nombre_comun:str):
     result = await get_microorg_cm(nombre_comun)
     if len(result.data)==0:
         raise HTTPException(status_code=404,detail="No se encontro el microorganismo")
-    
+    return result
 
 @router.delete("/microorganismo/{id_microorg}", status_code=202)
 async def deleteMicroorg(id_microorg:int):
@@ -109,3 +108,35 @@ async def deleteInvestigacion(id_inv:int):
 async def updateInv(id:int,nuevo:ActualizarInvestigacion):
     result = await update_inv(id,nuevo)
     return result
+
+################################### PRODUCTO ROUTES ################################### 
+
+@router.post("/producto", status_code=201)
+async def addProducto(producto:Producto):
+    result = await upsert_producto(producto)
+    return result
+
+@router.get("/producto_name/{nombre_producto}", status_code=302)
+async def getProductoNm(nombre_producto:str):
+    result = await get_producto_nm(nombre_producto)
+    if len(result.data)==0:
+        raise HTTPException(status_code=404,detail="No se encontro el producto")
+    return result
+
+@router.get("/producto_id/{id_prod}", status_code=302)
+async def getProductoId(id_prod:int):
+    result = await get_producto_id(id_prod)
+    if len(result.data)==0:
+        raise HTTPException(status_code=404,detail= "No se encontro el producto")
+    return result
+
+@router.put("/producto_update/{id}", status_code=202)
+async def updateProducto(id:int,nuevo:ActualizarProducto ):
+    result = await update_producto(id,nuevo)
+    return result 
+
+@router.delete("/producto/{id_producto}", status_code=202)
+async def deleteProduct(id_producto:int):
+    result = await delete_product(id_producto)
+    return result
+
