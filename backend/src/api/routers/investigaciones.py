@@ -2,7 +2,7 @@ from ...database.models import *
 from ...core.methods import *
 from fastapi import APIRouter
 from fastapi import HTTPException
-router = APIRouter()
+router = APIRouter(tags=["Investigaciones"])
 
 @router.post("/investigacion", status_code=201)
 async def addInvestigacion(investigacion:Investigacion):

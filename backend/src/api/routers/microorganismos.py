@@ -2,7 +2,7 @@ from ...database.models import *
 from ...core.methods import *
 from fastapi import APIRouter
 from fastapi import HTTPException
-router = APIRouter()
+router = APIRouter(tags=["microorganismos"])
 
 @router.post("/microorganismo", status_code=201)
 async def addMicroorg(microorganismo:Microorganismo):
