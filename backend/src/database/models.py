@@ -78,6 +78,9 @@ class Trabaja(BaseModel):
 
 class Usuario(BaseModel):
     email: str
-    id: int
-    nombre: str
+    nombre: Optional[str] = None
+
+class UsuarioDB(Usuario):
     password: str
+
+

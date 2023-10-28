@@ -1,7 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from prometheus_fastapi_instrumentator import Instrumentator
-from .routers import bloques, investigaciones, microorganismos, productos, salas
+from .routers import bloques, investigaciones, microorganismos, productos, salas, usuarios
 
 
 
@@ -11,6 +11,7 @@ app.include_router(bloques.router)
 app.include_router(microorganismos.router)
 app.include_router(productos.router)
 app.include_router(salas.router)
+app.include_router(usuarios.router)
 instrumentator = Instrumentator().instrument(app)
 
 app.add_middleware(
