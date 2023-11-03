@@ -1,0 +1,44 @@
+/* Con ayuda de la extensión de chrome WhatFont */
+@font-face {
+    font-family: 'Lato Light';
+    src: url('../../public/fonts/Lato-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+  
+.letra-grande {
+    font-family: 'Lato Light', "LatoWeb", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 45px;
+    line-height: 43px;
+    color: #2d3b45;
+    margin-top: 35px;
+}
+
+.letra-mediana {
+    font-family: 'Lato Light', "LatoWeb", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 43px;
+    color: #2d3b45;
+}
+
+.linea-divisora {
+    border-bottom: 0 px solid black; 
+}
+
+.opcion-inventario {
+    display: inline-block; 
+    margin-right: 20px; 
+}
+
+.letra-mediana.seleccionada {
+    text-decoration: underline 1px;
+    /* font-weight: bold;   */
+}
+  
+  
+  
+
+
+  

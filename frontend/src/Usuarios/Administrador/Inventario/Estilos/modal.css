@@ -1,0 +1,70 @@
+.button-icon {
+    margin-right: 20px;
+    margin-left: 20px;
+    background-color: #507E9D ; 
+    color: black;
+    border: 2px solid #507E9D;
+  }
+  
+.modal-header-custom {
+    background-color: #9CACBA;
+    color: black; 
+    font-size: 20px;
+  }
+
+  .modal-body-custom {
+    background-color: #D5D7E5;
+    color: black;
+    font-size: 30px;
+    height: 300px; 
+    overflow-y: auto; 
+  }
+  
+  .modal-footer-custom {
+    background-color: #9CACBA;
+  }
+
+  .modal {
+    font-family: 'Lato Light', "LatoWeb", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+  }
+
+  .header-name {
+    font-weight: bold;
+  }
+
+  .modal-body-custom {
+    background-color: #D5D7E5;
+    color: black;
+    font-size: 30px;
+    height: 150px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    overflow-y: auto;
+  }
+
+  .modal-button {
+    color: black;
+    font-size: 18px;
+  }
+
+  .btn-cancel {
+    background-color: gray;
+    border: 2px solid gray;
+   
+  }
+  
+  .btn-save {
+    background-color: #507E9D;
+    border: 2px solid #507E9D;
+  }
+  
+  
+
+
+  
+
+  
+  
+  
