@@ -1,16 +1,28 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { HomeProvider } from './ComponentesGlobales/Contextos/HomeContext';
-import AnimatedRoutes from './Rutas/AnimatedRoutes';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import AdministradorSidebar from './Usuarios/Administrador/AdministradorSideBar';
+import AdministadorCuenta from './Usuarios/Administrador/Cuenta/AdministradorCuenta'
+import AdministadorTablero from './Usuarios/Administrador/Tablero/AdministradorTablero'
+import AdministadorInventario from './Usuarios/Administrador/Inventario/AdministradorInventario'
+import AdministadorInvestigaciones from './Usuarios/Administrador/Investigaciones/AdminitradorInventigaciones'
+import AdministadorReservaHora from './Usuarios/Administrador/ReservaHoras/AdministradorReservaHoras'
+import AdministadorNotificaciones from './Usuarios/Administrador/Notificaciones/AdministradorNotificaciones'
 
-function App() {
+function Home() {
   return (
-    //<HomeProvider>
-      <Router>
-        <AnimatedRoutes/>
-      </Router>
-    //</HomeProvider>
+    <BrowserRouter>
+      <AdministradorSidebar>
+        <Routes>
+          <Route path="/administrador/cuenta" element={<AdministadorCuenta />} />
+          <Route path="/administrador/tablero" element={<AdministadorTablero />} />
+          <Route path="/administrador/inventario" element={<AdministadorInventario />} />
+          <Route path="/administrador/investigaciones" element={<AdministadorInvestigaciones />} />
+          <Route path="/administrador/reservaHora" element={<AdministadorReservaHora />} />
+          <Route path="/administrador/notificaciones" element={<AdministadorNotificaciones />} />
+        </Routes>
+      </AdministradorSidebar>
+    </BrowserRouter>
   );
 }
 
-export default App;
+export default Home;

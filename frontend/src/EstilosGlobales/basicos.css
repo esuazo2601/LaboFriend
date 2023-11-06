@@ -1,11 +1,9 @@
-/* Con ayuda de la extensión de chrome WhatFont */
-@font-face {
-    font-family: 'Lato Light';
-    src: url('../../public/fonts/Lato-Light.ttf') format('truetype');
-    font-weight: 300;
-    font-style: normal;
-}
-  
+
+main {
+    margin: 0;
+    padding: 0;
+  }
+ 
 .letra-grande {
     font-family: 'Lato Light', "LatoWeb", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
@@ -36,9 +34,33 @@
     text-decoration: underline 1px;
     /* font-weight: bold;   */
 }
-  
-  
-  
 
-
+.search-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 40px;
+    margin-top: 20px;
+    width: 500px; 
+}
+  
+.search-input {
+    font-family: 'Lato Light', "LatoWeb", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 43px;
+    color: #2d3b45;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 40px 5px 10px;
+    width: 100%; 
+}
+  
+.search-icon {
+    color: #999;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 10px;
+}
   

@@ -5,11 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 
-const ModalStock = ({ show, onHide, fungible, newStock, onIncrease, onDecrease, onSave }) => {
+const ModalStockMicroorganismo = ({ show, onHide, microorganismo, newStock, onIncrease, onDecrease, onSave }) => {
   return (
     <Modal show={show} onHide={onHide} centered={true}>
       <Modal.Header closeButton className="modal-header-custom">
-        <Modal.Title className="ms-auto header-name">{fungible && fungible.nombre}</Modal.Title>
+        <Modal.Title className="ms-auto header-name">{microorganismo && microorganismo.nombre}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="d-flex flex-column align-items-center modal-body-custom">
         <Form>
@@ -36,5 +36,5 @@ const ModalStock = ({ show, onHide, fungible, newStock, onIncrease, onDecrease, 
   );
 };
 
-export default ModalStock;
+export default ModalStockMicroorganismo;
 

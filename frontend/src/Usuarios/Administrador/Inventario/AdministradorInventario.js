@@ -2,27 +2,29 @@ import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import '../../../EstilosGlobales/basicos.css';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Fungible from './Componentes/Fungible';
 import Microorganismo from './Componentes/Microorganismo';
 import Equipo from './Componentes/Equipo';
 
 function AdministradorInventario() {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState('fungible');
+  const [searchTerm, setSearchTerm] = useState(''); 
 
   const renderSelectedComponent = () => {
     switch (selectedOption) {
       case 'fungible':
-        return <Fungible />;
+        return <Fungible searchTerm={searchTerm} />;
       case 'microorganismo':
-        return <Microorganismo />;
+        return <Microorganismo searchTerm={searchTerm} />;
       case 'equipo':
-        return <Equipo />;
+        return <Equipo searchTerm={searchTerm}/>;
       default:
         return null;
     }
   };
-
+  
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -59,6 +61,18 @@ function AdministradorInventario() {
             </p>
           </div>
         </nav>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar por nombre"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <span className="search-icon">
+            <FontAwesomeIcon icon={faSearch} />
+          </span>
+        </div>
         {renderSelectedComponent()}
       </Container>
     </motion.div>
@@ -66,5 +80,3 @@ function AdministradorInventario() {
 }
 
 export default AdministradorInventario;
-
-

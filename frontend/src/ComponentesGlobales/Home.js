@@ -1,20 +1,29 @@
-import { Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import AdministradorSidebar from '../Usuarios/Administrador/AdministradorSideBar';
+import AdministadorCuenta from '../Usuarios/Administrador/Cuenta/AdministradorCuenta'
+import AdministadorTablero from '../Usuarios/Administrador/Tablero/AdministradorTablero'
+import AdministadorInventario from '../Usuarios/Administrador/Inventario/AdministradorInventario'
+import AdministadorInvestigaciones from '../Usuarios/Administrador/Investigaciones/AdminitradorInventigaciones'
+import AdministadorReservaHora from '../Usuarios/Administrador/ReservaHoras/AdministradorReservaHoras'
+import AdministadorNotificaciones from '../Usuarios/Administrador/Notificaciones/AdministradorNotificaciones'
 
 function Home() {
-  const navigate = useNavigate();
-
-  const handleInventoryClick = () => {
-    navigate("/administrador/inventario");
-  };
-
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
-      <Button variant="primary" className="btn btn-primary btn-lg" onClick={handleInventoryClick}>
-        Inventario
-      </Button>
-    </div>
+    <BrowserRouter>
+      <AdministradorSidebar>
+        <Routes>
+          <Route path="/administrador/cuenta" element={<AdministadorCuenta />} />
+          <Route path="/administrador/tablero" element={<AdministadorTablero />} />
+          <Route path="/administrador/inventario" element={<AdministadorInventario />} />
+          <Route path="/administrador/investigaciones" element={<AdministadorInvestigaciones />} />
+          <Route path="/administrador/reservaHora" element={<AdministadorReservaHora />} />
+          <Route path="/administrador/notificaciones" element={<AdministadorNotificaciones />} />
+        </Routes>
+      </AdministradorSidebar>
+    </BrowserRouter>
   );
 }
 
 export default Home;
+

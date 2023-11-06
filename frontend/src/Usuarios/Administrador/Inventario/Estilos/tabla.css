@@ -1,6 +1,8 @@
+
+
 .encabezado-tabla {
-    background-color: #507E9D !important;
-    color: black !important;
+    background: #003966 !important; 
+    color: #fff !important;
   }
   
 .columna-nombre-tabla {
@@ -16,8 +18,9 @@
   border: 1px solid rgba(0, 0, 0, 0.4);
   border-collapse: collapse;
   font-weight: 300;
-  font-size: 18px;
+  font-size: 22px;
 }
+
 
 
 
