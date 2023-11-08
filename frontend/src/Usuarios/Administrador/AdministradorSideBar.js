@@ -1,9 +1,9 @@
 import React from 'react';
-import {  FaUserAlt, FaTachometerAlt, FaArchive, FaFlask, FaClock, FaBell } from "react-icons/fa";
+import { FaUserAlt, FaTachometerAlt, FaArchive, FaFlask, FaClock, FaBell } from "react-icons/fa";
 import '../../EstilosGlobales/sidebar.css';
 import { NavLink } from 'react-router-dom';
 
-const AdministradorSidebar = ({ children }) => {
+const AdministradorSidebar = ({ children, toggleSidebar }) => {
     const menuItem = [
         {
             path: "/administrador/cuenta",
@@ -23,7 +23,11 @@ const AdministradorSidebar = ({ children }) => {
         {
             path: "/administrador/investigaciones",
             name: "Investigaciones",
-            icon: <FaFlask/>
+            icon: <FaFlask/>,
+            onClick: (e) => {
+                e.preventDefault(); // Previene la navegación
+                toggleSidebar(); 
+            }
         },
         {
             path: "/administrador/reservaHora",
@@ -44,7 +48,13 @@ const AdministradorSidebar = ({ children }) => {
                     <img src="/logo.jpg" alt="Logo" />
                 </div>
                 {menuItem.map((item, index) => (
-                    <NavLink to={item.path} key={index} className="link" activeClassName="active">
+                    <NavLink 
+                        to={item.path} 
+                        key={index} 
+                        className="link" 
+                        activeClassName="active"
+                        onClick={item.onClick} 
+                    >
                         <div className="icon">{item.icon}</div>
                         <div className="link_text">{item.name}</div>
                     </NavLink>
@@ -56,3 +66,4 @@ const AdministradorSidebar = ({ children }) => {
 };
 
 export default AdministradorSidebar;
+
