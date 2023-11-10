@@ -9,6 +9,7 @@ import AdministadorNotificaciones from './Usuarios/Administrador/Notificaciones/
 import SideBarInvestigaciones from './Usuarios/Administrador/Investigaciones/SideBarInvestigaciones'
 import InvestigacionesPersonales from './Usuarios/Administrador/Investigaciones/InventigacionesPersonales'
 import InvestigacionesTerceros from './Usuarios/Administrador/Investigaciones/InventigacionesTerceros'
+import Investigacion from "./Usuarios/Administrador/Investigaciones/Personales/Investigacion/Investigacion";
 
 function App() {
   const [isInvestigacionesSidebarOpen, setInvestigacionesSidebarOpen] = useState(false);
@@ -22,13 +23,14 @@ function App() {
       <AdministradorSidebar toggleSidebar={toggleInvestigacionesSidebar}>
         {isInvestigacionesSidebarOpen && <SideBarInvestigaciones onClose={toggleInvestigacionesSidebar} />}
         <Routes>
-        <Route path="/administrador/cuenta" element={<AdministadorCuenta />} />
+          <Route path="/administrador/cuenta" element={<AdministadorCuenta />} />
           <Route path="/administrador/tablero" element={<AdministadorTablero />} />
-           <Route path="/administrador/inventario" element={<AdministadorInventario />} />
-           <Route path="/administrador/reservaHora" element={<AdministadorReservaHora />} />
-           <Route path="/administrador/notificaciones" element={<AdministadorNotificaciones />} />
-           <Route path="/administrador/investigaciones/personales" element={<InvestigacionesPersonales />} />
+          <Route path="/administrador/inventario" element={<AdministadorInventario />} />
+          <Route path="/administrador/reservaHora" element={<AdministadorReservaHora />} />
+          <Route path="/administrador/notificaciones" element={<AdministadorNotificaciones />} />
+          <Route path="/administrador/investigaciones/personales" element={<InvestigacionesPersonales />} />
           <Route path="/administrador/investigaciones/terceros" element={<InvestigacionesTerceros />} />
+          <Route path="/administrador/investigaciones/personales/investigacion" element={<Investigacion />} />
         </Routes>
       </AdministradorSidebar>
     </BrowserRouter>
