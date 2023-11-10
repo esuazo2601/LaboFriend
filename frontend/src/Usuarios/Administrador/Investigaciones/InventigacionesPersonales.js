@@ -14,38 +14,38 @@ const InvestigacionesPersonales = () => {
     },
     {
       nombre: 'Investigación 2',
-    }, 
+    },
     {
       nombre: 'Investigación 3',
     },
     {
       nombre: 'Investigación 4',
-    }, 
+    },
     {
       nombre: 'Investigación 5 Investigación 5 Investigación 5',
     },
     {
       nombre: 'Investigación 6',
-    }, 
+    },
     {
       nombre: 'Investigación 7',
     },
     {
       nombre: 'Investigación 8',
-    }, 
+    },
     {
       nombre: 'Investigación 9',
     },
     {
       nombre: 'Investigación 10',
-    }, 
+    },
     {
       nombre: 'Investigación 11',
     },
     {
       nombre: 'Investigación 12',
     },
-       
+
   ];
 
   const normalizeText = (text) => {
@@ -56,7 +56,7 @@ const InvestigacionesPersonales = () => {
     normalizeText(investigacion.nombre).includes(normalizeText(searchTerm))
   );
 
-  const itemsPerPage = 20; 
+  const itemsPerPage = 20;
   const totalItems = filteredInvestigaciones.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -90,10 +90,10 @@ const InvestigacionesPersonales = () => {
           <FontAwesomeIcon icon={faSearch} />
         </span>
       </div>
-      
+
       <div>
         {paginatedInvestigaciones.map((investigacion, index) => (
-          <Button key={index}  className="boton-investigacion" onClick={() => {/* Página de esa investigación detallada*/}}>
+          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
             {investigacion.nombre.length > 50
               ? `${investigacion.nombre.substring(0, 50)}...`
               : investigacion.nombre}
