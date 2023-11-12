@@ -47,25 +47,34 @@ async def delete_block(bloque_id:int):
 ################################### SALAS METHODS ################################### 
 
 async def new_room(sala: Sala):
-    print(sala.model_dump())
-    response = supabase.table('Sala').insert({
-        "capacidad":sala.capacidad,
-        "nombre":sala.nombre
-    }).execute()
-    return response
+    try:
+        print(sala.model_dump())
+        response = supabase.table('Sala').insert({
+            "capacidad":sala.capacidad,
+            "nombre":sala.nombre
+        }).execute()
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 async def get_rooms():
-    response = supabase.table('Sala').select('*').execute()
-    print(response)
-    return response
+    try:
+        response = supabase.table('Sala').select('*').execute()
+        print(response)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 async def delete_room(sala_nombre:str):
-    response = supabase.table('Sala').select('*').eq('nombre', sala_nombre).execute()
-    if response.data:
-        supabase.table('Sala').delete().eq('nombre', sala_nombre).execute()
-        return {'message':f'Sala con nombre: {sala_nombre} fue borrada'}
-    else:
-        return {'message':'No se encuentra la sala con esta id'} 
+    try:
+        response = supabase.table('Sala').select('*').eq('nombre', sala_nombre).execute()
+        if response.data:
+            supabase.table('Sala').delete().eq('nombre', sala_nombre).execute()
+            return {'message':f'Sala con nombre: {sala_nombre} fue borrada'}
+        else:
+            raise HTTPException(status_code=404, detail='No se encuentra la sala con este nombre')
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
 ################################### MICROORGANISMOS METHODS ################################### 
 
