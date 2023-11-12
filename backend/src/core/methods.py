@@ -5,31 +5,44 @@ from datetime import datetime,timedelta
 
 ################################### BLOQUES METHODS ################################### 
 async def get_blocks():
-    response = supabase.table('Bloque').select("*").execute()
-    print(response)
-    return response.data
+    try:
+        response = supabase.table('Bloque').select("*").execute()
+        print(response)
+        return response.data
+    except Exception:
+        raise HTTPException(status_code=400, detail="database blocks error" )
+
 
 async def get_block(bloque_id:int):
-    response = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
-    print(response)
-    return response
+    try:
+        response = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
+        print(response)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="database block error" )
 
 async def newblock(bloque: Bloque):
-    print(bloque.model_dump())  # Asegúrate de que los datos se imprimen correctamente
-    response = supabase.table('Bloque').insert({
-        "hora_inicio":bloque.hora_inicio,
-        "hora_fin":bloque.hora_fin    
-        }).execute()
-    return response
+    try:
+        print(bloque.model_dump())  # Asegúrate de que los datos se imprimen correctamente
+        response = supabase.table('Bloque').insert({
+            "hora_inicio":bloque.hora_inicio,
+            "hora_fin":bloque.hora_fin    
+            }).execute()
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="database newblock error")
 
 async def delete_block(bloque_id:int):
-    data = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
-    print (data)
-    if data.data:
-        response = supabase.table('Bloque').delete().eq("id",bloque_id).execute()
-        return {'message':f'Se elimino el bloque con id: {bloque_id}'},response
-    else:
-        return {'message':'No existe el bloque con esta id'}
+    try:
+        data = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
+        print(data)
+        if data.data:
+            response = supabase.table('Bloque').delete().eq("id",bloque_id).execute()
+            return {'message':f'Se elimino el bloque con id: {bloque_id}'}, response
+        else:
+            return {'message':'No existe el bloque con esta id'}, None
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="database deleteblock error")
 
 ################################### SALAS METHODS ################################### 
 
