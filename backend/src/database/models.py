@@ -17,10 +17,16 @@ class ActualizarProducto(BaseModel):
 
 class Agenda(BaseModel):
     id: Optional[int] = None
-    id_estudiante: int
+    email_estudiante: str
     id_sala: int
     id_bloque: int
     fecha: str
+
+class ActualizarAgenda(BaseModel):
+    email_estudiante: Optional[str] = None
+    id_sala: Optional[int] = None
+    id_bloque: Optional[int] = None
+    fecha: Optional[str] = None
 
 class Equipo(BaseModel):
     id: Optional[int] = None

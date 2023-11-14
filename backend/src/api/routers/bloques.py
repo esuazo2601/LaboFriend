@@ -9,7 +9,7 @@ async def getBlocks():
     result = await get_blocks()
     return result
 
-@router.get("/bloques/{bloque_id}")
+@router.get("/bloque/{bloque_id}")
 async def getBlock(bloque_id:int):
     result = await get_block(bloque_id)
     return result

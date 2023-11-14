@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi.logger import logger
 from prometheus_fastapi_instrumentator import Instrumentator
-from .routers import bloques, investigaciones, microorganismos, productos, salas, usuarios
+from .routers import bloques, investigaciones, microorganismos, productos, salas, usuarios, trabajando, agenda, incidencia
 from pydantic_settings import BaseSettings
 
 # class Settings(BaseSettings):
@@ -48,6 +48,9 @@ app.include_router(microorganismos.router)
 app.include_router(productos.router)
 app.include_router(salas.router)
 app.include_router(usuarios.router)
+app.include_router(trabajando.router)
+app.include_router(agenda.router)
+app.include_router(incidencia.router)
 instrumentator = Instrumentator().instrument(app)
 
 app.add_middleware(

@@ -9,6 +9,11 @@ async def addInvestigacion(investigacion:Investigacion):
     result = await add_investigacion(investigacion)
     return result
 
+@router.get("/investigaciones", status_code=200)
+async def getAllInvestigaciones():
+    result = await get_all_investigaciones()
+    return result
+
 @router.get("/investigacion_id/{id_inv}", status_code=302)
 async def getInvestigacionId(id_inv:int):
     result = await get_investigacion_id(id_inv)
