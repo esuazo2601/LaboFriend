@@ -229,14 +229,40 @@ async def delete_trabajando_id(id:int):
     return query
 
 ################################### AGENDA METHODS ################################### 
+async def check_availability(check_agenda:CheckAgenda):
+    block_query = supabase.table('Agenda').select('id_bloque').match({'id_sala':check_agenda.id_sala,'fecha':check_agenda.fecha}).execute()
+    sala_query = supabase.table('Sala').select('capacidad').eq('id',check_agenda.id_sala).execute()
+    
+    capacidad_sala = sala_query.data[0]['capacidad']
+    bloques = block_query.data
+    
+    available_list = [1,2,3,4,5,6,7,8,9,10]
+    block_dict = {}
+    for bloque in bloques:
+        id_bloque = bloque['id_bloque']
+        if id_bloque in block_dict:
+            block_dict[id_bloque] += 1
+        else:
+            block_dict[id_bloque] = 1
+
+    print('CAPACIDAD SALA: ',capacidad_sala)
+    for key,value in block_dict.items():
+        if value >= capacidad_sala:
+            available_list.remove(key)
+
+    return {'available_blocks': available_list}
+
 async def new_agendamiento(agendamiento:Agenda):
-    response = supabase.table('Agenda').insert({
-        "email_estudiante":agendamiento.email_estudiante,
-        "id_sala":agendamiento.id_sala,
-        "id_bloque":agendamiento.id_bloque,
-        "fecha":agendamiento.fecha
-    }).execute()
-    return response 
+    user_reservation = supabase.table('Agenda').select('id_bloque').match({'id_sala':agendamiento.id_sala, 'fecha':agendamiento.fecha, 'email_estudiante':agendamiento.email_estudiante}).execute()
+    if not user_reservation.data:
+        response = supabase.table('Agenda').insert({
+            "email_estudiante":agendamiento.email_estudiante,
+            "id_sala":agendamiento.id_sala,
+            "id_bloque":agendamiento.id_bloque,
+            "fecha":agendamiento.fecha
+        }).execute()
+        return response
+    raise HTTPException(status_code=409, detail='Bloque ya reservado') 
 
 async def delete_agendamiento(id:int):
     response = supabase.table('Agenda').delete().eq('id',id).execute()

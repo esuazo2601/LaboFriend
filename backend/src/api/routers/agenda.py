@@ -18,3 +18,8 @@ async def deleteAgendamiento(id:int):
 async def updateAgendamiento(id:int,new_agendamiento:ActualizarAgenda):
     result = await update_agendamiento(id,new_agendamiento)
     return result
+
+@router.get('/check_availability', status_code=201)
+async def checkAvailability(check_agenda:CheckAgenda):
+    result = await check_availability(check_agenda)
+    return result

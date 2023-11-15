@@ -28,6 +28,10 @@ class ActualizarAgenda(BaseModel):
     id_bloque: Optional[int] = None
     fecha: Optional[str] = None
 
+class CheckAgenda(BaseModel):
+    id_sala:int
+    fecha:str
+
 class Equipo(BaseModel):
     id: Optional[int] = None
     fecha_mantencion: str
