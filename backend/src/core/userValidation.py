@@ -20,7 +20,6 @@ oauth2_scheme = OAuth2PasswordBearer(
             'student':'lectura y escritura de su contenido'}
     )
 
-
 def user_exist(email: str):
     return supabase.table('Usuario').select("*").eq('email',email).execute()
 
@@ -60,11 +59,7 @@ def auth_check_permission(security_scopes: SecurityScopes, token_data: TokenData
             ) 
     return
 
-#Validación de usuario
-
-async def get_current_user(security_scopes: SecurityScopes, token: str = Depends(oauth2_scheme)):
-    
-    authenticate_value = auth_scope_value(security_scopes)
+def decode_token(token:str):
     try:
         token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
         email: str = token_decode.get("sub")
@@ -74,20 +69,21 @@ async def get_current_user(security_scopes: SecurityScopes, token: str = Depends
         token_data = TokenData(scopes=token_scopes, email=email)
     except (JWTError,ValidationError):
         raise CREDENTIAL_EXCEPTION
-    user = get_user(email)
+    return token_data
+#Validación de usuario
+
+async def get_current_user(security_scopes: SecurityScopes, token: str = Depends(oauth2_scheme)):
+    authenticate_value = auth_scope_value(security_scopes)
+    token_data = decode_token(token)
+    user = get_user(token_data.email)
     if not user:
         raise CREDENTIAL_EXCEPTION
-    for scope in security_scopes.scopes:
-        if scope not in token_data.scopes:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not enough permissions",
-                headers={"WWW-Authenticate": authenticate_value},
-            )
+    auth_check_permission(security_scopes,token_data,authenticate_value)
     return user
 
 async def get_current_active_user(current_user:Usuario = Security(get_current_user, scopes=["assist"])):
     return current_user
+
 
 #auth y token de usuario
 
@@ -157,20 +153,12 @@ def student_exist(email: str):
 
 async def make_admin(user:Usuario, security_scopes: SecurityScopes, token:str = Depends(oauth2_scheme)):
     authenticate_value = auth_scope_value(security_scopes)
-    try:
-        token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
-        email: str = token_decode.get("sub")
-        if email == None:
-            raise CREDENTIAL_EXCEPTION
-        token_scopes = token_decode.get("scopes", [])
-        token_data = TokenData(scopes=token_scopes, email=email)
-    except (JWTError,ValidationError):
-        raise CREDENTIAL_EXCEPTION
+    token_data = decode_token(token)
+    auth_check_permission(security_scopes,token_data,authenticate_value)
     if(not user_exist(user.email).data): 
         raise HTTPException(status_code=404,detail="Usuario no encontrado")
     if(admin_exist(user.email).data):
         raise HTTPException(status_code=208,detail="Ya cuenta con permisos de administrador")
-    auth_check_permission(security_scopes,token_data,authenticate_value)
     result = supabase.table('Administrador').insert({
         "email":user.email
     }).execute()
@@ -183,20 +171,12 @@ async def make_admin(user:Usuario, security_scopes: SecurityScopes, token:str = 
 async def make_assist(user:Usuario, security_scopes: SecurityScopes,token:str = Depends(oauth2_scheme)):
     
     authenticate_value = auth_scope_value(security_scopes)
-    try:
-        token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
-        email: str = token_decode.get("sub")
-        if email == None:
-            raise CREDENTIAL_EXCEPTION
-        token_scopes = token_decode.get("scopes", [])
-        token_data = TokenData(scopes=token_scopes, email=email)
-    except (JWTError,ValidationError):
-        raise CREDENTIAL_EXCEPTION
+    token_data = decode_token(token)
+    auth_check_permission(security_scopes,token_data,authenticate_value)
     if(not user_exist(user.email).data): 
         raise HTTPException(status_code=404,detail="Usuario no encontrado")
     if(assist_exist(user.email).data):
         raise HTTPException(status_code=208,detail="Ya cuenta con permisos de ayudante")
-    auth_check_permission(security_scopes,token_data,authenticate_value)
     result = supabase.table('Ayudante').insert({
         "email":user.email
     }).execute()
@@ -208,27 +188,15 @@ async def make_assist(user:Usuario, security_scopes: SecurityScopes,token:str = 
 
 async def make_student(user:Usuario, security_scopes:SecurityScopes, token:str = Depends(oauth2_scheme)):
     authenticate_value = auth_scope_value(security_scopes)
-    
-    try:
-        token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
-        email: str = token_decode.get("sub")
-        if email == None:
-            raise CREDENTIAL_EXCEPTION
-        token_scopes = token_decode.get("scopes", [])
-        token_data = TokenData(scopes=token_scopes, email=email)
-    except (JWTError,ValidationError):
-        raise CREDENTIAL_EXCEPTION
-    
+    token_data = decode_token(token)
+    auth_check_permission(security_scopes,token_data,authenticate_value) 
     if(not user_exist(user.email).data): 
         raise HTTPException(status_code=404,detail="Usuario no encontrado")
     if(student_exist(user.email).data):
         raise HTTPException(status_code=208,detail="Ya cuenta con permisos de estudiante") 
-    auth_check_permission(security_scopes,token_data,authenticate_value) 
-    
     result = supabase.table('Estudiante').insert({
         "email":user.email
     }).execute()
-
     if result.data:
         return HTTPException(
             status_code=201, detail="Privilegios concedidos con éxito",headers="bearer"
