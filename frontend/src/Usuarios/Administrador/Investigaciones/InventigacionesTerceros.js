@@ -8,6 +8,7 @@ const InvestigacionesTerceros = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
+  // IMPORTAR DESDE BACKEND
   const investigacionesData = [
     {
       nombre: 'Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1',
