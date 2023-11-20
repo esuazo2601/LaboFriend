@@ -7,10 +7,14 @@ import AdministadorInventario from '../Usuarios/Administrador/Inventario/Adminis
 import AdministadorInvestigaciones from '../Usuarios/Administrador/Investigaciones/AdminitradorInventigaciones'
 import AdministadorReservaHora from '../Usuarios/Administrador/ReservaHoras/AdministradorReservaHoras'
 import AdministadorNotificaciones from '../Usuarios/Administrador/Notificaciones/AdministradorNotificaciones'
+import Login from './Login'
 
 function Home() {
   return (
     <BrowserRouter>
+        <Routes>
+          <Route path='/login' element={<Login/>}/>
+        </Routes>
       <AdministradorSidebar>
         <Routes>
           <Route path="/administrador/cuenta" element={<AdministadorCuenta />} />

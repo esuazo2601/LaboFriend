@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi import HTTPException
 router = APIRouter(tags=["salas"])
 
-@router.post("/salas", status_code=201)
+@router.post("/salas")
 async def newRoom(sala:Sala):
     result = await new_room(sala)
     return result

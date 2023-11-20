@@ -10,6 +10,7 @@ import SideBarInvestigaciones from './Usuarios/Administrador/Investigaciones/Sid
 import InvestigacionesPersonales from './Usuarios/Administrador/Investigaciones/InventigacionesPersonales'
 import InvestigacionesTerceros from './Usuarios/Administrador/Investigaciones/InventigacionesTerceros'
 import Investigacion from "./Usuarios/Administrador/Investigaciones/Personales/Investigacion/Investigacion";
+import Login from './ComponentesGlobales/Login';
 
 function App() {
   const [isInvestigacionesSidebarOpen, setInvestigacionesSidebarOpen] = useState(false);
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <BrowserRouter>
+
       <AdministradorSidebar toggleSidebar={toggleInvestigacionesSidebar}>
         {isInvestigacionesSidebarOpen && <SideBarInvestigaciones onClose={toggleInvestigacionesSidebar} />}
         <Routes>

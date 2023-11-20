@@ -3,7 +3,6 @@ import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import './investigaciones.css';
-import useAxios from 'use-axios-client';
 
 const InvestigacionesPersonales = () => {
   const [searchTerm, setSearchTerm] = useState('');

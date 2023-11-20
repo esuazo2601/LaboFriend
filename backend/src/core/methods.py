@@ -179,6 +179,10 @@ async def get_producto_nm(name_prod:str):
     response = supabase.table('Producto').select('*').eq('nombre',name_prod).execute()
     return response
 
+async def get_productos():
+    response = supabase.table('Producto').select('*').execute()
+    return response
+
 async def get_producto_id(id_prod:str):
     response = supabase.table('Producto').select('*').eq('id',id_prod).execute()
     return response
