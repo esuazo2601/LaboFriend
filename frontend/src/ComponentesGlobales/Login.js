@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Row,
   Col,
   Stack,
   Button,
-  Image,
   Form,
 } from "react-bootstrap";
-import { FaMicroscope, FaVial } from 'react-icons/fa';
+import { FaVial } from 'react-icons/fa';
 import { motion } from "framer-motion";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './login.css';
 
 const Login = () => {
+  const navigate = useNavigate();
 
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
   const mostrarFormularioRegistro = () => {
@@ -23,8 +24,6 @@ const Login = () => {
 const volverAInicioSesion = () => {
   setMostrarRegistro(false);
 };
-
-
 
   const [formulario, setFormulario] = useState({
     email: "",
@@ -43,10 +42,15 @@ const volverAInicioSesion = () => {
     setFormulario({ ...formulario, [name]: value });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmitLogin = (event) => {
+    event.preventDefault()
+    navigate('/administrador/tablero');
   };
+
+  const handleSubmit= (event) => {
+    event.preventDefault()
+  };
+
 
   return (
     <Container fluid style={{ height: "100vh" }}>
@@ -660,7 +664,7 @@ const volverAInicioSesion = () => {
                 </p>                 
                 </Form.Group>
 
-              <Button className="formulario" onClick={handleSubmit} variant="dark" type="submit">
+              <Button className="formulario" onClick={handleSubmitLogin}  variant="dark" type="submit">
                 Iniciar sesion
               </Button>
               <p className="mt-3">
@@ -669,7 +673,7 @@ const volverAInicioSesion = () => {
             </Form>
           ) : (
 
-            <Form>
+            <Form >
                 {/* REGISTRO */}
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Email</Form.Label>

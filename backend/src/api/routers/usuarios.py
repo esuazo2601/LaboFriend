@@ -4,12 +4,12 @@ from fastapi import APIRouter
 from fastapi import HTTPException
 router = APIRouter(tags=["usuarios"])
 
-@router.post("/usuario",status_code=201,response_description="Usuario creado con éxito")
+@router.post("/usuario",response_description="Usuario creado con éxito")
 async def createUser(user: UsuarioDB):
     result = await create_user(user)
     return result
 
-@router.post("/token",status_code=201, response_description="Usuario logeado con éxito")
+@router.post("/token", response_description="Usuario logeado con éxito")
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     token = await get_token(form_data)
     return token
