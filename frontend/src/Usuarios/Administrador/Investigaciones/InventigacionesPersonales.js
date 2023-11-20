@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import './investigaciones.css'
+import './investigaciones.css';
 
 const InvestigacionesPersonales = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  //const [personalInv, setPersonalInv] = useEffect
+/*   const {data,error,loading} = useAxios({
+    url:""
+  }) */
 
+
+  //IMPORTAR DESDE BACKEND
   const investigacionesData = [
     {
       nombre: 'Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1',
