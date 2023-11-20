@@ -1,10 +1,13 @@
+import os
+print(os.getcwd())
 import pytest
 from unittest.mock import MagicMock, patch
-from src.core.methods import Bloque, get_blocks, get_block, newblock, delete_block
+from src.core.methods import get_blocks, get_block, newblock, delete_block
+
 
 @pytest.fixture
 def mock_table():
-    with patch('src.database.dbconfig.supabase.table') as mock:
+    with patch('backend.src.database.dbconfig.supabase.table') as mock:
         yield mock
 
 def test_get_blocks(mock_table):

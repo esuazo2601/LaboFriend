@@ -1,10 +1,11 @@
 import pytest
-from src.core.methods import Sala, new_room, get_rooms, delete_room, HTTPException
+#from backend.src.core.methods import Sala, new_room, get_rooms, delete_room, HTTPException
 from unittest.mock import MagicMock, patch
+from src.core.methods import Sala, new_room, get_rooms, delete_room, HTTPException
 
 @pytest.fixture
 def mock_supabase_table():
-    with patch('src.database.dbconfig.supabase.table') as mock_table:
+    with patch('backend.src.database.dbconfig.supabase.table') as mock_table:
         yield mock_table
 
 def test_new_room(mock_supabase_table):
