@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 class Bloque(BaseModel):
     id: Optional[int] = None
@@ -17,13 +17,13 @@ class ActualizarProducto(BaseModel):
 
 class Agenda(BaseModel):
     id: Optional[int] = None
-    email_estudiante: str
+    email_estudiante: EmailStr
     id_sala: int
     id_bloque: int
     fecha: str
 
 class ActualizarAgenda(BaseModel):
-    email_estudiante: Optional[str] = None
+    email_estudiante: Optional[EmailStr] = None
     id_sala: Optional[int] = None
     id_bloque: Optional[int] = None
     fecha: Optional[str] = None
@@ -83,14 +83,16 @@ class Sala(BaseModel):
     nombre: str
 
 class Trabaja(BaseModel):
-    email_usuario:str
+    email_usuario: EmailStr
     id_investigacion: int
 
 class Usuario(BaseModel):
-    email: str
+    email: EmailStr
     nombre: Optional[str] = None
 
 class UsuarioDB(Usuario):
     password: str
 
-
+class TokenData(BaseModel):
+    email: Optional[EmailStr] = None
+    scopes: Optional[list[str]] = []
