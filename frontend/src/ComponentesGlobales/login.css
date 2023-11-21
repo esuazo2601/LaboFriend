@@ -4,7 +4,7 @@
 }
 
 .columna2 {
-  background-color: #C5C7D4
+  background-color: #D5D7E5;
 }
 
 .a
@@ -20,6 +20,7 @@
 {
   background-color: #1c4046 !important;
 }
+
 
 .formulario
 {
@@ -162,17 +163,6 @@
   font-family: 'Open Sans', sans-serif;
   
 }
-
-html,
-body {
-  font-size: 18px; /*20*/
-  background-color: #1e7781;
-
-}
-
- .App {
-  background-color: #1e7781;
-  };
 
 
 .fila-principal {

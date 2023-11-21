@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
-import { FaUserAlt, FaArchive, FaUserSecret } from "react-icons/fa";
+import { FaUserAlt, FaArchive, FaUserSecret, FaClock } from "react-icons/fa";
 import '../../../EstilosGlobales/basicos.css';
 import './tablero.css';
 
@@ -29,6 +29,10 @@ function AdministradorTablero() {
           <NavLink to="/administrador/investigaciones/personales" className="tablero-item">
           <FaUserSecret className="link-icon"/> 
             <span>Investigaciones Personales</span>
+          </NavLink>
+          <NavLink to="/administrador/reservaHora" className="tablero-item">
+          <FaClock className="link-icon"/> 
+            <span>Calendario de Reservas</span>
           </NavLink>
         </div>
       </Container>
