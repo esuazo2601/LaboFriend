@@ -16,7 +16,7 @@ async def getMicroorgCin(nombre_cientifico:str):
         raise HTTPException(status_code=404,detail="No se encontro el microorganismo")
     return result
 
-@router.get("/microorganismo/{nombre_comun}")
+@router.get("/microorganismo_nombre/{nombre_comun}")
 async def getMicroorgCm(nombre_comun:str):
     result = await get_microorg_cm(nombre_comun)
     if len(result.data)==0:

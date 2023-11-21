@@ -59,4 +59,4 @@ export async function deleteAgenda(id) {
     return response
 }
 
-console.log(await deleteAgenda(3));
+//console.log(await deleteAgenda(3));
