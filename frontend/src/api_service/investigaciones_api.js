@@ -68,9 +68,9 @@ export async function updateInvestigacion(id,titulo = null, descripcion = null, 
     .catch(error => console.log("Error en la petición a la api: ",error))
     return response
 }
-let date = new Date()
-date.setMilliseconds(0)
-console.log(await updateInvestigacion(6,null,"al final si que cambia", date))
+// let date = new Date()
+// date.setMilliseconds(0)
+// console.log(await updateInvestigacion(6,null,"al final si que cambia", date))
 //delete
 export async function deleteInvestigacion(id) {
     const response = await client.delete("investigacion/"+id)
