@@ -12,7 +12,7 @@ import { FaVial } from 'react-icons/fa';
 import { motion } from "framer-motion";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './login.css';
-//import {client, login, getUser} from '../api_service/user_api.js'
+import {client, login, getUser, decodedToken} from '../api_service/user_api.js'
 //import {jwt} from 'jsonwebtoken'
 const Login = () => {
   const navigate = useNavigate();
@@ -45,10 +45,32 @@ const volverAInicioSesion = () => {
 
   const handleSubmitLogin = async (event) => {
     event.preventDefault()
-    //const token = await login(email,contrasena)
-    //const decodeToken = jwt.decode(token,{complete: true})
-    //console.log(token.data)
-    //navigate('/administrador/tablero');
+    if (!email || !contrasena) {
+      // Mostrar una alerta de error
+      alert("Por favor, completa todos los campos");
+      return;
+    }
+
+    try{
+      const token = await login(email,contrasena)
+      //console.log(token.data)
+      const data = await decodedToken(token.data['access_token'])
+      //console.log(data.data)
+      //navigate('/administrador/tablero');
+      localStorage.setItem('accessToken',token.data['access_token'])
+      localStorage.setItem('user',data.data['nombre'])
+      localStorage.setItem('email',data.data['email'])
+      localStorage.setItem('scopes',data.data['scopes'])
+      console.log(localStorage.getItem('accessToken'))
+      console.log(localStorage.getItem('user'))
+      console.log(localStorage.getItem('email'))
+      console.log(localStorage.getItem('scopes'))
+    }
+    catch(error){
+      console.log("ha ocurrido un error "+error)
+      alert("Email o contraseña incorrectos")
+    }
+      
   };
 
   const handleSubmit= (event) => {

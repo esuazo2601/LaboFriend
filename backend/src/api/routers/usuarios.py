@@ -14,6 +14,11 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     token = await get_token(form_data)
     return token
 
+@router.get("/datos_token/{token}",response_description="Datos del token extraidos con éxito")
+async def decodeToken(token: str):
+    data = await decode_token(token)
+    return data
+
 @router.get("/usuario/datos",status_code=201, response_model=Usuario)
 async def getCurrentUser(user: Usuario = Depends(get_current_active_user)):
     return user

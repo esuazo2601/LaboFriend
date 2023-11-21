@@ -26,8 +26,8 @@ export async function login(email, password){
     }
 }
 
-await login("richixdpro@gmail.com","juanitouwu");
-console.log(client.defaults)
+// await login("richixdpro@gmail.com","juanitouwu");
+// console.log(client.defaults)
 
 export async function getUser(){
     const response = await client.get("/usuario/datos")
@@ -36,5 +36,11 @@ export async function getUser(){
     return response
 }
 
-console.log(await getUser())
+// console.log(await getUser())
 
+export async function decodedToken(token){
+    const data = await client.get("/datos_token/"+token)
+    .then(data  => data)
+    .catch(error => console.error("Error en la petición a la API: ", error))
+    return data
+}

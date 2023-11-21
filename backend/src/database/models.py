@@ -98,5 +98,6 @@ class UsuarioDB(Usuario):
     password: str
 
 class TokenData(BaseModel):
+    nombre: Optional[str] = None
     email: Optional[EmailStr] = None
     scopes: Optional[list[str]] = []
