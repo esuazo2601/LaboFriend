@@ -280,3 +280,83 @@ async def update_agendamiento(id:int,new_agendamiento:ActualizarAgenda):
         "fecha":new_agendamiento.fecha
         }).eq('id',id).execute()
     return response
+
+################################### PRODUCTO_EN_SALA METHODS ################################### 
+async def get_prod_by_id(id_producto:int):
+    response = supabase.table('Producto_en_sala').select('*').eq('id_producto', id_producto).execute()
+    return response
+
+async def check_stock(id_producto:int, cantidad:int):
+    id_prod = id_producto
+    cant_agregada = cantidad
+
+    query_1 = supabase.table('Producto_en_sala').select('cantidad').eq("id_producto", id_prod).execute()
+    query_2 = await get_producto_id(id_prod)
+    print(query_2)
+    cant_total = query_2.data[0]["cantidad_total"]
+
+    cantidad_en_salas = 0
+    for cantidades in query_1.data:
+        cantidad_en_salas += cantidades['cantidad']
+
+    if cantidad_en_salas + cant_agregada > cant_total:
+        raise HTTPException(400,detail='Se excede el maximo de producto')
+    else: 
+        return True
+
+async def add_prod_en_sala(prod_en_sala:Producto_en_sala):
+    if await check_stock(prod_en_sala):
+        response = supabase.table('Producto_en_sala').insert({
+            "id_producto":prod_en_sala.id_producto,
+            "cantidad":prod_en_sala.cantidad,
+            "id_sala":prod_en_sala.id_sala,
+            "lugar":prod_en_sala.lugar
+        }).execute()
+        return response 
+
+async def get_prod_en_sala():
+    response = supabase.table('Producto_en_sala').select('*').execute()
+    return response
+
+async def update_prod_en_sala(id_producto:int, id_sala:int, actualizado:ActualizarProd_en_sala):
+    if actualizado.cantidad:
+        if await check_stock(id_producto, actualizado.cantidad):
+            response = supabase.table('Producto_en_sala').update({
+                "cantidad":actualizado.cantidad,
+                "lugar":actualizado.lugar
+            }).match({'id_producto':id_producto,'id_sala':id_sala}).execute()
+            return response
+    else:
+        response = supabase.table('Producto_en_sala').update({
+                "cantidad":actualizado.cantidad,
+                "lugar":actualizado.lugar
+        }).match({'id_producto':id_producto,'id_sala':id_sala}).execute()
+        return response
+################################### INCIDENCIA METHODS ################################### 
+
+async def add_incidencia(incidencia:Incidencia):
+    date = datetime.now()
+    formated_date = date.replace(microsecond=0)
+    incidencia.fecha = str(formated_date)
+    response = supabase.table('Incidencia').insert({
+        "observacion":incidencia.observacion,
+        "fecha":incidencia.fecha,
+        "id_investigacion":incidencia.id_investigacion
+    }).execute()
+    return response
+
+async def get_incidencias():
+    response = supabase.table('Incidencia').select('*').execute()
+    return response
+
+async def get_incidencias_inv(id_inv:int):
+    response = supabase.table('Incidencia').select('*').eq('id_investigacion',id_inv).execute()
+    return response 
+
+async def get_incidencia(id:int):
+    response = supabase.table('Incidencia').select('*').eq('id',id).execute()
+    return response
+
+async def delete_incidencia(id:int):
+    response = supabase.table('Incidencia').delete().eq('id',id).execute()
+    return response

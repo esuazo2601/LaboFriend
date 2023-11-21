@@ -42,7 +42,7 @@ class Equipo(BaseModel):
 class Incidencia(BaseModel):
     id: Optional[int] = None
     observacion: str
-    fecha: str
+    fecha: Optional[str] = None
     id_investigacion: int
 
 class Inv_microorganismo(BaseModel):
@@ -76,6 +76,10 @@ class Producto_en_sala(BaseModel):
     cantidad:int
     id_sala:int
     lugar:str
+
+class ActualizarProd_en_sala(BaseModel):
+    cantidad: Optional[int] = None
+    lugar:Optional[str] = None
 
 class Sala(BaseModel):
     id: Optional[int] = None
