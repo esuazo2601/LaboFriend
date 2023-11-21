@@ -12,7 +12,7 @@ import { FaVial } from 'react-icons/fa';
 import { motion } from "framer-motion";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './login.css';
-import {client, login, getUser} from '../api_service/user_api.js'
+//import {client, login, getUser} from '../api_service/user_api.js'
 //import {jwt} from 'jsonwebtoken'
 const Login = () => {
   const navigate = useNavigate();
@@ -45,9 +45,9 @@ const volverAInicioSesion = () => {
 
   const handleSubmitLogin = async (event) => {
     event.preventDefault()
-    const token = login(email,contrasena)
+    //const token = await login(email,contrasena)
     //const decodeToken = jwt.decode(token,{complete: true})
-    console.log(token)
+    //console.log(token.data)
     //navigate('/administrador/tablero');
   };
 
