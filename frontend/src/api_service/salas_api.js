@@ -1,8 +1,4 @@
-import axios from "axios";
-
-const client = axios.create({
-    baseURL: "http://127.0.0.1:8000" 
-});
+import { client } from './userApi.js';
 
 export async function getSalas() {
     const response = await client.get("salas")

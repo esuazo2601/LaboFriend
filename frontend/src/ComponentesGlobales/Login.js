@@ -12,10 +12,11 @@ import { FaVial } from 'react-icons/fa';
 import { motion } from "framer-motion";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './login.css';
-
+import {client, login, getUser} from '../api_service/user_api.js'
+//import {jwt} from 'jsonwebtoken'
 const Login = () => {
   const navigate = useNavigate();
-
+  
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
   const mostrarFormularioRegistro = () => {
   setMostrarRegistro(true);
@@ -42,9 +43,12 @@ const volverAInicioSesion = () => {
     setFormulario({ ...formulario, [name]: value });
   };
 
-  const handleSubmitLogin = (event) => {
+  const handleSubmitLogin = async (event) => {
     event.preventDefault()
-    navigate('/administrador/tablero');
+    const token = login(email,contrasena)
+    //const decodeToken = jwt.decode(token,{complete: true})
+    console.log(token)
+    //navigate('/administrador/tablero');
   };
 
   const handleSubmit= (event) => {

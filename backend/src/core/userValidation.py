@@ -60,6 +60,7 @@ def auth_check_permission(security_scopes: SecurityScopes, token_data: TokenData
     return
 
 def decode_token(token:str):
+
     try:
         token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
         email: str = token_decode.get("sub")
@@ -81,7 +82,7 @@ async def get_current_user(security_scopes: SecurityScopes, token: str = Depends
     auth_check_permission(security_scopes,token_data,authenticate_value)
     return user
 
-async def get_current_active_user(current_user:Usuario = Security(get_current_user, scopes=["assist"])):
+async def get_current_active_user(current_user:Usuario = Security(get_current_user, scopes=['admin'])):
     return current_user
 
 
