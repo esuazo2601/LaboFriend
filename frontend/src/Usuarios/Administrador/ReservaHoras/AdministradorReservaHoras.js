@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Calendario from './Calendario';
 import { Container } from 'react-bootstrap';
 import HoraReserva from './HoraReserva';
-import './AdministradorReservaHoras.css';
+import './Estilos/AdministradorReservaHoras.css';
 
 const AdministradorReservaHoras = () => {
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);

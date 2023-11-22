@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import '../Estilos/Modales.css';
 
 const ModalReserva = ({ show, handleClose, fecha, hora, onReservar }) => {
   return (
@@ -7,7 +8,7 @@ const ModalReserva = ({ show, handleClose, fecha, hora, onReservar }) => {
       <Modal.Header closeButton className="modal-header-custom">
         <Modal.Title className="ms-auto header-name">Detalles de la Reserva</Modal.Title>
       </Modal.Header >
-      <Modal.Body className="modal-body-custom-description">
+      <Modal.Body className="modal-body">
         <p>Fecha: {fecha}</p>
         <p>Hora: {hora}</p>
       </Modal.Body>

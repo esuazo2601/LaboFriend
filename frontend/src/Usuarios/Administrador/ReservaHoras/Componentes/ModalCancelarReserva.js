@@ -1,15 +1,14 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { format } from 'date-fns';
-import esLocale from 'date-fns/locale/es';
+import '../Estilos/Modales.css';
 
 const ModalCancelarReserva = ({ show, handleClose, fecha, hora, onCancelarReserva }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton className="modal-header-custom">
-        <Modal.Title className="ms-auto header-name">Confirmar Reserva</Modal.Title>
+        <Modal.Title className="ms-auto header-name">Cancelar Reserva</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="modal-body-custom-description">
+      <Modal.Body className="modal-body">
         <p>Fecha: {fecha}</p>
         <p>Hora: {hora}</p>
       </Modal.Body>
