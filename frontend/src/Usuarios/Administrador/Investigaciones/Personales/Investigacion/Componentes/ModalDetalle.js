@@ -37,7 +37,7 @@ const DetalleAvance = ({ show, avance, onHide }) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-center modal-footer-custom">
-                    <Button variant="primary" onClick={closeModal} className="modal-button btn-save">
+                    <Button variant="primary" onClick={closeModal} className="modal-button btn-cancel">
                         Cerrar
                     </Button>
                     <Button variant="primary" className="modal-button btn-save">
