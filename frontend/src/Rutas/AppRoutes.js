@@ -23,9 +23,10 @@ const AppRoutes = () => {
         <Route path="notificaciones" element={<AdministradorNotificaciones />} />
         <Route path="investigaciones/personales" element={<InvestigacionesPersonales />} />
         <Route path="investigaciones/terceros" element={<InvestigacionesTerceros />} />
+        <Route path="investigaciones/terceros/insvestigacion" element={<Investigacion />} />
         <Route path="investigaciones/personales/investigacion" element={<Investigacion />} />
-    </Route>
-  </Routes>
+      </Route>
+    </Routes>
   );
 };
 
