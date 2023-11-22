@@ -46,7 +46,7 @@ const InvestigacionesTerceros = () => {
     {
       nombre: 'Investigación 12',
     },
-       
+    
   ];
 
   const normalizeText = (text) => {

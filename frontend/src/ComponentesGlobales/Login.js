@@ -65,9 +65,19 @@ const volverAInicioSesion = () => {
       console.log(localStorage.getItem('user'))
       console.log(localStorage.getItem('email'))
       console.log(localStorage.getItem('scopes'))
+      
+      if (data.data['scopes'][0] === 'admin'){
+        navigate("/administrador/tablero")
+      }
+      //else if(data.data['scopes'][0] === 'assist'){
+        //deberia ir a asistente
+      //}else{
+        //debe redireccionar a student
+      //}
+      
     }
     catch(error){
-      console.log("ha ocurrido un error "+error)
+      console.log("ha ocurrido un error " + error)
       alert("Email o contraseña incorrectos")
     }
       
