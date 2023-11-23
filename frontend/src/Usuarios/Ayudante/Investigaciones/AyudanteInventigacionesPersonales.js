@@ -1,49 +1,65 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import './investigaciones.css';
-import { getInvestigacionById, getTrabajandoEmail } from '../../../api_service/investigaciones_api.js'
 
-const InvestigacionesPersonales = () => {
+const AyudanteInvestigacionesPersonales = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [investigacionesPersonales, setInvestigacionesPersonales] = useState([]);
   //const [personalInv, setPersonalInv] = useEffect
   /*   const {data,error,loading} = useAxios({
       url:""
     }) */
 
 
-  useEffect(() => {
-    try {
-      const getData = async () => {
-        const data = await getTrabajandoEmail(localStorage.getItem('email'));
-        let investigacion_list = [];
+  //IMPORTAR DESDE BACKEND
+  const investigacionesData = [
+    {
+      nombre: 'Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1',
+    },
+    {
+      nombre: 'Investigación 2',
+    },
+    {
+      nombre: 'Investigación 3',
+    },
+    {
+      nombre: 'Investigación 4',
+    },
+    {
+      nombre: 'Investigación 5 Investigación 5 Investigación 5',
+    },
+    {
+      nombre: 'Investigación 6',
+    },
+    {
+      nombre: 'Investigación 7',
+    },
+    {
+      nombre: 'Investigación 8',
+    },
+    {
+      nombre: 'Investigación 9',
+    },
+    {
+      nombre: 'Investigación 10',
+    },
+    {
+      nombre: 'Investigación 11',
+    },
+    {
+      nombre: 'Investigación 12',
+    },
 
-        for (var i = 0; i < data.length; ++i) {
-          const id = data[i].id_investigacion
-          const investigacion = await getInvestigacionById(id)
-          //console.log(investigacion[0].id)
-          investigacion_list.push(investigacion)
-          console.log('Investigacion list: ', investigacion_list)
-        }
-        setInvestigacionesPersonales(investigacion_list)
-      };
-      getData();
-
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
+  ];
 
   const normalizeText = (text) => {
     return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   };
 
-  const filteredInvestigaciones = investigacionesPersonales.filter(investigacion =>
-    normalizeText(investigacion[0].titulo).includes(normalizeText(searchTerm))
+  const filteredInvestigaciones = investigacionesData.filter(investigacion =>
+    normalizeText(investigacion.nombre).includes(normalizeText(searchTerm))
   );
 
   const itemsPerPage = 20;
@@ -82,11 +98,11 @@ const InvestigacionesPersonales = () => {
       </div>
 
       <div>
-        {investigacionesPersonales.map((investigacion, index) => (
-          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
-            {investigacion[0].titulo.length > 50
-              ? `${investigacion[0].titulo.substring(0, 50)}...`
-              : investigacion[0].titulo}
+        {paginatedInvestigaciones.map((investigacion, index) => (
+          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/ayudante/investigaciones/personales/investigacion'; }}>
+            {investigacion.nombre.length > 50
+              ? `${investigacion.nombre.substring(0, 50)}...`
+              : investigacion.nombre}
           </Button>
         ))}
       </div>
@@ -112,4 +128,4 @@ const InvestigacionesPersonales = () => {
   );
 };
 
-export default InvestigacionesPersonales;
+export default AyudanteInvestigacionesPersonales;

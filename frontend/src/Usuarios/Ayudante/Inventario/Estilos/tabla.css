@@ -1,0 +1,27 @@
+
+
+.encabezado-tabla {
+    background: #003966 !important; 
+    color: #fff !important;
+  }
+  
+.columna-nombre-tabla {
+    background-color: #9CACBA !important;
+  }
+
+  .celdas-restantes-tabla {
+    background-color: #D5D7E5 !important;
+  }
+
+  .table {
+  font-family: 'Lato Light', "LatoWeb", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-collapse: collapse;
+  font-weight: 300;
+  font-size: 22px;
+}
+
+
+
+
+  

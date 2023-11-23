@@ -1,0 +1,21 @@
+.boton-investigacion {
+    margin: 10px 5px; 
+    background-color: #003966; 
+    color: white; 
+    font-size: 16px; 
+    border: none; 
+    border-radius: 10px; 
+    padding: 24px 24px;
+    text-align: center;
+    font-family: 'Lato Light', "LatoWeb", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.search-container-investigaciones {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: 40px;
+    margin-top: 40px;
+    width: 500px; 
+}
+  

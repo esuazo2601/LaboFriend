@@ -1,0 +1,43 @@
+.tablero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px; 
+    margin-top: 50px;
+  }
+  
+  .tablero-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 75%; 
+    height: 100px; 
+    padding: 20px;
+    border-radius: 10px; 
+    text-decoration: none; 
+    color: #fff; 
+    background: #003966; 
+    transition: background-color 0.5s, color 0.5s; 
+    font-family: 'Lato Light', "LatoWeb", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+  }
+  
+  .tablero-icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 10px; 
+  }
+  
+  .tablero-item:hover {
+    background: #D5D7E5; 
+    color: #000; 
+    border-color: #D5D7E5;
+  }
+  
+  .tablero-item.active {
+    background: #D5D7E5; 
+    border-color: #D5D7E5 ;
+    color: #000; 
+  }
