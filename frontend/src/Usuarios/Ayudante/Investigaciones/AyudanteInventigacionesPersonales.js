@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import './investigaciones.css';
 
-const InvestigacionesPersonales = () => {
+const AyudanteInvestigacionesPersonales = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   //const [personalInv, setPersonalInv] = useEffect
@@ -99,7 +99,7 @@ const InvestigacionesPersonales = () => {
 
       <div>
         {paginatedInvestigaciones.map((investigacion, index) => (
-          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
+          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/ayudante/investigaciones/personales/investigacion'; }}>
             {investigacion.nombre.length > 50
               ? `${investigacion.nombre.substring(0, 50)}...`
               : investigacion.nombre}
@@ -128,4 +128,4 @@ const InvestigacionesPersonales = () => {
   );
 };
 
-export default InvestigacionesPersonales;
+export default AyudanteInvestigacionesPersonales;

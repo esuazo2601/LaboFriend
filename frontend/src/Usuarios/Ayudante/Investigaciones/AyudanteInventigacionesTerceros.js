@@ -2,18 +2,13 @@ import React, { useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import './investigaciones.css';
+import './investigaciones.css'
 
-const InvestigacionesPersonales = () => {
+const AyudanteInvestigacionesTerceros = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  //const [personalInv, setPersonalInv] = useEffect
-  /*   const {data,error,loading} = useAxios({
-      url:""
-    }) */
 
-
-  //IMPORTAR DESDE BACKEND
+  // IMPORTAR DESDE BACKEND
   const investigacionesData = [
     {
       nombre: 'Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1',
@@ -82,7 +77,7 @@ const InvestigacionesPersonales = () => {
 
   return (
     <Container>
-      <h1 className="letra-grande">Investigaciones Personales</h1>
+      <h1 className="letra-grande">Investigaciones De Terceros</h1>
       <hr className="linea-divisora" />
       <div className="search-container-investigaciones">
         <input
@@ -99,7 +94,7 @@ const InvestigacionesPersonales = () => {
 
       <div>
         {paginatedInvestigaciones.map((investigacion, index) => (
-          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
+          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/ayudante/investigaciones/terceros/investigacion'; }}>
             {investigacion.nombre.length > 50
               ? `${investigacion.nombre.substring(0, 50)}...`
               : investigacion.nombre}
@@ -128,4 +123,4 @@ const InvestigacionesPersonales = () => {
   );
 };
 
-export default InvestigacionesPersonales;
+export default AyudanteInvestigacionesTerceros;

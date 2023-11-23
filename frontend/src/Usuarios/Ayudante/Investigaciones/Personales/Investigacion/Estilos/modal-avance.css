@@ -1,0 +1,21 @@
+.mb-3 {
+    background-color: #D5D7E5;
+}
+
+.modal-color {
+    background-color: #9CACBA;
+}
+
+.label-custom {
+    font-size: 20px;
+}
+
+.boton-cerrar {
+    background-color: gray;
+    border: 2px solid gray;
+}
+
+.boton-agregar {
+    background-color: #507E9D;
+    border: 2px solid #507E9D;
+}
