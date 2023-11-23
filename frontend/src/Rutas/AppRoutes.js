@@ -22,6 +22,15 @@ import AyudanteInvestigacionesTerceros from '../Usuarios/Ayudante/Investigacione
 import AyudanteInvestigacion from '../Usuarios/Ayudante/Investigaciones/Personales/Investigacion/AyudanteInvestigacion';
 import AyudanteInvestigacionTerceros from '../Usuarios/Ayudante/Investigaciones/Terceros/Investigacion/AyudanteInvestigacionTerceros';
 
+import EstudianteLayout from '../Usuarios/Estudiante/EstudianteLayout';
+import EstudianteCuenta from '../Usuarios/Estudiante/Cuenta/EstudianteCuenta';
+import EstudianteTablero from '../Usuarios/Estudiante/Tablero/EstudianteTablero';
+import EstudianteInventario from '../Usuarios/Estudiante/Inventario/EstudianteInventario';
+import EstudianteReservaHora from '../Usuarios/Estudiante/ReservaHoras/EstudianteReservaHoras';
+import EstudianteNotificaciones from '../Usuarios/Estudiante/Notificaciones/EstudianteNotificaciones';
+import EstudianteInvestigaciones from '../Usuarios/Estudiante/Investigaciones/InventigacionesPersonales';
+import EstudianteInvestigacion from '../Usuarios/Estudiante/Investigaciones/Personales/Investigacion/Investigacion';
+
 
 const AppRoutes = () => {
   return (
@@ -49,10 +58,17 @@ const AppRoutes = () => {
         <Route path="investigaciones/terceros" element={<AyudanteInvestigacionesTerceros />} />
         <Route path="investigaciones/terceros/investigacion" element={<AyudanteInvestigacionTerceros />} />
         <Route path="investigaciones/personales/investigacion" element={<AyudanteInvestigacion />} />
-
-
-
       </Route>
+      
+      <Route path="/estudiante/*" element={<EstudianteLayout />}>
+        <Route path="cuenta" element={<EstudianteCuenta />} />
+        <Route path="tablero" element={<EstudianteTablero />} />
+        <Route path="inventario" element={<EstudianteInventario />} />
+        <Route path="reservaHora" element={<EstudianteReservaHora />} />
+        <Route path="notificaciones" element={<EstudianteNotificaciones />} />
+        <Route path="investigaciones/personales" element={<EstudianteInvestigaciones />} />
+        <Route path="investigaciones/personales/investigacion" element={<EstudianteInvestigacion/>} />
+        </Route>
     </Routes>
   );
 };
