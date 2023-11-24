@@ -15,126 +15,30 @@ const Microorganismo = ({ searchTerm }) => {
       nombre: 'Microorganismo 1',
       nombreCientifico: 'Cientifico 1',
       procedencia: 'Origen 1',
-      ubicacion: 'Ubicación 1',
       detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Microorganismo 2',
-      nombreCientifico: 'Cientifico 2',
-      procedencia: 'Origen 2',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 100
-    },
-    {
-      
-      nombre: 'Microorganismo 1',
-      nombreCientifico: 'Cientifico 1',
-      procedencia: 'Origen 1',
-      ubicacion: 'Ubicación 1',
-      detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Microorganismo 2',
-      nombreCientifico: 'Cientifico 2',
-      procedencia: 'Origen 2',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      
-      nombre: 'Microorganismo 1',
-      nombreCientifico: 'Cientifico 1',
-      procedencia: 'Origen 1',
-      ubicacion: 'Ubicación 1',
-      detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Microorganismo 2',
-      nombreCientifico: 'Cientifico 2',
-      procedencia: 'Origen 2',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      
-      nombre: 'Microorganismo 1',
-      nombreCientifico: 'Cientifico 1',
-      procedencia: 'Origen 1',
-      ubicacion: 'Ubicación 1',
-      detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Microorganismo 21',
-      nombreCientifico: 'Cientifico 2',
-      procedencia: 'Origen 2',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 10
     },
   ];
 
   const [showModalEliminar, setShowModalEliminar] = useState(false);
-  const [showModalStock, setShowModalStock] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
   const [selectedMicroorganismo, setSelectedMicroorganismo] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState({
-    descripcion: '',
     procedencia: '',
-    ubicacion: '',
     detalles: '',
-    imagen: '',
   });
-
-  const [newStock, setNewStock] = useState(0);
-
-  // Stock del microorganismo seleccionado
-  const handleStockClick = (microorganismo) => {
-    setShowModalStock(true);
-    setSelectedMicroorganismo(microorganismo);
-    setNewStock(microorganismo.stock);
-  };
 
   // Editar descripción del microorganismo seleccionado
   const handleDescriptionClick = (microorganismo) => {
     setShowModalDescription(true);
     setSelectedMicroorganismo(microorganismo);
     setSelectedDescription({
-      descripcion: microorganismo.descripcion,
       procedencia: microorganismo.procedencia,
-      ubicacion: microorganismo.ubicacion,
       detalles: microorganismo.detalles,
-      imagen: microorganismo.imagen,
     });
   };
 
-  const handleIncreaseStock = () => {
-    setNewStock(newStock + 1);
-  };
 
-  const handleDecreaseStock = () => {
-    if (newStock > 0) {
-      setNewStock(newStock - 1);
-    }
-  };
 
-  const handleSaveStock = () => {
-    setShowModalStock(false);
-  };
 
   const handleSaveDescription = () => {
     setShowModalDescription(false);
@@ -184,7 +88,6 @@ const Microorganismo = ({ searchTerm }) => {
       <thead>
         <tr>
           <th className="encabezado-tabla text-center align-middle">Nombre</th>
-          <th className="encabezado-tabla text-center align-middle">Stock</th>
           <th className="encabezado-tabla text-center align-middle">Acción</th>
         </tr>
       </thead>
@@ -194,12 +97,7 @@ const Microorganismo = ({ searchTerm }) => {
             <td className="columna-nombre-tabla text-center align-middle">
               {microorganismo.nombre}
             </td>
-            <td 
-              className="celdas-restantes-tabla text-center align-middle"
-              onClick={() => handleStockClick(microorganismo)}
-            >
-              {microorganismo.stock}
-            </td>
+            
             <td className="celdas-restantes-tabla text-center align-middle">
               <div className="action-container">
                 <div className="action-item" onClick={() => handleDescriptionClick(microorganismo)}>
@@ -233,16 +131,6 @@ const Microorganismo = ({ searchTerm }) => {
           Siguiente
         </button>
       </div>
-
-      <ModalStockMicroorganismo
-        show={showModalStock}
-        onHide={() => setShowModalStock(false)}
-        microorganismo={selectedMicroorganismo}
-        newStock={newStock}
-        onIncrease={handleIncreaseStock}
-        onDecrease={handleDecreaseStock}
-        onSave={handleSaveStock}
-      />
 
       <ModalDescriptionMicroorganismo
         show={showModalDescription}

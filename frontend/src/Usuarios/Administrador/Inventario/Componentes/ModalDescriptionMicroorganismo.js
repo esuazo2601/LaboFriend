@@ -12,7 +12,6 @@ const ModalDescriptionMicroorganismo = ({ show, onHide, microorganismo, onSave }
       nombre: microorganismo.nombre,
       nombreCientifico: microorganismo.nombreCientifico,
       procedencia: microorganismo.procedencia,
-      ubicacion: microorganismo.ubicacion,
       detalles: microorganismo.detalles,
     });
   };
@@ -87,20 +86,6 @@ const ModalDescriptionMicroorganismo = ({ show, onHide, microorganismo, onSave }
             />
           ) : (
             <div className="scrollable-text">{microorganismo.procedencia}</div>
-          )}
-        </div>
-        <div className="data-item">
-          <p>Ubicación:</p>
-          {isEditing ? (
-            <Form.Control
-              type="text"
-              name="ubicacion"
-              value={editedMicroorganismo.ubicacion}
-              onChange={handleInputChange}
-              className="custom-input"
-            />
-          ) : (
-            <div className="scrollable-text">{microorganismo.ubicacion}</div>
           )}
         </div>
         <div className="data-item">

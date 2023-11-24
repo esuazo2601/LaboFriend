@@ -10,9 +10,8 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
     setIsEditing(true);
     setEditedEquipo({
       nombre: equipo.nombre,
-      ubicacion: equipo.ubicacion,
-      modoUso: equipo.modoUso,
-      detalles: equipo.detalles,
+      sala: equipo.ubicacion,
+      descripcion: equipo.descripcion,
     });
   };
 
@@ -58,45 +57,32 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
             <div className="black-square"></div>
             <div className="text-container">
               <div className="data-item">
-                <p>Ubicación:</p>
+                <p>Sala:</p>
                 {isEditing ? (
                   <Form.Control
                     type="text"
                     name="ubicacion"
-                    value={editedEquipo.ubicacion}
+                    value={editedEquipo.sala}
                     onChange={handleInputChange}
                     className="custom-input"
                   />
                 ) : (
-                  <div className="scrollable-text">{equipo.ubicacion}</div>
+                  <div className="scrollable-text">{equipo.sala}</div>
                 )}
               </div>
-              <div className="data-item">
-                <p>Modo de uso:</p>
-                {isEditing ? (
-                  <Form.Control
-                    type="text"
-                    name="modoUso"
-                    value={editedEquipo.modoUso}
-                    onChange={handleInputChange}
-                    className="custom-input"
-                  />
-                ) : (
-                  <div className="scrollable-text">{equipo.modoUso}</div>
-                )}
-              </div>
+          
               <div className="data-item">
                 <p>Detalles:</p>
                 {isEditing ? (
                   <Form.Control
                     as="textarea"
                     name="detalles"
-                    value={editedEquipo.detalles}
+                    value={editedEquipo.descripcion}
                     onChange={handleInputChange}
                     className="custom-input"
                   />
                 ) : (
-                  <div className="scrollable-text">{equipo.detalles}</div>
+                  <div className="scrollable-text">{equipo.descripcion}</div>
                 )}
               </div>
             </div>

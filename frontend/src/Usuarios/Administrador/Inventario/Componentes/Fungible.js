@@ -12,19 +12,11 @@ const Fungible = ({ searchTerm }) => {
   const fungiblesData = [
     {
       nombre: 'Fungible 12',
-      procedencia: 'Origen 3',
+      tipo: 'tipo 3',
       ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
+      // detalles: 'Detalles 3',
+      // imagen: 'imagen.jpg', 
       stock: 100
-    },
-    {
-      nombre: 'Fungible 13',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
     },
   ];
 
@@ -35,10 +27,10 @@ const Fungible = ({ searchTerm }) => {
   const [selectedFungible, setSelectedFungible] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState({
     descripcion: '',
-    procedencia: '',
+    tipo: '',
     ubicacion: '',
-    detalles: '',
-    imagen: '',
+    // detalles: '',
+    // imagen: '',
   });
 
   const [newStock, setNewStock] = useState(0);
@@ -67,7 +59,6 @@ const Fungible = ({ searchTerm }) => {
       descripcion: fungible.descripcion,
       procedencia: fungible.procedencia,
       ubicacion: fungible.ubicacion,
-      detalles: fungible.detalles,
       imagen: fungible.imagen,
     });
   };
