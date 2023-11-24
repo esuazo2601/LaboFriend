@@ -12,7 +12,7 @@ import { FaVial } from 'react-icons/fa';
 import { motion } from "framer-motion";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './login.css';
-import {client, login, getUser, decodedToken} from '../api_service/user_api.js'
+import {client, login, getUser, decodedToken, register} from '../api_service/user_api.js'
 //import {jwt} from 'jsonwebtoken'
 const Login = () => {
   const navigate = useNavigate();
@@ -28,10 +28,11 @@ const volverAInicioSesion = () => {
 
   const [formulario, setFormulario] = useState({
     email: "",
+    nombre:"",
     contrasena: "",
   });
 
-  const { email, contrasena } = formulario;
+  const { email, nombre,contrasena } = formulario;
   const [textVisible, setTextVisible] = useState(false);
 
   useEffect(() => {
@@ -39,11 +40,13 @@ const volverAInicioSesion = () => {
   }, []);
 
   const handleInputChangue = (event) => {
+    
     const { name, value } = event.target;
     setFormulario({ ...formulario, [name]: value });
   };
 
   const handleSubmitLogin = async (event) => {
+    console.log("Usando handle submit de login")
     event.preventDefault()
     if (!email || !contrasena) {
       // Mostrar una alerta de error
@@ -53,7 +56,7 @@ const volverAInicioSesion = () => {
 
     try{
       const token = await login(email,contrasena)
-      //console.log(token.data)
+      console.log(token.data)
       const data = await decodedToken(token.data['access_token'])
       //console.log(data.data)
       //navigate('/administrador/tablero');
@@ -69,11 +72,11 @@ const volverAInicioSesion = () => {
       if (data.data['scopes'][0] === 'admin'){
         navigate("/administrador/tablero")
       }
-      //else if(data.data['scopes'][0] === 'assist'){
-        //deberia ir a asistente
-      //}else{
-        //debe redireccionar a student
-      //}
+      else if(data.data['scopes'][0] === 'assist'){
+        navigate("/ayudante/tablero")
+      }else{
+        navigate("/estudiante/tablero")
+      }
       
     }
     catch(error){
@@ -83,8 +86,28 @@ const volverAInicioSesion = () => {
       
   };
 
-  const handleSubmit= (event) => {
+  const handleSubmit = async(event) => {
+    console.log("Usando handle submit de registro")
+    //Registrar usuario
     event.preventDefault()
+    if (!email || !contrasena) {
+      // Mostrar una alerta de error
+      alert("Por favor, completa todos los campos");
+      return;
+    }
+    try
+    {
+      console.log("email",email,"nombre",nombre,"passowrd",contrasena)
+      const registered = await register(email,nombre,contrasena)
+      console.log(registered)
+      navigate("/")
+    }
+    catch(error)
+    {
+      console.log("ha ocurrido un error " + error)
+      alert("Email o contraseña incorrectos")
+    }
+
   };
 
 
@@ -711,6 +734,17 @@ const volverAInicioSesion = () => {
 
             <Form >
                 {/* REGISTRO */}
+                <Form.Group className="mb-3" controlId="formBasicText">
+                  <Form.Label>Nombre</Form.Label>
+                  <Form.Control
+                    className="formulario"
+                    type="text"
+                    placeholder="Ingresa tu nombre"
+                    name="nombre"
+                    value={nombre}
+                    onChange={handleInputChangue}
+                  />
+                </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
@@ -734,7 +768,7 @@ const volverAInicioSesion = () => {
                     name="contrasena"
                   />
                 </Form.Group>
-
+{/* 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>Repetir contraseña</Form.Label>
                   <Form.Control
@@ -746,7 +780,7 @@ const volverAInicioSesion = () => {
                     name="contrasena"
                   />
                 </Form.Group>
-
+ */}
                 <Button className="formulario" onClick={handleSubmit} variant="dark" type="submit">
                 Registrarte
               </Button>

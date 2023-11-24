@@ -21,13 +21,29 @@ export async function login(email, password){
         //AUTH_TOKEN = 'Bearer '+ response.data["access_token"]
         return response
     } catch (error) {
-        console.error("Error en la petición a la API: ", error);
+        console.error("Error en la petición a la API de login: ", error);
         throw error; // Lanza la excepción para que puedas manejarla en el lugar donde llamas a la función
     }
 }
 
-// await login("richixdpro@gmail.com","juanitouwu");
-// console.log(client.defaults)
+export async function register (email, nombre ,password){
+    try{
+        const user = {
+            "email":email,
+            "nombre":nombre,
+            "password":password
+        }
+        const response = await client.post("/usuario",user);
+        console.log(response)
+        return response
+    }catch(error){
+        console.error("Error en registro",error)
+        throw error
+    }
+}
+
+//const resp = await register("didox@didox.com","dido");
+//console.log(resp)
 
 export async function getUser(){
     const response = await client.get("/usuario/datos")
