@@ -4,32 +4,29 @@ import '../Estilos/modal.css';
 
 const ModalAgregarFungible = (props) => {
   const [nombre, setNombre] = useState('');
-  const [procedencia, setProcedencia] = useState('');
+  const [tipo, setTipo] = useState('');
   const [ubicacion, setUbicacion] = useState('');
-  const [detalles, setDetalles] = useState('');
   const [stock, setStock] = useState('');
   const [imagen, setImagen] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = () => {
-    if (!nombre || !procedencia || !ubicacion || !detalles || !stock || !imagen) {
+    if (!nombre || !tipo|| !ubicacion || !stock ) {
       setShowAlert(true);
       setSuccess(false);
       return;
     }
-    console.log({ nombre, procedencia, ubicacion, detalles, stock, imagen });
+    console.log({ nombre, tipo, ubicacion, stock });
     setSuccess(true);
     setShowAlert(false);
   };
 
   const handleClose = () => {
     setNombre('');
-    setProcedencia('');
+    setTipo('');
     setUbicacion('');
-    setDetalles('');
     setStock('');
-    setImagen(null);
     setShowAlert(false);
     setSuccess(false);
     props.onHide();
@@ -55,20 +52,12 @@ const ModalAgregarFungible = (props) => {
             <Form.Control type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Procedencia</Form.Label>
-            <Form.Control type="text" value={procedencia} onChange={(e) => setProcedencia(e.target.value)} />
+            <Form.Label>Tipo</Form.Label>
+            <Form.Control type="text" value={tipo} onChange={(e) => setTipo(e.target.value)} />
           </Form.Group>
           <Form.Group>
             <Form.Label>Ubicación</Form.Label>
             <Form.Control type="text" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Detalles</Form.Label>
-            <Form.Control as="textarea" rows={3} value={detalles} onChange={(e) => setDetalles(e.target.value)} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Stock</Form.Label>
-            <Form.Control type="number" value={stock} onChange={(e) => setStock(e.target.value)} />
           </Form.Group>
           <Form.Group>
             <Form.Label>Imagen</Form.Label>
