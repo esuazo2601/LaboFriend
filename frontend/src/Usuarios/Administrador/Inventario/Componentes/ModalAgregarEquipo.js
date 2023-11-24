@@ -6,32 +6,28 @@ import '../Estilos/modal.css';
 
 const ModalAgregarEquipo = (props) => {
   const [nombre, setNombre] = useState('');
-  const [ubicacion, setUbicacion] = useState('');
-  const [detalles, setDetalles] = useState('');
-  const [modoUso, setModoUso] = useState('');
+  const [sala, setSala] = useState('');
+  const [descripcion, setDescripcion] = useState('');
   const [fechaMantenimiento, setFechaMantenimiento] = useState(null);
-  const [imagen, setImagen] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = () => {
-    if (!nombre || !ubicacion || !detalles || !modoUso || !imagen) {
+    if (!nombre || !sala || !descripcion) {
       setShowAlert(true);
       setSuccess(false);
       return;
     }
-    console.log({ nombre, ubicacion, detalles, modoUso, fechaMantenimiento, imagen });
+    console.log({ nombre, sala, descripcion});
     setSuccess(true);
     setShowAlert(false);
   };
 
   const handleClose = () => {
     setNombre('');
-    setUbicacion('');
-    setDetalles('');
-    setModoUso('');
+    setSala('');
+    setDescripcion('');
     setFechaMantenimiento(null);
-    setImagen(null);
     setShowAlert(false);
     setSuccess(false);
     props.onHide();
@@ -57,16 +53,12 @@ const ModalAgregarEquipo = (props) => {
             <Form.Control type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Ubicación</Form.Label>
-            <Form.Control type="text" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
+            <Form.Label>Sala</Form.Label>
+            <Form.Control type="text" value={sala} onChange={(e) => setSala(e.target.value)} />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Detalles</Form.Label>
-            <Form.Control as="textarea" rows={3} value={detalles} onChange={(e) => setDetalles(e.target.value)} />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Modo de Uso</Form.Label>
-            <Form.Control as="textarea" rows={3} value={modoUso} onChange={(e) => setModoUso(e.target.value)} />
+            <Form.Label>Descripción</Form.Label>
+            <Form.Control as="textarea" rows={3} value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
           </Form.Group>
           <Form.Group>
             <Form.Label>Fecha de Mantenimiento</Form.Label>
@@ -78,10 +70,6 @@ const ModalAgregarEquipo = (props) => {
                 placeholderText="  Sin fecha"
               />
             </div>
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Imagen</Form.Label>
-            <Form.Control type="file" onChange={(e) => setImagen(e.target.files[0])} />
           </Form.Group>
         </Form>
       </Modal.Body>

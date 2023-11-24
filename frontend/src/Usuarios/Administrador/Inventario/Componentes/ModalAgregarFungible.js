@@ -59,10 +59,10 @@ const ModalAgregarFungible = (props) => {
             <Form.Label>Ubicación</Form.Label>
             <Form.Control type="text" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
           </Form.Group>
-          <Form.Group>
+          {/* <Form.Group>
             <Form.Label>Imagen</Form.Label>
             <Form.Control type="file" onChange={(e) => setImagen(e.target.files[0])} />
-          </Form.Group>
+          </Form.Group> */}
         </Form>
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center modal-footer-custom">

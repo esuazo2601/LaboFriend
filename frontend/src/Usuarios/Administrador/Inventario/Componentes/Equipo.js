@@ -12,19 +12,9 @@ const Equipo = ({ searchTerm }) => {
   const equiposData = [
     {
       nombre: 'Equipo 1',
-      ubicacion: 'Ubicación 1',
-      modoUso: 'Mode de uso 1',
-      detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
+      sala: 'Sala 1',
       mantenimiento: '01-01-2023',
-    },
-    {
-      nombre: 'Equipo 2',
-      ubicacion: 'Ubicación 2',
-      modoUso: 'Mode de uso 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      mantenimiento: '01-01-2023',
+      descripcion: 'Descripción 1',
     },
   ];
 
@@ -32,9 +22,8 @@ const Equipo = ({ searchTerm }) => {
   const [showModalDescription, setShowModalDescription] = useState(false);
   const [selectedEquipo, setSelectedEquipo] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState({
-    ubicacion: '',
-    modoUso: '',
-    detalles: '',
+    sala: '',
+    descripcion: '',
   });
 
   const [showModalMantenimiento, setShowModalMantenimiento] = useState(false);
@@ -63,9 +52,8 @@ const Equipo = ({ searchTerm }) => {
     setShowModalDescription(true);
     setSelectedEquipo(equipo);
     setSelectedDescription({
-      ubicacion: equipo.ubicacion,
-      modoUso: equipo.modoUso,
-      detalles: equipo.detalles,
+      Sala: equipo.sala,
+      descripcion: equipo.descripcion,
     });
   };
 
