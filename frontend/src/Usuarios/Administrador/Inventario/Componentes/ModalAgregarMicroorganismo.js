@@ -6,20 +6,17 @@ const ModalAgregarMicroorganismo = (props) => {
   const [nombre, setNombre] = useState('');
   const [nombreCientifico, setNombreCientifico] = useState('');
   const [procedencia, setProcedencia] = useState('');
-  const [ubicacion, setUbicacion] = useState('');
   const [detalles, setDetalles] = useState('');
-  const [stock, setStock] = useState('');
-  const [imagen, setImagen] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = () => {
-    if (!nombre || !nombreCientifico || !procedencia || !ubicacion || !detalles || !stock || !imagen) {
+    if (!nombre || !nombreCientifico || !procedencia) {
       setShowAlert(true);
       setSuccess(false);
       return;
     }
-    console.log({ nombre, nombreCientifico, procedencia, ubicacion, detalles, stock, imagen });
+    console.log({ nombre, nombreCientifico, procedencia});
     setSuccess(true);
     setShowAlert(false);
   };
@@ -28,10 +25,6 @@ const ModalAgregarMicroorganismo = (props) => {
     setNombre('');
     setNombreCientifico('');
     setProcedencia('');
-    setUbicacion('');
-    setDetalles('');
-    setStock('');
-    setImagen(null);
     setShowAlert(false);
     setSuccess(false);
     props.onHide();
@@ -65,20 +58,8 @@ const ModalAgregarMicroorganismo = (props) => {
             <Form.Control type="text" value={procedencia} onChange={(e) => setProcedencia(e.target.value)} />
           </Form.Group>
           <Form.Group >
-            <Form.Label>Ubicación</Form.Label>
-            <Form.Control type="text" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
-          </Form.Group>
-          <Form.Group >
             <Form.Label>Detalles</Form.Label>
             <Form.Control as="textarea" rows={3} value={detalles} onChange={(e) => setDetalles(e.target.value)} />
-          </Form.Group>
-          <Form.Group >
-            <Form.Label>Stock</Form.Label>
-            <Form.Control type="number" value={stock} onChange={(e) => setStock(e.target.value)} />
-          </Form.Group>
-          <Form.Group >
-            <Form.Label>Imagen</Form.Label>
-            <Form.Control type="file" onChange={(e) => setImagen(e.target.files[0])} />
           </Form.Group>
         </Form>
       </Modal.Body>
