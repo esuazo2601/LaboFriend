@@ -3,9 +3,10 @@ import { Table, Button } from 'react-bootstrap';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalStockMicroorganismo from './ModalStockMicroorganismo';
 import ModalDescriptionMicroorganismo from './ModalDescriptionMicroorganismo';
+import ModalEliminarConfirmar from './ModalEliminarConfirmar';
 
 const Microorganismo = ({ searchTerm }) => {
   const microorganismosData = [
@@ -26,7 +27,7 @@ const Microorganismo = ({ searchTerm }) => {
       ubicacion: 'Ubicación 2',
       detalles: 'Detalles 2',
       imagen: 'imagen.jpg', 
-      stock: 10
+      stock: 100
     },
     {
       
@@ -77,7 +78,7 @@ const Microorganismo = ({ searchTerm }) => {
       stock: 10
     },
     {
-      nombre: 'Microorganismo 2',
+      nombre: 'Microorganismo 21',
       nombreCientifico: 'Cientifico 2',
       procedencia: 'Origen 2',
       ubicacion: 'Ubicación 2',
@@ -87,6 +88,7 @@ const Microorganismo = ({ searchTerm }) => {
     },
   ];
 
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalStock, setShowModalStock] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
   const [selectedMicroorganismo, setSelectedMicroorganismo] = useState(null);
@@ -167,38 +169,52 @@ const Microorganismo = ({ searchTerm }) => {
     }
   };
 
+  const handleEliminarClick = (microorganismo) => {
+    setSelectedMicroorganismo(microorganismo);
+    setShowModalEliminar(true);
+  };
+
+  const handleDelete = () => {
+    console.log("Microorganismo eliminado"); // Simulación con backend
+  };
+
   return (
     <div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th className="encabezado-tabla text-center align-middle">Nombre</th>
-            <th className="encabezado-tabla text-center align-middle">Descripción</th>
-            <th className="encabezado-tabla text-center align-middle">Stock</th>
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th className="encabezado-tabla text-center align-middle">Nombre</th>
+          <th className="encabezado-tabla text-center align-middle">Stock</th>
+          <th className="encabezado-tabla text-center align-middle">Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {paginatedMicroorganismos.map((microorganismo, index) => (
+          <tr key={index}>
+            <td className="columna-nombre-tabla text-center align-middle">
+              {microorganismo.nombre}
+            </td>
+            <td 
+              className="celdas-restantes-tabla text-center align-middle"
+              onClick={() => handleStockClick(microorganismo)}
+            >
+              {microorganismo.stock}
+            </td>
+            <td className="celdas-restantes-tabla text-center align-middle">
+              <div className="action-container">
+                <div className="action-item" onClick={() => handleDescriptionClick(microorganismo)}>
+                  <FontAwesomeIcon icon={faEye} />
+                </div>
+                <div className="action-divider"></div>
+                <div className="action-item" onClick={() => handleEliminarClick(microorganismo)}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </div>
+              </div>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {paginatedMicroorganismos.map((microorganismo, index) => (
-            <tr key={index}>
-              <td className="columna-nombre-tabla text-center align-middle">
-                {microorganismo.nombre}
-              </td>
-              <td
-                className="celdas-restantes-tabla text-center align-middle"
-                onClick={() => handleDescriptionClick(microorganismo)}
-              >
-                <FontAwesomeIcon icon={faEye} />
-              </td>
-              <td
-                className="celdas-restantes-tabla text-center align-middle"
-                onClick={() => handleStockClick(microorganismo)}
-              >
-                {microorganismo.stock}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+        ))}
+      </tbody>
+    </Table>
 
       <div className="pagination">
         <button onClick={handlePreviousPage} disabled={currentPage === 1}>
@@ -233,6 +249,14 @@ const Microorganismo = ({ searchTerm }) => {
         onHide={() => setShowModalDescription(false)}
         microorganismo={selectedMicroorganismo}
         onSave={handleSaveDescription}
+      />
+
+      <ModalEliminarConfirmar
+        show={showModalEliminar}
+        onHide={() => setShowModalEliminar(false)}
+        tipoElemento="Microorganismo" 
+        nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre : ''}
+        onDelete={handleDelete}
       />
     </div>
   );

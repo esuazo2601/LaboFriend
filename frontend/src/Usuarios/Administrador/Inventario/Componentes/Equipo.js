@@ -3,9 +3,10 @@ import { Table, Button } from 'react-bootstrap';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalMantenimientoEquipo from './ModalMantenimientoEquipo';
 import ModalDescriptionEquipo from './ModalDescriptionEquipo';
+import ModalEliminarConfirmar from './ModalEliminarConfirmar';
 
 const Equipo = ({ searchTerm }) => {
   const equiposData = [
@@ -27,6 +28,7 @@ const Equipo = ({ searchTerm }) => {
     },
   ];
 
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
   const [selectedEquipo, setSelectedEquipo] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState({
@@ -100,14 +102,23 @@ const Equipo = ({ searchTerm }) => {
     }
   };
 
+  const handleEliminarClick = (equipo) => {
+    setSelectedEquipo(equipo);
+    setShowModalEliminar(true);
+  };
+
+  const handleDelete = () => {
+    console.log("Equipo eliminado"); 
+  };
+
   return (
     <div>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th className="encabezado-tabla text-center align-middle">Nombre</th>
-            <th className="encabezado-tabla text-center align-middle">Descripción</th>
             <th className="encabezado-tabla text-center align-middle">Mantenimiento</th>
+            <th className="encabezado-tabla text-center align-middle">Acción</th>
           </tr>
         </thead>
         <tbody>
@@ -116,17 +127,22 @@ const Equipo = ({ searchTerm }) => {
               <td className="columna-nombre-tabla text-center align-middle">
                 {equipo.nombre}
               </td>
-              <td
-                className="celdas-restantes-tabla text-center align-middle"
-                onClick={() => handleDescriptionClick(equipo)}
-              >
-                <FontAwesomeIcon icon={faEye} />
-              </td>
-              <td
+              <td 
                 className="celdas-restantes-tabla text-center align-middle"
                 onClick={() => handleMantenimientoClick(equipo)}
               >
                 {equipo.mantenimiento}
+              </td>
+              <td className="celdas-restantes-tabla text-center align-middle">
+                <div className="action-container">
+                  <div className="action-item" onClick={() => handleDescriptionClick(equipo)}>
+                    <FontAwesomeIcon icon={faEye} />
+                  </div>
+                  <div className="action-divider"></div>
+                  <div className="action-item" onClick={() => handleEliminarClick(equipo)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </div>
+                </div>
               </td>
             </tr>
           ))}
@@ -165,6 +181,14 @@ const Equipo = ({ searchTerm }) => {
         onHide={() => setShowModalDescription(false)}
         equipo={selectedEquipo}
         onSave={handleSaveDescription}
+      />
+
+      <ModalEliminarConfirmar
+        show={showModalEliminar}
+        onHide={() => setShowModalEliminar(false)}
+        tipoElemento="Equipo" 
+        nombreElemento={selectedEquipo ? selectedEquipo.nombre : ''}
+        onDelete={handleDelete}
       />
     </div>
   );

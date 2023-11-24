@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import '../../../EstilosGlobales/basicos.css';
@@ -7,10 +8,13 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Fungible from './Componentes/Fungible';
 import Microorganismo from './Componentes/Microorganismo';
 import Equipo from './Componentes/Equipo';
-
+import ModalAgregarFungible from './Componentes/ModalAgregarFungible'; 
+import ModalAgregarMicroorganismo from './Componentes/ModalAgregarMicroorganismo'; 
+import ModalAgregarEquipo from './Componentes/ModalAgregarEquipo'; 
 function AdministradorInventario() {
   const [selectedOption, setSelectedOption] = useState('fungible');
-  const [searchTerm, setSearchTerm] = useState(''); 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const renderSelectedComponent = () => {
     switch (selectedOption) {
@@ -19,12 +23,38 @@ function AdministradorInventario() {
       case 'microorganismo':
         return <Microorganismo searchTerm={searchTerm} />;
       case 'equipo':
-        return <Equipo searchTerm={searchTerm}/>;
+        return <Equipo searchTerm={searchTerm} />;
       default:
         return null;
     }
   };
-  
+
+  const renderModal = () => {
+    switch (selectedOption) {
+      case 'fungible':
+        return <ModalAgregarFungible show={showModal} onHide={() => setShowModal(false)} />;
+      case 'microorganismo':
+        return <ModalAgregarMicroorganismo show={showModal} onHide={() => setShowModal(false)} />;
+      case 'equipo':
+        return <ModalAgregarEquipo show={showModal} onHide={() => setShowModal(false)} />;
+      default:
+        return null;
+    }
+  };
+
+  const addButtonLabel = () => {
+    switch (selectedOption) {
+      case 'fungible':
+        return 'Agregar Fungible';
+      case 'microorganismo':
+        return 'Agregar Microorganismo';
+      case 'equipo':
+        return 'Agregar Equipo';
+      default:
+        return 'Agregar al Inventario';
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -60,6 +90,15 @@ function AdministradorInventario() {
               Equipo
             </p>
           </div>
+  
+          <Button 
+            className='boton-modal-avance' 
+            onClick={() => setShowModal(true)}
+          >
+            {selectedOption === 'fungible' ? 'Agregar Fungible' :
+             selectedOption === 'microorganismo' ? 'Agregar Microorganismo' :
+             'Agregar Equipo'}
+          </Button>
         </nav>
         <div className="search-container">
           <input
@@ -74,9 +113,10 @@ function AdministradorInventario() {
           </span>
         </div>
         {renderSelectedComponent()}
+        {renderModal()}
       </Container>
     </motion.div>
-  );
+  );  
 }
 
 export default AdministradorInventario;

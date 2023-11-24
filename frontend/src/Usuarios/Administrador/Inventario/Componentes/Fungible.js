@@ -1,110 +1,22 @@
 import React, { useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import '../Estilos/tabla.css';
-import '../Estilos/paginacion.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalStockFungible from './ModalStockFungible';
 import ModalDescriptionFungible from './ModalDescriptionFungible';
+import ModalEliminarConfirmar from './ModalEliminarConfirmar';
+import '../Estilos/tabla.css';
+import '../Estilos/paginacion.css';
 
 const Fungible = ({ searchTerm }) => {
   const fungiblesData = [
-    {
-      // Para comprobar que no se desborde 
-      nombre: 'Fungible 1',
-      procedencia: 'Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1 Origen 1',
-      ubicacion: 'Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1 Ubicación 1',
-      detalles: 'Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1 Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 2',
-      procedencia: 'Origen 2 lajlakjakljaljalajlakj',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 500
-    },
-    {
-      nombre: 'Fungible 3',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 4',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 5',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 6',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 7',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 8',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 9',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 10',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Fungible 11',
-      procedencia: 'Origen 3',
-      ubicacion: 'Ubicación 3',
-      detalles: 'Detalles 3',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
     {
       nombre: 'Fungible 12',
       procedencia: 'Origen 3',
       ubicacion: 'Ubicación 3',
       detalles: 'Detalles 3',
       imagen: 'imagen.jpg', 
-      stock: 10
+      stock: 100
     },
     {
       nombre: 'Fungible 13',
@@ -114,9 +26,10 @@ const Fungible = ({ searchTerm }) => {
       imagen: 'imagen.jpg', 
       stock: 10
     },
-    
   ];
 
+ 
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalStock, setShowModalStock] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
   const [selectedFungible, setSelectedFungible] = useState(null);
@@ -129,6 +42,15 @@ const Fungible = ({ searchTerm }) => {
   });
 
   const [newStock, setNewStock] = useState(0);
+
+  const handleEliminarClick = (fungible, tipo) => {
+    setSelectedFungible(fungible);
+    setShowModalEliminar(true);
+  };
+
+  const handleDelete = () => {
+    console.log("Elemento eliminado"); // Simulación con backend
+  };
 
   // Stock del fungible seleccionado
   const handleStockClick = (fungible) => {
@@ -203,8 +125,9 @@ const Fungible = ({ searchTerm }) => {
         <thead>
           <tr>
             <th className="encabezado-tabla text-center align-middle">Nombre</th>
-            <th className="encabezado-tabla text-center align-middle">Descripción</th>
             <th className="encabezado-tabla text-center align-middle">Stock</th>
+            <th className="encabezado-tabla text-center align-middle">Acción</th>
+            
           </tr>
         </thead>
         <tbody>
@@ -213,17 +136,22 @@ const Fungible = ({ searchTerm }) => {
               <td className="columna-nombre-tabla text-center align-middle">
                 {fungible.nombre}
               </td>
-              <td
-                className="celdas-restantes-tabla text-center align-middle"
-                onClick={() => handleDescriptionClick(fungible)}
-              >
-                <FontAwesomeIcon icon={faEye} />
-              </td>
-              <td
+              <td 
                 className="celdas-restantes-tabla text-center align-middle"
                 onClick={() => handleStockClick(fungible)}
               >
                 {fungible.stock}
+              </td>
+              <td className="celdas-restantes-tabla text-center align-middle">
+                <div className="action-container">
+                  <div className="action-item" onClick={() => handleDescriptionClick(fungible)}>
+                    <FontAwesomeIcon icon={faEye} />
+                  </div>
+                  <div className="action-divider"></div>
+                  <div className="action-item" onClick={() => handleEliminarClick(fungible)}>
+                    <FontAwesomeIcon icon={faTrash} />
+                  </div>
+                </div>
               </td>
             </tr>
           ))}
@@ -263,6 +191,14 @@ const Fungible = ({ searchTerm }) => {
         onHide={() => setShowModalDescription(false)}
         fungible={selectedFungible}
         onSave={handleSaveDescription}
+      />
+
+      <ModalEliminarConfirmar
+        show={showModalEliminar}
+        onHide={() => setShowModalEliminar(false)}
+        tipoElemento="Fungible" 
+        nombreElemento={selectedFungible ? selectedFungible.nombre : ''}
+        onDelete={handleDelete}
       />
     </div>
   );
