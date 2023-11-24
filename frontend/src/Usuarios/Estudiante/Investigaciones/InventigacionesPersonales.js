@@ -30,7 +30,7 @@ const InvestigacionesPersonales = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, []); 
 
 
   const normalizeText = (text) => {

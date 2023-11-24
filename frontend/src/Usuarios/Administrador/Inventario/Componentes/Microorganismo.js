@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css'
@@ -7,6 +7,7 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalStockMicroorganismo from './ModalStockMicroorganismo';
 import ModalDescriptionMicroorganismo from './ModalDescriptionMicroorganismo';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
+import { getAllMicroorg, postMicroorganismo } from '../../../../api_service/microorganismo_api';
 
 const Microorganismo = ({ searchTerm }) => {
   const microorganismosData = [
@@ -27,6 +28,31 @@ const Microorganismo = ({ searchTerm }) => {
     detalles: '',
   });
 
+<<<<<<< Updated upstream
+=======
+
+  const [microorganismos, setMicroorganismos] = useState([]);
+  const [newStock, setNewStock] = useState(0);
+
+/*   useEffect(() => {
+    try
+    {
+
+    }
+    catch(error)
+    {
+      console.log(error)
+    }
+  },[])
+ */
+  // Stock del microorganismo seleccionado
+  const handleStockClick = (microorganismo) => {
+    setShowModalStock(true);
+    setSelectedMicroorganismo(microorganismo);
+    setNewStock(microorganismo.stock);
+  };
+
+>>>>>>> Stashed changes
   // Editar descripción del microorganismo seleccionado
   const handleDescriptionClick = (microorganismo) => {
     setShowModalDescription(true);
