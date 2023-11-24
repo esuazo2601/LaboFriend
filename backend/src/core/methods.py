@@ -65,6 +65,10 @@ async def add_microorg(microorganismo:Microorganismo):
     }).execute()
     return response
 
+async def get_all_microorg():
+    response = supabase.table('Microorganismo').select("*").execute()
+    return response
+
 async def delete_microorg(id:int):
     response = supabase.table('Microorganismo').delete().eq('id',id).execute()
     if response:

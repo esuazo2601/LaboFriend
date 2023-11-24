@@ -169,7 +169,8 @@ async def make_admin(user:Usuario, security_scopes: SecurityScopes, token:str = 
             status_code=201, detail="Privilegios concedidos con éxito",headers="bearer"
         )
     raise HTTPException(status_code=401, detail="Error al conceder privilegios")
-    
+
+
 async def make_assist(user:Usuario, security_scopes: SecurityScopes,token:str = Depends(oauth2_scheme)):
     
     authenticate_value = auth_scope_value(security_scopes)
