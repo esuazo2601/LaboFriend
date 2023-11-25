@@ -22,29 +22,35 @@ const Microorganismo = ({ searchTerm }) => {
 
   const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
+  const [showModalStock, setShowModalStock] = useState(false);
   const [selectedMicroorganismo, setSelectedMicroorganismo] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState({
     procedencia: '',
     detalles: '',
   });
 
-<<<<<<< Updated upstream
-=======
 
   const [microorganismos, setMicroorganismos] = useState([]);
   const [newStock, setNewStock] = useState(0);
 
-/*   useEffect(() => {
+
+  useEffect(() => {
     try
     {
-
+      const fetchData  = async () =>{
+        const data = await getAllMicroorg();
+        setMicroorganismos(data)
+        console.log(data)
+      }  
+      fetchData();
     }
     catch(error)
     {
       console.log(error)
     }
   },[])
- */
+  
+
   // Stock del microorganismo seleccionado
   const handleStockClick = (microorganismo) => {
     setShowModalStock(true);
@@ -52,7 +58,6 @@ const Microorganismo = ({ searchTerm }) => {
     setNewStock(microorganismo.stock);
   };
 
->>>>>>> Stashed changes
   // Editar descripción del microorganismo seleccionado
   const handleDescriptionClick = (microorganismo) => {
     setShowModalDescription(true);
@@ -62,8 +67,6 @@ const Microorganismo = ({ searchTerm }) => {
       detalles: microorganismo.detalles,
     });
   };
-
-
 
 
   const handleSaveDescription = () => {
@@ -118,10 +121,10 @@ const Microorganismo = ({ searchTerm }) => {
         </tr>
       </thead>
       <tbody>
-        {paginatedMicroorganismos.map((microorganismo, index) => (
+        {microorganismos.map((microorganismo, index) => (
           <tr key={index}>
             <td className="columna-nombre-tabla text-center align-middle">
-              {microorganismo.nombre}
+              {microorganismo.nombre_comun}
             </td>
             
             <td className="celdas-restantes-tabla text-center align-middle">
