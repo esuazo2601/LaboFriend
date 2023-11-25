@@ -142,6 +142,10 @@ async def create_user(user: UsuarioDB):
         "nombre":user.nombre,
         "password":hash_password
     }).execute()
+    if(response.data):
+        supabase.table('Estudiante').insert({
+        "email":user.email
+        }).execute()
     return response
 
 def admin_exist(email: str):
@@ -206,5 +210,6 @@ async def make_student(user:Usuario, security_scopes:SecurityScopes, token:str =
         )
     
     raise HTTPException(status_code=401, detail="Error al conceder privilegios")
+
 
     
