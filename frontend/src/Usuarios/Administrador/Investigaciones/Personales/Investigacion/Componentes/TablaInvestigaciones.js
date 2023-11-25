@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 //import MUIDataTable from 'mui-datatables';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Spinner } from 'react-bootstrap';
 import '../Estilos/tabla-avances.css';
 import '../Estilos/paginacion.css';
 import '../../../../../../EstilosGlobales/basicos.css';
@@ -15,13 +15,26 @@ import { getInvestigaciones, deleteInvestigacion } from '../../../../../../api_s
 const TablaAvances = ({ searchTerm }) => {
 
     const [investigaciones, setInvestgaciones] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await getInvestigaciones();
-                setInvestgaciones(data);
+                if(data){
+                    setInvestgaciones(data);
+                    setLoading(false);
+                }
+                else{
+                    setInvestgaciones([]);
+                    setLoading(false);
+                }
+
             } catch (error) {
                 console.error(error);
+                setLoading(false);
+                setInvestgaciones([]);
             }
         };
 
@@ -88,65 +101,76 @@ const TablaAvances = ({ searchTerm }) => {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         return new Date(fecha).toLocaleDateString(undefined, options);
       };
-    return (
-
+      return (
         <div>
-            <Table striped bordered hover>
-                <thead>
-                    <tr>
-                        <th className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>#</th>
-                        <th className="encabezado-tabla text-center align-middle" style={{ width: '40%' }}>Nombre</th>
-                        {/* <th className="encabezado-tabla text-center align-middle" style={{ width: '40%' }}>Autor</th> */}
-                        <th className="encabezado-tabla text-center align-middle" style={{ width: '10%' }}>Fecha</th>
-                        <th colspan="2" className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {paginatedAvances.map((investigacion, index) => (
-                        <tr key={index}>
-                            <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
-                            <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
-                            {/* <td className="celdas-restantes-tabla text-center align-middle">{investigacion.autor}</td> */}
-                            <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
-                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => window.location.href = '/ayudante/investigaciones/terceros/investigacion'}><FontAwesomeIcon icon={faEye} /></td>
-                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
-            <div className="pagination">
-                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-                    Anterior
-                </button>
-                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentPage(page)}
-                        className={currentPage === page ? "active" : ""}
-                    >
-                        {page}
-                    </button>
-                ))}
-                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    Siguiente
-                </button>
-            </div>
+            {loading ? (
+                <div className='loading-spinner'>
+                    <Spinner animation="border" role="status" size="lg">
+                    <span className="visually-hidden">Cargando...</span>
+                    </Spinner>
+                </div>
+                
+            ) : (
+                <div>
+                    {investigaciones.length === 0 ? (
+                        <p>No hay investigaciones disponibles.</p>
+                    ) : (
+                        <>
+                            <Table striped bordered hover>
+                                <thead>
+                                    <tr>
+                                        <th className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>#</th>
+                                        <th className="encabezado-tabla text-center align-middle" style={{ width: '40%' }}>Nombre</th>
+                                        <th className="encabezado-tabla text-center align-middle" style={{ width: '10%' }}>Fecha</th>
+                                        <th colspan="2" className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {paginatedAvances.map((investigacion, index) => (
+                                        <tr key={index}>
+                                            <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
+                                            <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
+                                            <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
+                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => window.location.href = '/ayudante/investigaciones/terceros/investigacion'}><FontAwesomeIcon icon={faEye} /></td>
+                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                            <div className="pagination">
+                                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                                    Anterior
+                                </button>
+                                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setCurrentPage(page)}
+                                        className={currentPage === page ? "active" : ""}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
+                                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                                    Siguiente
+                                </button>
+                            </div>
 
-
-            <DetalleAvance
-                show={showModalDetalle}
-                avance={selectedAvance}
-                onHide={() => setShowModalDetalle(false)}
-            />
-            <EliminarAvance
-                show={showModalEliminacion}
-                avance={selectedAvance}
-                onHide={() => setShowModalEliminacion(false)}
-                onEliminarAvance={handleEliminarAvance}
-            />
-        </div >
-
-
+                            <DetalleAvance
+                                show={showModalDetalle}
+                                avance={selectedAvance}
+                                onHide={() => setShowModalDetalle(false)}
+                            />
+                            <EliminarAvance
+                                show={showModalEliminacion}
+                                avance={selectedAvance}
+                                onHide={() => setShowModalEliminacion(false)}
+                                onEliminarAvance={handleEliminarAvance}
+                            />
+                        </>
+                    )}
+                </div>
+            )}
+        </div>
     );
 };
 

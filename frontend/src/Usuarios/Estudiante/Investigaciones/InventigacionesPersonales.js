@@ -21,8 +21,8 @@ const InvestigacionesPersonales = () => {
           const investigacion = await getInvestigacionById(id)
           //console.log(investigacion[0].id)
           investigacion_list.push(investigacion)
-          console.log('Investigacion list: ', investigacion_list)
         }
+        console.log('Investigacion list: ', investigacion_list)
         setInvestigacionesPersonales(investigacion_list)
       };
       getData();
@@ -78,7 +78,7 @@ const InvestigacionesPersonales = () => {
 
       <div>
         {investigacionesPersonales.map((investigacion, index) => (
-          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
+          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/estudiante/investigaciones/personales/investigacion'; }}>
             {investigacion[0].titulo.length > 50
               ? `${investigacion[0].titulo.substring(0, 50)}...`
               : investigacion[0].titulo}

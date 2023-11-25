@@ -22,3 +22,16 @@ td {
     max-width: 200px;
     /* Opcional: Establece un ancho máximo para la celda */
 }
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px; /* Ajusta la altura según tus necesidades */
+  }
+  
+  .loading-spinner > .spinner-border {
+    margin-top: 50px; /* Ajusta el margen superior según tus necesidades */
+    width: 5rem;
+    height: 5rem;
+  }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import './investigaciones.css';
@@ -13,6 +13,7 @@ const InvestigacionesPersonales = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [investigacionesPersonales, setInvestigacionesPersonales] = useState([]);
+  const [loading, setLoading] = useState(true);
   //const [personalInv, setPersonalInv] = useEffect
   /*   const {data,error,loading} = useAxios({
       url:""
@@ -24,20 +25,26 @@ const InvestigacionesPersonales = () => {
       const getData = async () => {
         const data = await getTrabajandoEmail(localStorage.getItem('email'));
         let investigacion_list = [];
-
-        for (var i = 0; i < data.length; ++i) {
-          const id = data[i].id_investigacion
-          const investigacion = await getInvestigacionById(id)
-          //console.log(investigacion[0].id)
-          investigacion_list.push(investigacion)
-          console.log('Investigacion list: ', investigacion_list)
+        if(data){
+          for (var i = 0; i < data.length; ++i) {
+            const id = data[i].id_investigacion
+            const investigacion = await getInvestigacionById(id)
+            investigacion_list.push(investigacion)
+            console.log('Investigacion list: ', investigacion_list)
+          }
+          setInvestigacionesPersonales(investigacion_list)
+          setLoading(false)
+        }else{
+          setInvestigacionesPersonales([])
+          setLoading(false)
         }
-        setInvestigacionesPersonales(investigacion_list)
       };
       getData();
 
     } catch (error) {
-      console.log(error);
+      console.log("se encontro un error: ",error);
+      setLoading(false);
+      setInvestigacionesPersonales([])
     }
   }, []);
 
@@ -74,33 +81,51 @@ const InvestigacionesPersonales = () => {
       <hr className="linea-divisora" />
       <Row>
         <Col>
-        <div className="search-container-investigaciones">
-          <input
-            type="text"
-            placeholder="Buscar por nombre"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <span className="search-icon">
-            <FontAwesomeIcon icon={faSearch} />
-          </span>
-        </div>
+          {loading ? (
+            <div className='loading-spinner'>
+              <Spinner animation="border" role="status" size="lg">
+                <span className="visually-hidden">Cargando...</span>
+              </Spinner>
+            </div>
+          ) : (
+            investigacionesPersonales.length > 0 && (
+              <div className="search-container-investigaciones">
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+                <span className="search-icon">
+                  <FontAwesomeIcon icon={faSearch} />
+                </span>
+              </div>
+            )
+          )}
         </Col>
         <Col>
-        <ModalNuevaInvestigacion/>
+          <ModalNuevaInvestigacion />
         </Col>
       </Row>
 
-      <div>
-        {investigacionesPersonales.map((investigacion, index) => (
-          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
-            {investigacion[0].titulo.length > 50
-              ? `${investigacion[0].titulo.substring(0, 50)}...`
-              : investigacion[0].titulo}
-          </Button>
-        ))}
-      </div>
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (
+        <div>
+          {investigacionesPersonales.length === 0 ? (
+            <p>No hay investigaciones disponibles.</p>
+          ) : (
+            paginatedInvestigaciones.map((investigacion, index) => (
+              <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
+                {investigacion[0].titulo.length > 50
+                  ? `${investigacion[0].titulo.substring(0, 50)}...`
+                  : investigacion[0].titulo}
+              </Button>
+            ))
+          )}
+        </div>
+      )}
 
       <div className="pagination">
         <button onClick={handlePreviousPage} disabled={currentPage === 1}>
