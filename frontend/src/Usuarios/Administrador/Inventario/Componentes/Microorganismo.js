@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Spinner } from 'react-bootstrap';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +19,7 @@ const Microorganismo = ({ searchTerm }) => {
       detalles: 'Detalles 1',
     },
   ];
-
+  const [loading, setLoading] =useState(true);
   const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
   const [showModalStock, setShowModalStock] = useState(false);
@@ -39,14 +39,22 @@ const Microorganismo = ({ searchTerm }) => {
     {
       const fetchData  = async () =>{
         const data = await getAllMicroorg();
-        setMicroorganismos(data)
-        console.log(data)
+        if(data){
+          setMicroorganismos(data)
+          setLoading(false)
+          console.log(data)
+        }else{
+          setMicroorganismos([])
+          setLoading(false)
+        }
       }  
       fetchData();
     }
     catch(error)
     {
       console.log(error)
+      setMicroorganismos([])
+      setLoading(false)
     }
   },[])
   
@@ -113,68 +121,82 @@ const Microorganismo = ({ searchTerm }) => {
 
   return (
     <div>
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th className="encabezado-tabla text-center align-middle">Nombre</th>
-          <th className="encabezado-tabla text-center align-middle">Acción</th>
-        </tr>
-      </thead>
-      <tbody>
-        {microorganismos.map((microorganismo, index) => (
-          <tr key={index}>
-            <td className="columna-nombre-tabla text-center align-middle">
-              {microorganismo.nombre_comun}
-            </td>
-            
-            <td className="celdas-restantes-tabla text-center align-middle">
-              <div className="action-container">
-                <div className="action-item" onClick={() => handleDescriptionClick(microorganismo)}>
-                  <FontAwesomeIcon icon={faEye} />
-                </div>
-                <div className="action-divider"></div>
-                <div className="action-item" onClick={() => handleEliminarClick(microorganismo)}>
-                  <FontAwesomeIcon icon={faTrash} />
-                </div>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
+      {loading ? (
+        <div className='loading-spinner'>
+          <Spinner animation="border" role="status" size="lg">
+            <span className="visually-hidden">Cargando...</span>
+          </Spinner>
+        </div>
+      ) : (
+        microorganismos.length > 0 ? (
+          <div>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th className="encabezado-tabla text-center align-middle">Nombre</th>
+                  <th className="encabezado-tabla text-center align-middle">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {microorganismos.map((microorganismo, index) => (
+                  <tr key={index}>
+                    <td className="columna-nombre-tabla text-center align-middle">
+                      {microorganismo.nombre_comun}
+                    </td>
 
-      <div className="pagination">
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          Anterior
-        </button>
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(page)}
-            className={currentPage === page ? "active" : ""}
-          >
-            {page}
-          </button>
-        ))}
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Siguiente
-        </button>
-      </div>
+                    <td className="celdas-restantes-tabla text-center align-middle">
+                      <div className="action-container">
+                        <div className="action-item" onClick={() => handleDescriptionClick(microorganismo)}>
+                          <FontAwesomeIcon icon={faEye} />
+                        </div>
+                        <div className="action-divider"></div>
+                        <div className="action-item" onClick={() => handleEliminarClick(microorganismo)}>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
 
-      <ModalDescriptionMicroorganismo
-        show={showModalDescription}
-        onHide={() => setShowModalDescription(false)}
-        microorganismo={selectedMicroorganismo}
-        onSave={handleSaveDescription}
-      />
+            <div className="pagination">
+              <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                Anterior
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(page)}
+                  className={currentPage === page ? "active" : ""}
+                >
+                  {page}
+                </button>
+              ))}
+              <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                Siguiente
+              </button>
+            </div>
 
-      <ModalEliminarConfirmar
-        show={showModalEliminar}
-        onHide={() => setShowModalEliminar(false)}
-        tipoElemento="Microorganismo" 
-        nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre : ''}
-        onDelete={handleDelete}
-      />
+            <ModalDescriptionMicroorganismo
+              show={showModalDescription}
+              onHide={() => setShowModalDescription(false)}
+              microorganismo={selectedMicroorganismo}
+              onSave={handleSaveDescription}
+            />
+
+            <ModalEliminarConfirmar
+              show={showModalEliminar}
+              onHide={() => setShowModalEliminar(false)}
+              tipoElemento="Microorganismo"
+              nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre : ''}
+              onDelete={handleDelete}
+            />
+          </div>
+        ) : (
+          <p className="text-center">No se encontraron datos.</p>
+        )
+      )}
     </div>
   );
 };
