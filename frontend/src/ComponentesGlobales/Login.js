@@ -97,7 +97,7 @@ const volverAInicioSesion = () => {
     }
     try
     {
-      console.log("email",email,"nombre",nombre,"passowrd",contrasena)
+      console.log("email",email,"nombre",nombre,"password",contrasena)
       const registered = await register(email,nombre,contrasena)
       console.log(registered)
       navigate("/")
@@ -105,7 +105,7 @@ const volverAInicioSesion = () => {
     catch(error)
     {
       console.log("ha ocurrido un error " + error)
-      alert("Email o contraseña incorrectos")
+      alert("Ya existe un usuario con ese correo")
     }
 
   };
