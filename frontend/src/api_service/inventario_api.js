@@ -1,13 +1,13 @@
 import { client } from './user_api.js';
 
-async function getProducto() {
+export async function getProducto() {
     const response = await client.get("producto")
     .then(response => response.data.data)
     .catch(error => console.log("Error en la petición a la api: ",error))
     return response
 }
 
-async function postProducto(nombre,cantidad_total,tipo) {
+export async function postProducto(nombre,cantidad_total,tipo) {
     let data = {
         "nombre":nombre,
         "cantidad_total":cantidad_total,
@@ -20,7 +20,7 @@ async function postProducto(nombre,cantidad_total,tipo) {
     return response
 }
 
-async function getProductoByName(nombre) {
+export async function getProductoByName(nombre) {
 
     const response = await client.get("producto_name/" + nombre)
     .then(response => response.data.data)
@@ -28,7 +28,7 @@ async function getProductoByName(nombre) {
     return response
 }
 
-async function getProductoByID(id) {
+export async function getProductoByID(id) {
 
     const response = await client.get("producto_id/" + id)
     .then(response => response.data.data)
@@ -37,7 +37,7 @@ async function getProductoByID(id) {
 }
 //console.log(await getProductoByName("alcojol"))
 
-async function updateProducto(id, cantidad_total) {
+export async function updateProducto(id, cantidad_total) {
     let data={
         "cantidad_total":cantidad_total
     }
@@ -47,7 +47,7 @@ async function updateProducto(id, cantidad_total) {
     return response
 }
 
-async function deleteProducto(id) {
+export async function deleteProducto(id) {
     const response = await client.delete("producto/" + id)
     .then(response => response.data.data)
     .catch(error => console.log("Error en la petición a la api: ",error))
