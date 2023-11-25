@@ -19,6 +19,8 @@ const Microorganismo = ({ searchTerm }) => {
       detalles: 'Detalles 1',
     },
   ];
+  const [microorganismos, setMicroorganismos] = useState([]);
+  const [newStock, setNewStock] = useState(0);
   const [loading, setLoading] =useState(true);
   const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
@@ -28,10 +30,6 @@ const Microorganismo = ({ searchTerm }) => {
     procedencia: '',
     detalles: '',
   });
-
-
-  const [microorganismos, setMicroorganismos] = useState([]);
-  const [newStock, setNewStock] = useState(0);
 
 
   useEffect(() => {
@@ -82,8 +80,8 @@ const Microorganismo = ({ searchTerm }) => {
   };
 
   // Filtra los elementos 
-  const filteredMicroorganismos = microorganismosData.filter((microorganismo) =>
-    microorganismo.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMicroorganismos = microorganismos.filter((microorganismo) =>
+    microorganismo.nombre_comun.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const itemsPerPage = 5; // Cantidad de elementos por pág
@@ -138,7 +136,7 @@ const Microorganismo = ({ searchTerm }) => {
                 </tr>
               </thead>
               <tbody>
-                {microorganismos.map((microorganismo, index) => (
+                {paginatedMicroorganismos.map((microorganismo, index) => (
                   <tr key={index}>
                     <td className="columna-nombre-tabla text-center align-middle">
                       {microorganismo.nombre_comun}
@@ -189,7 +187,7 @@ const Microorganismo = ({ searchTerm }) => {
               show={showModalEliminar}
               onHide={() => setShowModalEliminar(false)}
               tipoElemento="Microorganismo"
-              nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre : ''}
+              nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre_comun : ''}
               onDelete={handleDelete}
             />
           </div>

@@ -36,7 +36,7 @@ class Equipo(BaseModel):
     id: Optional[int] = None
     fecha_mantencion: str
     nombre: str
-    id_sala: int
+    id_sala: Optional[int] = None
     descripcion: str
 
 class Incidencia(BaseModel):

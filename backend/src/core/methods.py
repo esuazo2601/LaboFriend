@@ -364,3 +364,44 @@ async def get_incidencia(id:int):
 async def delete_incidencia(id:int):
     response = supabase.table('Incidencia').delete().eq('id',id).execute()
     return response
+
+################################### EQUIPO METHODS ################################### 
+
+async def upsert_equipo(equipo: Equipo):
+    # Verificar si el producto ya existe en la base de datos
+    existing_equipment = supabase.table('Equipo').select('id').eq('nombre', equipo.nombre).execute()
+    if existing_equipment.data:
+        response = supabase.table('Equipo').upsert({
+            "id": existing_equipment.data[0]['id'],
+            "nombre":equipo.nombre,
+            "fecha_mantencion":equipo.fecha_mantencion,
+            "descripcion":equipo.descripcion
+            }).execute()
+        return response
+    else: 
+        response = supabase.table('Equipo').insert({
+            "nombre":equipo.nombre,
+            "fecha_mantencion":equipo.fecha_mantencion,
+            "descripcion":equipo.descripcion
+        }).execute()
+        return response
+
+async def get_equipo_nm(name_equip:str):
+    response = supabase.table('Equipo').select('*').eq('nombre',name_equip).execute()
+    return response
+
+async def get_equipos():
+    response = supabase.table('Equipo').select('*').execute()
+    return response
+
+async def get_equipo_id(id_equip:str):
+    response = supabase.table('Equipo').select('*').eq('id',id_equip).execute()
+    return response
+
+async def delete_equipo(id:int):
+    query = supabase.table('Equipo').select('*').eq('id',id).execute()
+    if query.data:
+        response = supabase.table('Equipo').delete().eq('id',id).execute()
+        return response
+    else:
+        return {'message':f'No se encontró el producto de id: {id}'}
