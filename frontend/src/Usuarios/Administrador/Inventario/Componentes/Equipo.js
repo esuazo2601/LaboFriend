@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Table, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Spinner } from 'react-bootstrap';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +7,7 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalMantenimientoEquipo from './ModalMantenimientoEquipo';
 import ModalDescriptionEquipo from './ModalDescriptionEquipo';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
+import {getEquipo} from '../../../../api_service/equipo_api.js'
 
 const Equipo = ({ searchTerm }) => {
   const equiposData = [
@@ -17,6 +18,8 @@ const Equipo = ({ searchTerm }) => {
       descripcion: 'Descripción 1',
     },
   ];
+  const [loading, setLoading] =useState(true);
+  const [listaEquipos, setListaEquipos] = useState([]);
 
   const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
@@ -31,6 +34,27 @@ const Equipo = ({ searchTerm }) => {
     oldDate: '',
     newDate: '',
   });
+
+  useEffect(()=>{
+    try {
+      const getData = async () => {
+        const data = await getEquipo()
+        if(data){
+          console.log(data)
+          setListaEquipos(data)
+          setLoading(false)
+        }else{
+          setListaEquipos([])
+          setLoading(false)
+        }
+      };
+      getData();
+    } catch (error) {
+      console.log("se encontro un error: ",error);
+      setListaEquipos([])
+        setLoading(false)
+    }
+  },[])
 
   const handleMantenimientoClick = (equipo) => {
     setShowModalMantenimiento(true);
@@ -62,7 +86,7 @@ const Equipo = ({ searchTerm }) => {
   };
 
   // Filtra los elementos 
-  const filteredEquipos =  equiposData.filter((equipo) =>
+  const filteredEquipos =  listaEquipos.filter((equipo) =>
     equipo.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -101,83 +125,97 @@ const Equipo = ({ searchTerm }) => {
 
   return (
     <div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th className="encabezado-tabla text-center align-middle">Nombre</th>
-            <th className="encabezado-tabla text-center align-middle">Mantenimiento</th>
-            <th className="encabezado-tabla text-center align-middle">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedEquipos.map((equipo, index) => (
-            <tr key={index}>
-              <td className="columna-nombre-tabla text-center align-middle">
-                {equipo.nombre}
-              </td>
-              <td 
-                className="celdas-restantes-tabla text-center align-middle"
-                onClick={() => handleMantenimientoClick(equipo)}
-              >
-                {equipo.mantenimiento}
-              </td>
-              <td className="celdas-restantes-tabla text-center align-middle">
-                <div className="action-container">
-                  <div className="action-item" onClick={() => handleDescriptionClick(equipo)}>
-                    <FontAwesomeIcon icon={faEye} />
-                  </div>
-                  <div className="action-divider"></div>
-                  <div className="action-item" onClick={() => handleEliminarClick(equipo)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      {loading ? (
+        <div className='loading-spinner'>
+          <Spinner animation="border" role="status" size="lg">
+            <span className="visually-hidden">Cargando...</span>
+          </Spinner>
+        </div>
+      ) : (
+        listaEquipos.length > 0 ? (
+          <div>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th className="encabezado-tabla text-center align-middle">Nombre</th>
+                  <th className="encabezado-tabla text-center align-middle">Mantenimiento</th>
+                  <th className="encabezado-tabla text-center align-middle">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedEquipos.map((equipo, index) => (
+                  <tr key={index}>
+                    <td className="columna-nombre-tabla text-center align-middle">
+                      {equipo.nombre}
+                    </td>
+                    <td
+                      className="celdas-restantes-tabla text-center align-middle"
+                      onClick={() => handleMantenimientoClick(equipo)}
+                    >
+                      {equipo.mantenimiento}
+                    </td>
+                    <td className="celdas-restantes-tabla text-center align-middle">
+                      <div className="action-container">
+                        <div className="action-item" onClick={() => handleDescriptionClick(equipo)}>
+                          <FontAwesomeIcon icon={faEye} />
+                        </div>
+                        <div className="action-divider"></div>
+                        <div className="action-item" onClick={() => handleEliminarClick(equipo)}>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
 
-      <div className="pagination">
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          Anterior
-        </button>
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(page)}
-            className={currentPage === page ? "active" : ""}
-          >
-            {page}
-          </button>
-        ))}
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Siguiente
-        </button>
-      </div>
+            <div className="pagination">
+              <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                Anterior
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(page)}
+                  className={currentPage === page ? "active" : ""}
+                >
+                  {page}
+                </button>
+              ))}
+              <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                Siguiente
+              </button>
+            </div>
 
-      <ModalMantenimientoEquipo
-        show={showModalMantenimiento}
-        onHide={() => setShowModalMantenimiento(false)}
-        equipo={selectedEquipo} 
-        oldDate={selectedMantenimiento.oldDate}
-        newDate={selectedMantenimiento.newDate}
-        onSave={handleSaveMantenimiento}
-      />
+            <ModalMantenimientoEquipo
+              show={showModalMantenimiento}
+              onHide={() => setShowModalMantenimiento(false)}
+              equipo={selectedEquipo}
+              oldDate={selectedMantenimiento.oldDate}
+              newDate={selectedMantenimiento.newDate}
+              onSave={handleSaveMantenimiento}
+            />
 
-      <ModalDescriptionEquipo
-        show={showModalDescription}
-        onHide={() => setShowModalDescription(false)}
-        equipo={selectedEquipo}
-        onSave={handleSaveDescription}
-      />
+            <ModalDescriptionEquipo
+              show={showModalDescription}
+              onHide={() => setShowModalDescription(false)}
+              equipo={selectedEquipo}
+              onSave={handleSaveDescription}
+            />
 
-      <ModalEliminarConfirmar
-        show={showModalEliminar}
-        onHide={() => setShowModalEliminar(false)}
-        tipoElemento="Equipo" 
-        nombreElemento={selectedEquipo ? selectedEquipo.nombre : ''}
-        onDelete={handleDelete}
-      />
+            <ModalEliminarConfirmar
+              show={showModalEliminar}
+              onHide={() => setShowModalEliminar(false)}
+              tipoElemento="Equipo"
+              nombreElemento={selectedEquipo ? selectedEquipo.nombre : ''}
+              onDelete={handleDelete}
+            />
+          </div>
+        ) : (
+          <p className="text-center">No se encontraron datos.</p>
+        )
+      )}
     </div>
   );
 };
