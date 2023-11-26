@@ -3,6 +3,7 @@ import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import '../Estilos/modal.css';
+import {postEquipo} from '../../../../api_service/equipo_api';
 
 const ModalAgregarEquipo = (props) => {
   const [nombre, setNombre] = useState('');
@@ -12,13 +13,21 @@ const ModalAgregarEquipo = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = () => {
-    if (!nombre || !sala || !descripcion) {
+  const handleSubmit = async() => {
+    if (!nombre || !fechaMantenimiento || !descripcion) {
       setShowAlert(true);
       setSuccess(false);
       return;
+    }else{
+      try{
+        const resp = await postEquipo(nombre,descripcion,fechaMantenimiento);
+        console.log(resp)
+      }catch(error){
+        alert('Error al agregar microorganismo')
+        console.log(error);
+      }
     }
-    console.log({ nombre, sala, descripcion});
+    //console.log({ nombre, sala, descripcion});
     setSuccess(true);
     setShowAlert(false);
   };
@@ -52,10 +61,10 @@ const ModalAgregarEquipo = (props) => {
             <Form.Label>Nombre</Form.Label>
             <Form.Control type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} />
           </Form.Group>
-          <Form.Group>
+          {/* <Form.Group>
             <Form.Label>Sala</Form.Label>
             <Form.Control type="text" value={sala} onChange={(e) => setSala(e.target.value)} />
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group>
             <Form.Label>Descripción</Form.Label>
             <Form.Control as="textarea" rows={3} value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />

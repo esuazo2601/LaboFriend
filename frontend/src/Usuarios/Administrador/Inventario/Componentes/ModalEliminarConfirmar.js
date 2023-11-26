@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import '../Estilos/modal.css';
 
-const ModalEliminarConfirmar = ({ show, onHide, tipoElemento, nombreElemento, onDelete }) => {
+const ModalEliminarConfirmar = ({ show, onHide, tipoElemento, nombreElemento, onDelete, id }) => {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
 
   const handleConfirm = () => {
     setIsConfirmed(true);
-    onDelete();
+    onDelete(id);
     setIsDeleted(true);
   };
 

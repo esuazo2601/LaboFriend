@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import '../Estilos/modal.css';
+import {postProducto} from '../../../../api_service/inventario_api'
 
 const ModalAgregarFungible = (props) => {
   const [nombre, setNombre] = useState('');
   const [tipo, setTipo] = useState('');
-  const [ubicacion, setUbicacion] = useState('');
+  //const [ubicacion, setUbicacion] = useState('');
   const [stock, setStock] = useState('');
-  const [imagen, setImagen] = useState(null);
+  //const [imagen, setImagen] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  const handleSubmit = () => {
-    if (!nombre || !tipo|| !ubicacion || !stock ) {
+  
+  const handleSubmit = async() => {
+    if (!nombre || !tipo || !stock ) {
       setShowAlert(true);
       setSuccess(false);
       return;
+    }else{
+      try{
+        const resp = await postProducto(nombre,stock,tipo)
+        console.log(resp)
+      }catch(error){
+        alert('Falla al intentar agregar fungible')
+        console.log("Fallo al intentar agregar")
+      }
     }
-    console.log({ nombre, tipo, ubicacion, stock });
+    console.log({ nombre, tipo, stock });
     setSuccess(true);
     setShowAlert(false);
   };
@@ -25,7 +34,7 @@ const ModalAgregarFungible = (props) => {
   const handleClose = () => {
     setNombre('');
     setTipo('');
-    setUbicacion('');
+    //setUbicacion('');
     setStock('');
     setShowAlert(false);
     setSuccess(false);
@@ -56,10 +65,11 @@ const ModalAgregarFungible = (props) => {
             <Form.Control type="text" value={tipo} onChange={(e) => setTipo(e.target.value)} />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Ubicación</Form.Label>
-            <Form.Control type="text" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
+            <Form.Label>Cantidad</Form.Label>
+            <Form.Control type="text" value={stock} onChange={(e) => setStock(e.target.value)} />
           </Form.Group>
-          {/* <Form.Group>
+            
+            {/* <Form.Group>
             <Form.Label>Imagen</Form.Label>
             <Form.Control type="file" onChange={(e) => setImagen(e.target.files[0])} />
           </Form.Group> */}

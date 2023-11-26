@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Alert } from 'react-bootstrap';
 import '../Estilos/modal.css';
-
+import {postMicroorganismo} from '../../../../api_service/microorganismo_api'
+import { de } from 'date-fns/locale';
 const ModalAgregarMicroorganismo = (props) => {
+  
   const [nombre, setNombre] = useState('');
   const [nombreCientifico, setNombreCientifico] = useState('');
   const [procedencia, setProcedencia] = useState('');
@@ -10,11 +12,19 @@ const ModalAgregarMicroorganismo = (props) => {
   const [showAlert, setShowAlert] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (!nombre || !nombreCientifico || !procedencia) {
       setShowAlert(true);
       setSuccess(false);
       return;
+    }else{
+      try{
+        const resp = await postMicroorganismo(nombreCientifico, nombre, procedencia,detalles);
+        console.log(resp)
+      }catch(error){
+        alert('Error al agregar microorganismo')
+        console.log(error);
+      }
     }
     console.log({ nombre, nombreCientifico, procedencia});
     setSuccess(true);

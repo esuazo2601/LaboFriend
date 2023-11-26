@@ -7,26 +7,18 @@ import ModalDescriptionFungible from './ModalDescriptionFungible';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css';
-import {getProducto} from '../../../../api_service/inventario_api.js'
+import {getProducto,deleteProducto} from '../../../../api_service/inventario_api.js'
 
 const Fungible = ({ searchTerm }) => {
-  const fungiblesData = [
-    {
-      nombre: 'Fungible 12',
-      tipo: 'tipo 3',
-      ubicacion: 'Ubicación 3',
-      // detalles: 'Detalles 3',
-      // imagen: 'imagen.jpg', 
-      stock: 100
-    },
-  ];
+
   const [loading, setLoading] =useState(true);
+  //const [refresh, setRefresh] =useState(false);
   const [listaFungibles, setListaFungibles] = useState([]);
   const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalStock, setShowModalStock] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
   const [selectedFungible, setSelectedFungible] = useState(null);
-   const [selectedDescription, setSelectedDescription] = useState({
+  const [selectedDescription, setSelectedDescription] = useState({
     descripcion: '',
     tipo: '',
     ubicacion: '',
@@ -41,9 +33,11 @@ const Fungible = ({ searchTerm }) => {
           console.log(data)
           setListaFungibles(data)
           setLoading(false)
+          //setRefresh(false)
         }else{
           setListaFungibles([])
           setLoading(false)
+          //setRefresh(false)
         }
       };
       getData();
@@ -52,27 +46,34 @@ const Fungible = ({ searchTerm }) => {
       console.log("se encontro un error: ",error);
       setListaFungibles([])
         setLoading(false)
+        //setRefresh(false)
     }
   },[])
 
   const [newStock, setNewStock] = useState(0);
-
   const handleEliminarClick = (fungible, tipo) => {
     setSelectedFungible(fungible);
     setShowModalEliminar(true);
   };
-
-  const handleDelete = () => {
+  
+  const handleDelete = async (id) => {
+    console.log(id)
+    try{
+      const resp = await deleteProducto(id)
+      console.log(resp)
+    }catch(error){
+      console.log(error)
+    }
     console.log("Elemento eliminado"); // Simulación con backend
   };
-
+  
   // Stock del fungible seleccionado
   const handleStockClick = (fungible) => {
     setShowModalStock(true);
     setSelectedFungible(fungible);
     setNewStock(fungible.cantidad_total);
   };
-
+  
   // Editar descripción del fungible seleccionado
   const handleDescriptionClick = (fungible) => {
     setShowModalDescription(true);
@@ -84,7 +85,7 @@ const Fungible = ({ searchTerm }) => {
       imagen: fungible.imagen,
     });
   };
-
+  
   const handleIncreaseStock = () => {
     setNewStock(newStock + 1);
   };
@@ -94,30 +95,34 @@ const Fungible = ({ searchTerm }) => {
       setNewStock(newStock - 1);
     }
   };
-
+  
   const handleSaveStock = () => {
     setShowModalStock(false);
   };
-
+  
   const handleSaveDescription = () => {
     setShowModalDescription(false);
   };
-
-  // Filtra los elementos 
-  const filteredFungibles = listaFungibles.filter((fungible) =>
-    fungible.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const itemsPerPage = 5; // Cantidad de elementos por pág
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalItems = filteredFungibles.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  // Calcula los elementos para la pág actual
-  const paginatedFungibles = filteredFungibles.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  
+  /*   const handleAgregar = () =>{
+    setRefresh(true);
+  } 
+  */
+ // Filtra los elementos 
+ const filteredFungibles = listaFungibles.filter((fungible) =>
+ fungible.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+ );
+ 
+ const itemsPerPage = 5; // Cantidad de elementos por pág
+ const [currentPage, setCurrentPage] = useState(1);
+ 
+ const totalItems = filteredFungibles.length;
+ const totalPages = Math.ceil(totalItems / itemsPerPage);
+ 
+ // Calcula los elementos para la pág actual
+ const paginatedFungibles = filteredFungibles.slice(
+   (currentPage - 1) * itemsPerPage,
+   currentPage * itemsPerPage
   );
 
   const handlePreviousPage = () => {
@@ -219,6 +224,7 @@ const Fungible = ({ searchTerm }) => {
               onHide={() => setShowModalEliminar(false)}
               tipoElemento="Fungible" 
               nombreElemento={selectedFungible ? selectedFungible.nombre : ''}
+              id = {selectedFungible ? selectedFungible.id : ''}
               onDelete={handleDelete}
             />
           </div>

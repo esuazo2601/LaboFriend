@@ -1,5 +1,3 @@
-
-
 .encabezado-tabla {
     background: #003966 !important; 
     color: #fff !important;
@@ -11,6 +9,7 @@
 
   .celdas-restantes-tabla {
     background-color: #D5D7E5 !important;
+    cursor: pointer;
   }
 
   .table {

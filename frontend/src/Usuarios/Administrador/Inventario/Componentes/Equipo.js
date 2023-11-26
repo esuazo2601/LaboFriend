@@ -152,7 +152,7 @@ const Equipo = ({ searchTerm }) => {
                       className="celdas-restantes-tabla text-center align-middle"
                       onClick={() => handleMantenimientoClick(equipo)}
                     >
-                      {equipo.mantenimiento}
+                      {equipo.fecha_mantencion}
                     </td>
                     <td className="celdas-restantes-tabla text-center align-middle">
                       <div className="action-container">
