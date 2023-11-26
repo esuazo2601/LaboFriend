@@ -6,7 +6,7 @@ import AdministradorCuenta from '../Usuarios/Administrador/Cuenta/AdministradorC
 import AdministradorTablero from '../Usuarios/Administrador/Tablero/AdministradorTablero';
 import AdministradorInventario from '../Usuarios/Administrador/Inventario/AdministradorInventario';
 import AdministradorReservaHora from '../Usuarios/Administrador/ReservaHoras/AdministradorReservaHoras';
-import AdministradorNotificaciones from '../Usuarios/Administrador/Notificaciones/AdministradorNotificaciones';
+import AdministradorEditarUsuarios from '../Usuarios/Administrador/Editar/AdministradorEditarUsuarios';
 import InvestigacionesPersonales from '../Usuarios/Administrador/Investigaciones/InventigacionesPersonales';
 import InvestigacionesTerceros from '../Usuarios/Administrador/Investigaciones/InventigacionesTerceros';
 import Investigacion from '../Usuarios/Administrador/Investigaciones/Personales/Investigacion/Investigacion';
@@ -41,7 +41,7 @@ const AppRoutes = () => {
         <Route path="tablero" element={<AdministradorTablero />} />
         <Route path="inventario" element={<AdministradorInventario />} />
         <Route path="reservaHora" element={<AdministradorReservaHora />} />
-        <Route path="notificaciones" element={<AdministradorNotificaciones />} />
+        <Route path="editarUsuarios" element={<AdministradorEditarUsuarios />} />
         <Route path="investigaciones/personales" element={<InvestigacionesPersonales />} />
         <Route path="investigaciones/terceros" element={<InvestigacionesTerceros />} />
         <Route path="investigaciones/terceros/insvestigacion" element={<Investigacion />} />
