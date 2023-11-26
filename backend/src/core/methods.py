@@ -405,3 +405,37 @@ async def delete_equipo(id:int):
         return response
     else:
         return {'message':f'No se encontró el producto de id: {id}'}
+
+################################### USER FETCH METHODS ################################### 
+
+#Se consultan todos los users
+async def get_users():
+    query = supabase.table('Usuario').select('email', 'nombre').execute()
+    return query
+
+#Se busca un usuario basado en su email
+async def get_user_by_email(email:EmailStr):
+    query = supabase.table('Usuario').select('email','nombre').eq('email',email).execute()
+    if query.data:
+        return query
+    else:
+        return {'message':'No existe usuario con este email'}
+
+
+async def get_user_scopes(email:EmailStr):
+    # Se pregunta si el usuario existe, si es asi, se verifica que exista en algunas de las tablas de los roles
+    scopes = []
+    admin = supabase.table('Administrador').select('email').eq('email',email).execute()
+    if admin.data:
+        scopes.append('Administrador')
+    ayudante = supabase.table('Ayudante').select('email').eq('email',email).execute()
+    if ayudante.data:
+        scopes.append('Ayudante')
+    estudiante = supabase.table('Estudiante').select('email').eq('email',email).execute()
+    if estudiante.data:
+        scopes.append('Estudiante')
+    return scopes
+
+async def delete_user(email:EmailStr):
+    response = supabase.table('Usuario').delete().eq('email',email).execute()
+    return response

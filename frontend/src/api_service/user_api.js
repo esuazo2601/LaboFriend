@@ -45,7 +45,7 @@ export async function register (email, nombre ,password){
 //const resp = await register("didox@didox.com","dido");
 //console.log(resp)
 
-export async function getUser(){
+export async function getCurrentUser(){
     const response = await client.get("/usuario/datos")
     .then(response => response.data)
     .catch(error => console.error("Error en la petición a la API: ", error))
@@ -57,6 +57,34 @@ export async function getUser(){
 export async function decodedToken(token){
     const data = await client.get("/datos_token/"+token)
     .then(data  => data)
+    .catch(error => console.error("Error en la petición a la API: ", error))
+    return data
+}
+
+export async function getUsers(){
+    const data = await client.get("/users")
+    .then(data  => data.data.data)
+    .catch(error => console.error("Error en la petición a la API: ", error))
+    return data
+}
+
+export async function getUserByEmail(email){
+    const data = await client.get("/user/" + email)
+    .then(data  => data.data.data)
+    .catch(error => console.error("Error en la petición a la API: ", error))
+    return data
+}
+
+export async function getUserScopes(email){
+    const data = await client.get("/user_scopes/" + email)
+    .then(data  => data.data)
+    .catch(error => console.error("Error en la petición a la API: ", error))
+    return data
+}
+
+export async function deleteUser(email){
+    const data = await client.delete("/user/" + email)
+    .then(data  => data.data)
     .catch(error => console.error("Error en la petición a la API: ", error))
     return data
 }

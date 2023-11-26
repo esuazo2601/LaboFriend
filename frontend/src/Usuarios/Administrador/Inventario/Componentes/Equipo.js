@@ -157,11 +157,11 @@ const Equipo = ({ searchTerm }) => {
                     <td className="celdas-restantes-tabla text-center align-middle">
                       <div className="action-container">
                         <div className="action-item" onClick={() => handleDescriptionClick(equipo)}>
-                          <FontAwesomeIcon icon={faEye} />
+                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} />
                         </div>
                         <div className="action-divider"></div>
                         <div className="action-item" onClick={() => handleEliminarClick(equipo)}>
-                          <FontAwesomeIcon icon={faTrash} />
+                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faTrash} />
                         </div>
                       </div>
                     </td>

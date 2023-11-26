@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import '../Inventario/Estilos/tabla.css';
 import '../Inventario/Estilos/paginacion.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faSearch } from '@fortawesome/free-solid-svg-icons';
-import ModalEliminarConfirmar from '../Inventario/Componentes/ModalEliminarConfirmar';
+import ModalEliminarConfirmar from './ModalEliminarConfirmar';
 import ModalEditarUsuario from './ModalEditarUsuario';
+import { getUsers,getUserByEmail,getUserScopes } from '../../../api_service/user_api';
 
 function AdministradorInventario() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,27 +15,46 @@ function AdministradorInventario() {
   const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalEditar, setShowModalEditar] = useState(false);
   const [tipoUsuarioEditar, setTipoUsuarioEditar] = useState('');
+  const [usuariosTabla, setUsuariosTabla] = useState([]);
+  
+  useEffect(() => {
+    try {
+      const getData = async () => {
+        const data = await getUsers();
+        if (data) {
+          const usuariosConScopes = await Promise.all(
+            data.map(async (usuario) => {
+              const scopes = await getUserScopes(usuario.email);
+              const firstScope = scopes[0] 
+              console.log('Scopes',firstScope)
+              return {
+                ...usuario,
+                tipo: firstScope || [] // Asegúrate de manejar el caso en que el nuevoCampo sea null o undefined
+              };
+            })
+          );
+  
+          setUsuariosTabla(usuariosConScopes);
+        } else {
+          setUsuariosTabla([]);
+        }
+      };
+  
+      getData();
+    } catch (error) {
+      console.log("Se encontró un error:", error);
+      setUsuariosTabla([]);
+    }
+  }, []);
+  
 
-  const usuariosData = [
-    {
-      nombre: 'Nombre1 Apellido1',
-      correo: 'correo1@gmail.com',
-      tipo: 'Estudiante'
-    },
-    {
-      nombre: 'Nombre2 Apellido1',
-      correo: 'correo2@gmail.com',
-      tipo: 'Estudiante'
-    },
-  ];
-
-
+  console.log('Usuarios Tabla',usuariosTabla)
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredUsuarios = usuariosData.filter((usuario) =>
+  const filteredUsuarios = usuariosTabla.filter((usuario) =>
     usuario.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    usuario.correo.toLowerCase().includes(searchTerm.toLowerCase())
+    usuario.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const totalItems = filteredUsuarios.length;
@@ -113,10 +133,10 @@ function AdministradorInventario() {
             {paginatedUsuarios.map((usuario, index) => (
               <tr key={index}>
                 <td className="columna-nombre-tabla text-center align-middle" >{usuario.nombre}</td>
-                <td className="celdas-restantes-tabla text-center align-middle">{usuario.correo}</td>
+                <td className="celdas-restantes-tabla text-center align-middle">{usuario.email}</td>
                 <td className="celdas-restantes-tabla text-center align-middle">{usuario.tipo}</td>
-                <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEditar(usuario)}><FontAwesomeIcon icon={faEdit} /></td>
-                <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminarClick(usuario)}><FontAwesomeIcon icon={faTrash} /></td>
+                <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEditar(usuario)}><FontAwesomeIcon style={{cursor:'pointer'}} icon={faEdit} /></td>
+                <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminarClick(usuario)}><FontAwesomeIcon style={{cursor:'pointer'}} icon={faTrash} /></td>
               </tr>
             ))}
           </tbody>
@@ -149,7 +169,6 @@ function AdministradorInventario() {
             onActualizarTipoUsuario={handleUpdateTipoUsuario}
           />
         )}
-
 
         <ModalEliminarConfirmar
           show={showModalEliminar}

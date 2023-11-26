@@ -9,7 +9,6 @@
 
   .celdas-restantes-tabla {
     background-color: #D5D7E5 !important;
-    cursor: pointer;
   }
 
   .table {
@@ -19,8 +18,3 @@
   font-weight: 300;
   font-size: 22px;
 }
-
-
-
-
-  

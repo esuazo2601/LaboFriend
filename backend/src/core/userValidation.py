@@ -59,7 +59,7 @@ def auth_check_permission(security_scopes: SecurityScopes, token_data: TokenData
             ) 
     return
 
-async def decode_token(token:str):
+def decode_token(token:str):
     try:
         token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
         email: str = token_decode.get("sub")
@@ -211,5 +211,16 @@ async def make_student(user:Usuario, security_scopes:SecurityScopes, token:str =
     
     raise HTTPException(status_code=401, detail="Error al conceder privilegios")
 
-
-    
+async def decode_token_frontend(token:str):
+    try:
+        token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
+        email: str = token_decode.get("sub")
+        if email == None:
+            raise CREDENTIAL_EXCEPTION
+        token_scopes = token_decode.get("scopes", [])
+        token_name = token_decode.get("user")
+        token_data = TokenData(nombre=token_name,scopes=token_scopes, email=email)
+    except (JWTError,ValidationError):
+        print("o por aqui?")
+        raise CREDENTIAL_EXCEPTION
+    return token_data

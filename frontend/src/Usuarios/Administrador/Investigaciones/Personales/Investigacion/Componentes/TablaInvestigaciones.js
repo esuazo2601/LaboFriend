@@ -131,8 +131,8 @@ const TablaAvances = ({ searchTerm }) => {
                                             <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
-                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => window.location.href = '/ayudante/investigaciones/terceros/investigacion'}><FontAwesomeIcon icon={faEye} /></td>
-                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></td>
+                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => window.location.href = '/ayudante/investigaciones/terceros/investigacion'}><FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} /></td>
+                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" , cursor: 'pointer'}} /></td>
                                         </tr>
                                     ))}
                                 </tbody>
