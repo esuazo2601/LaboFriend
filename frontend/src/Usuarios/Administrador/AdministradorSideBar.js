@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaUserAlt, FaTachometerAlt, FaArchive, FaFlask, FaClock, FaBell } from "react-icons/fa";
+import { FaUserAlt, FaTachometerAlt, FaArchive, FaFlask, FaClock, FaUserEdit } from "react-icons/fa";
 import '../../EstilosGlobales/sidebar.css';
 import { NavLink } from 'react-router-dom';
 
@@ -35,9 +35,9 @@ const AdministradorSidebar = ({ children, toggleSidebar }) => {
             icon: <FaClock />
         },
         {
-            path: "/administrador/notificaciones",
-            name: "Notificaciones",
-            icon: <FaBell />
+            path: "/administrador/editarUsuarios",
+            name: "Administrar usuarios",
+            icon: <FaUserEdit />
         }
     ];
 
