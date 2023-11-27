@@ -1,65 +1,60 @@
-import React, { useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Button, Container, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import './investigaciones.css';
+import { getInvestigacionById, getTrabajandoEmail } from '../../../api_service/investigaciones_api.js'
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import ModalNuevaInvestigacion from './Personales/Investigacion/Componentes/ModalNuevaInvestigacion'
+
 
 const InvestigacionesPersonales = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [investigacionesPersonales, setInvestigacionesPersonales] = useState([]);
+  const [loading, setLoading] = useState(true);
   //const [personalInv, setPersonalInv] = useEffect
-/*   const {data,error,loading} = useAxios({
-    url:""
-  }) */
+  /*   const {data,error,loading} = useAxios({
+      url:""
+    }) */
 
 
-  //IMPORTAR DESDE BACKEND
-  const investigacionesData = [
-    {
-      nombre: 'Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1',
-    },
-    {
-      nombre: 'Investigación 2',
-    },
-    {
-      nombre: 'Investigación 3',
-    },
-    {
-      nombre: 'Investigación 4',
-    },
-    {
-      nombre: 'Investigación 5 Investigación 5 Investigación 5',
-    },
-    {
-      nombre: 'Investigación 6',
-    },
-    {
-      nombre: 'Investigación 7',
-    },
-    {
-      nombre: 'Investigación 8',
-    },
-    {
-      nombre: 'Investigación 9',
-    },
-    {
-      nombre: 'Investigación 10',
-    },
-    {
-      nombre: 'Investigación 11',
-    },
-    {
-      nombre: 'Investigación 12',
-    },
+  useEffect(() => {
+    try {
+      const getData = async () => {
+        const data = await getTrabajandoEmail(localStorage.getItem('email'));
+        let investigacion_list = [];
+        if(data){
+          for (var i = 0; i < data.length; ++i) {
+            const id = data[i].id_investigacion
+            const investigacion = await getInvestigacionById(id)
+            investigacion_list.push(investigacion)
+            console.log('Investigacion list: ', investigacion_list)
+          }
+          setInvestigacionesPersonales(investigacion_list)
+          setLoading(false)
+        }else{
+          setInvestigacionesPersonales([])
+          setLoading(false)
+        }
+      };
+      getData();
 
-  ];
+    } catch (error) {
+      console.log("se encontro un error: ",error);
+      setLoading(false);
+      setInvestigacionesPersonales([])
+    }
+  }, []);
+
 
   const normalizeText = (text) => {
     return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   };
 
-  const filteredInvestigaciones = investigacionesData.filter(investigacion =>
-    normalizeText(investigacion.nombre).includes(normalizeText(searchTerm))
+  const filteredInvestigaciones = investigacionesPersonales.filter(investigacion =>
+    normalizeText(investigacion[0].titulo).includes(normalizeText(searchTerm))
   );
 
   const itemsPerPage = 20;
@@ -84,28 +79,53 @@ const InvestigacionesPersonales = () => {
     <Container>
       <h1 className="letra-grande">Investigaciones Personales</h1>
       <hr className="linea-divisora" />
-      <div className="search-container-investigaciones">
-        <input
-          type="text"
-          placeholder="Buscar por nombre"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        <span className="search-icon">
-          <FontAwesomeIcon icon={faSearch} />
-        </span>
-      </div>
+      <Row>
+        <Col>
+          {loading ? (
+            <div className='loading-spinner'>
+              <Spinner animation="border" role="status" size="lg">
+                <span className="visually-hidden">Cargando...</span>
+              </Spinner>
+            </div>
+          ) : (
+            investigacionesPersonales.length > 0 && (
+              <div className="search-container-investigaciones">
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="search-input"
+                />
+                <span className="search-icon">
+                  <FontAwesomeIcon icon={faSearch} />
+                </span>
+              </div>
+            )
+          )}
+        </Col>
+        <Col>
+          <ModalNuevaInvestigacion />
+        </Col>
+      </Row>
 
-      <div>
-        {paginatedInvestigaciones.map((investigacion, index) => (
-          <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
-            {investigacion.nombre.length > 50
-              ? `${investigacion.nombre.substring(0, 50)}...`
-              : investigacion.nombre}
-          </Button>
-        ))}
-      </div>
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (
+        <div>
+          {investigacionesPersonales.length === 0 ? (
+            <p>No hay investigaciones disponibles.</p>
+          ) : (
+            paginatedInvestigaciones.map((investigacion, index) => (
+              <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
+                {investigacion[0].titulo.length > 50
+                  ? `${investigacion[0].titulo.substring(0, 50)}...`
+                  : investigacion[0].titulo}
+              </Button>
+            ))
+          )}
+        </div>
+      )}
 
       <div className="pagination">
         <button onClick={handlePreviousPage} disabled={currentPage === 1}>

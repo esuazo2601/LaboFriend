@@ -1,33 +1,52 @@
-import './HoraReserva.css';
-import React, { useState, useEffect } from 'react';
+import './Estilos/HoraReserva.css';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { format } from 'date-fns';
 import esLocale from 'date-fns/locale/es';
-import ModalReserva from './ModalReserva';
-import ModalCancelarReserva from './ModalCancelarReserva';
+import ModalReserva from './Componentes/ModalReserva';
+import ModalCancelarReserva from './Componentes/ModalCancelarReserva';
 
 const HoraReserva = ({ fechaSeleccionada }) => {
-  const horasReservadas = ['10:15 AM', '02:15 PM', '05:15 PM'];
   const todasLasHoras = ['08:15 AM', '09:15 AM', '10:15 AM', '11:15 AM', '12:15 PM', '01:15 PM', '02:15 PM', '03:15 PM', '04:15 PM', '05:15 PM'];
+
+  const salas = [
+    {
+      id: 1,
+      nombre: 'Sala A',
+      horasDisponibles: ['08:15 AM', '09:15 AM', '10:15 AM'],
+      horasNoDisponibles: ['11:15 AM', '12:15 PM', '01:15 PM'],
+    },
+    {
+      id: 2,
+      nombre: 'Sala B',
+      horasDisponibles: ['02:15 PM', '03:15 PM', '04:15 PM'],
+      horasNoDisponibles: ['08:15 AM', '09:15 AM', '10:15 AM'],
+    },
+  ];
 
   const [modalReservaOpen, setModalReservaOpen] = useState(false);
   const [modalCancelarReservaOpen, setModalCancelarReservaOpen] = useState(false);
   const [fechaHoraReserva, setFechaHoraReserva] = useState('');
-  const [horasUsuario, setHorasUsuario] = useState([]);
+  const [horasAgendadasUsuario] = useState([
+    { sala: 'Sala A', fecha: fechaSeleccionada, hora: '11:00 AM' },
+    { sala: 'Sala B', fecha: fechaSeleccionada, hora: '03:00 PM' },
+    { sala: 'Sala B', fecha: fechaSeleccionada, hora: '04:00 PM' },
+  ]);
 
-  useEffect(() => {
-    const horasAgendadasUsuario = ['11:15 AM', '03:15 PM', '04:15 PM'];
-    setHorasUsuario([...horasAgendadasUsuario]);
-  }, []);
-
-  const handleHoraSeleccionada = (hora) => {
+  const handleHoraSeleccionada = (hora, nombreSala) => {
     const fechaReserva = format(fechaSeleccionada, 'dd/MM/yy', { locale: esLocale });
-    setFechaHoraReserva({ fecha: fechaReserva, hora });
+    setFechaHoraReserva({ fecha: fechaReserva, hora, nombreSala });
     setModalReservaOpen(true);
   };
 
+  const handleCancelarHoraSeleccionada = (agenda) => {
+    const fechaReserva = format(agenda.fecha, 'dd/MM/yy', { locale: esLocale });
+    setFechaHoraReserva({ fecha: fechaReserva, hora: agenda.hora, sala: agenda.sala });
+    setModalCancelarReservaOpen(true);
+  };
+
   const handleReservar = () => {
-    // Editar para reservas la hora
+    // Editar para reservar la hora
     setModalReservaOpen(false);
   };
 
@@ -43,33 +62,33 @@ const HoraReserva = ({ fechaSeleccionada }) => {
 
   return (
     <div className="hora-reserva-container d-flex">
-      <div className="horas-column">
-        <h2 className="letra-mediana">Horas para el {format(fechaSeleccionada, "EEEE d 'de' MMMM 'de' yyyy", { locale: esLocale })}</h2>
-        {todasLasHoras.map((hora, horaIndex) => (
-          <div key={horaIndex} className="hora-item">
-            <span>{hora}</span>
-            <Button
-              onClick={() => handleHoraSeleccionada(hora)}
-              className={`hora-disponible${horasReservadas.includes(hora) || horasUsuario.includes(hora) ? ' no-disponible' : ' '}`}
-              disabled={horasReservadas.includes(hora) || horasUsuario.includes(hora)}
-            >
-              Reservar
-            </Button>
-          </div>
-        ))}
-      </div>
+      {salas.map((sala) => (
+        
+        <div key={sala.id} className="horas-column">
+          <h2 className="letra-mediana">Horas para {sala.nombre}</h2>
+          {todasLasHoras.map((hora, horaIndex) => (
+            <div key={horaIndex} className="hora-item">
+              <span>{hora}</span>
+              <Button
+                onClick={() => handleHoraSeleccionada(hora, sala.nombre)}
+                className={`hora-disponible${sala.horasNoDisponibles.includes(hora) || horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.salaId === sala.id) ? ' no-disponible' : ' '}`}
+                disabled={sala.horasNoDisponibles.includes(hora) || horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.salaId === sala.id)}
+              >
+                {horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.sala === sala.nombre) ? 'Reservado' : 'Reservar'}
+              </Button>
+            </div>
+          ))}
+        </div>
+      ))}
       <div className="horas-column-agendadas ml-4">
         <h2 className='letra-mediana'>Horas agendadas del usuario</h2>
-        {horasUsuario.map((hora, index) => (
+        {horasAgendadasUsuario.map((agenda, index) => (
           <div key={index} className="hora-agendada d-flex align-items-center">
-            <span>{hora}</span>
+            <span>{format(agenda.fecha, "dd/MM/yy")} - {agenda.hora}</span>
             <Button
               variant="danger"
               className="ml-2"
-              onClick={() => {
-                setFechaHoraReserva({ fecha: ' ', hora });
-                setModalCancelarReservaOpen(true);
-              }}
+              onClick={() => handleCancelarHoraSeleccionada(agenda)}
             >
               Cancelar
             </Button>
@@ -81,6 +100,7 @@ const HoraReserva = ({ fechaSeleccionada }) => {
         handleClose={handleCloseModals}
         fecha={fechaHoraReserva.fecha}
         hora={fechaHoraReserva.hora}
+        sala={fechaHoraReserva.nombreSala}
         onReservar={handleReservar}
       />
       <ModalCancelarReserva
@@ -88,6 +108,7 @@ const HoraReserva = ({ fechaSeleccionada }) => {
         handleClose={handleCloseModals}
         fecha={fechaHoraReserva.fecha}
         hora={fechaHoraReserva.hora}
+        sala={fechaHoraReserva.sala}
         onCancelarReserva={handleCancelarReserva}
       />
     </div>

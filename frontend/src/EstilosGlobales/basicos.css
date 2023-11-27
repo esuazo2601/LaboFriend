@@ -27,11 +27,12 @@ main {
 
 .opcion-inventario {
     display: inline-block; 
-    margin-right: 20px; 
+    margin-right: 20px;
+    cursor: pointer; 
 }
 
 .letra-mediana.seleccionada {
-    text-decoration: underline 1px;
+    text-decoration: underline 2px;
     /* font-weight: bold;   */
 }
 

@@ -72,6 +72,16 @@
   overflow-y: auto;
 }
 
+.modal-body-custom-general {
+  background-color: #D5D7E5;
+  color: black;
+  font-size: 18px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  overflow-y: auto;
+}
+
 .black-square {
   width: 200px;
   height: 200px;
@@ -125,3 +135,9 @@
 .iconCalender {
   margin-right: 10px;
 }  
+
+
+.modal-text {
+  margin: 10px;
+  text-align: center;
+}

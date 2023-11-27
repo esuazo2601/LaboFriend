@@ -1,0 +1,17 @@
+.modal-wider {
+    max-width: 50%;
+    max-height: 50%;
+    /* Ajusta el tamaño del modal según tus necesidades */
+}
+
+.modal-desborde {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 50%;
+}
+
+.descripcion-modal {
+    overflow-y: scroll;
+    height: 300px;
+}

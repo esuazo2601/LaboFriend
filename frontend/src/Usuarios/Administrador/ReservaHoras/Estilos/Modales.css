@@ -1,0 +1,7 @@
+.modal-body {
+    background-color: #D5D7E5;
+    color: black;
+    font-size: 26px;
+    align-items: flex-start; 
+    overflow-y: auto;
+  }

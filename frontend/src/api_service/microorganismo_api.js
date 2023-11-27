@@ -4,6 +4,13 @@ import { client } from './user_api.js';
 
 //get
 
+export async function getAllMicroorg() {
+    const response = await client.get("microorganismos")
+    .then(response => response.data.data)
+    .catch(error => console.log("Error en la petición a la api: ",error))
+    return response
+}
+
 export async function getMicroorgByCiName(nombre_cientifico) {
     const response = await client.get("microorganismo/"+nombre_cientifico)
     .then(response => response.data)

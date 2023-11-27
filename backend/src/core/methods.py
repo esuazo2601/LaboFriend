@@ -87,6 +87,10 @@ async def add_microorg(microorganismo:Microorganismo):
     }).execute()
     return response
 
+async def get_all_microorg():
+    response = supabase.table('Microorganismo').select("*").execute()
+    return response
+
 async def delete_microorg(id:int):
     response = supabase.table('Microorganismo').delete().eq('id',id).execute()
     if response:
@@ -381,4 +385,79 @@ async def get_incidencia(id:int):
 
 async def delete_incidencia(id:int):
     response = supabase.table('Incidencia').delete().eq('id',id).execute()
+    return response
+
+################################### EQUIPO METHODS ################################### 
+
+async def upsert_equipo(equipo: Equipo):
+    # Verificar si el producto ya existe en la base de datos
+    existing_equipment = supabase.table('Equipo').select('id').eq('nombre', equipo.nombre).execute()
+    if existing_equipment.data:
+        response = supabase.table('Equipo').upsert({
+            "id": existing_equipment.data[0]['id'],
+            "nombre":equipo.nombre,
+            "fecha_mantencion":equipo.fecha_mantencion,
+            "descripcion":equipo.descripcion
+            }).execute()
+        return response
+    else: 
+        response = supabase.table('Equipo').insert({
+            "nombre":equipo.nombre,
+            "fecha_mantencion":equipo.fecha_mantencion,
+            "descripcion":equipo.descripcion
+        }).execute()
+        return response
+
+async def get_equipo_nm(name_equip:str):
+    response = supabase.table('Equipo').select('*').eq('nombre',name_equip).execute()
+    return response
+
+async def get_equipos():
+    response = supabase.table('Equipo').select('*').execute()
+    return response
+
+async def get_equipo_id(id_equip:str):
+    response = supabase.table('Equipo').select('*').eq('id',id_equip).execute()
+    return response
+
+async def delete_equipo(id:int):
+    query = supabase.table('Equipo').select('*').eq('id',id).execute()
+    if query.data:
+        response = supabase.table('Equipo').delete().eq('id',id).execute()
+        return response
+    else:
+        return {'message':f'No se encontró el producto de id: {id}'}
+
+################################### USER FETCH METHODS ################################### 
+
+#Se consultan todos los users
+async def get_users():
+    query = supabase.table('Usuario').select('email', 'nombre').execute()
+    return query
+
+#Se busca un usuario basado en su email
+async def get_user_by_email(email:EmailStr):
+    query = supabase.table('Usuario').select('email','nombre').eq('email',email).execute()
+    if query.data:
+        return query
+    else:
+        return {'message':'No existe usuario con este email'}
+
+
+async def get_user_scopes(email:EmailStr):
+    # Se pregunta si el usuario existe, si es asi, se verifica que exista en algunas de las tablas de los roles
+    scopes = []
+    admin = supabase.table('Administrador').select('email').eq('email',email).execute()
+    if admin.data:
+        scopes.append('Administrador')
+    ayudante = supabase.table('Ayudante').select('email').eq('email',email).execute()
+    if ayudante.data:
+        scopes.append('Ayudante')
+    estudiante = supabase.table('Estudiante').select('email').eq('email',email).execute()
+    if estudiante.data:
+        scopes.append('Estudiante')
+    return scopes
+
+async def delete_user(email:EmailStr):
+    response = supabase.table('Usuario').delete().eq('email',email).execute()
     return response

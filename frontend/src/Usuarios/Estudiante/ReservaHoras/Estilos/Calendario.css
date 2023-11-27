@@ -1,0 +1,21 @@
+.sin-horas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: #ccc;
+    text-decoration: line-through;
+  }
+
+  .react-calendar {
+    max-width: 600px; 
+    margin: 0 auto; 
+    margin-top: 20px; 
+    
+  }
+
+  .react-calendar,
+.react-calendar__tile {
+  height: 90px; 
+}

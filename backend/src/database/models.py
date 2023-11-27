@@ -36,7 +36,7 @@ class Equipo(BaseModel):
     id: Optional[int] = None
     fecha_mantencion: str
     nombre: str
-    id_sala: int
+    id_sala: Optional[int] = None
     descripcion: str
 
 class Incidencia(BaseModel):
@@ -98,5 +98,6 @@ class UsuarioDB(Usuario):
     password: str
 
 class TokenData(BaseModel):
+    nombre: Optional[str] = None
     email: Optional[EmailStr] = None
     scopes: Optional[list[str]] = []

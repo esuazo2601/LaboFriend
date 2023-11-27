@@ -4,5 +4,7 @@
     height: 53px;
     float: right;
     background-color: #507E9D;
+    border: 2px solid #507E9D;
     color: white;
+    cursor: pointer;
 }

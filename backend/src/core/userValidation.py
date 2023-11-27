@@ -60,15 +60,16 @@ def auth_check_permission(security_scopes: SecurityScopes, token_data: TokenData
     return
 
 def decode_token(token:str):
-
     try:
         token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
         email: str = token_decode.get("sub")
         if email == None:
             raise CREDENTIAL_EXCEPTION
         token_scopes = token_decode.get("scopes", [])
-        token_data = TokenData(scopes=token_scopes, email=email)
+        token_name = token_decode.get("user")
+        token_data = TokenData(nombre=token_name,scopes=token_scopes, email=email)
     except (JWTError,ValidationError):
+        print("o por aqui?")
         raise CREDENTIAL_EXCEPTION
     return token_data
 #Validación de usuario
@@ -141,6 +142,10 @@ async def create_user(user: UsuarioDB):
         "nombre":user.nombre,
         "password":hash_password
     }).execute()
+    if(response.data):
+        supabase.table('Estudiante').insert({
+        "email":user.email
+        }).execute()
     return response
 
 def admin_exist(email: str):
@@ -168,7 +173,8 @@ async def make_admin(user:Usuario, security_scopes: SecurityScopes, token:str = 
             status_code=201, detail="Privilegios concedidos con éxito",headers="bearer"
         )
     raise HTTPException(status_code=401, detail="Error al conceder privilegios")
-    
+
+
 async def make_assist(user:Usuario, security_scopes: SecurityScopes,token:str = Depends(oauth2_scheme)):
     
     authenticate_value = auth_scope_value(security_scopes)
@@ -205,4 +211,16 @@ async def make_student(user:Usuario, security_scopes:SecurityScopes, token:str =
     
     raise HTTPException(status_code=401, detail="Error al conceder privilegios")
 
-    
+async def decode_token_frontend(token:str):
+    try:
+        token_decode = jwt.decode(token, key=SECRET_KEY,algorithms=[ALGORITHM])
+        email: str = token_decode.get("sub")
+        if email == None:
+            raise CREDENTIAL_EXCEPTION
+        token_scopes = token_decode.get("scopes", [])
+        token_name = token_decode.get("user")
+        token_data = TokenData(nombre=token_name,scopes=token_scopes, email=email)
+    except (JWTError,ValidationError):
+        print("o por aqui?")
+        raise CREDENTIAL_EXCEPTION
+    return token_data

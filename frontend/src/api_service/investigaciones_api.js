@@ -73,4 +73,25 @@ export async function deleteInvestigacion(id) {
     .catch(error => console.log("Error en la petición a la api: ",error))
     return response
 }
+
+export async function getTrabajandoEmail(email) {
+    const response = await client.get("trabajando_email/" + email)
+    .then(response => response.data)
+    .catch(error => console.log("Error en la petición a la api: ",error))
+    return response
+}
+
+export async function postTrabjando(email, id_investigacion) {
+    const trabajando_data = {
+        "email_usuario": email,
+        "id_investigacion":id_investigacion
+    }
+
+    const response = await client.post("investigacion/"+id_investigacion, trabajando_data)
+    .then(response => response)
+    .catch(error => console.log("Error en la petición a la api: ",error))
+    return response
+}
+
+
 //console.log(await deleteInvestigacion(9))

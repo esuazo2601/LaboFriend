@@ -9,6 +9,11 @@ async def addMicroorg(microorganismo:Microorganismo):
     result = await add_microorg(microorganismo)
     return result
 
+@router.get("/microorganismos")
+async def getAllMicroorg():
+    result = await get_all_microorg()
+    return result
+
 @router.get("/microorganismo/{nombre_cientifico}")
 async def getMicroorgCin(nombre_cientifico:str):
     result = await get_microorg_cin(nombre_cientifico)

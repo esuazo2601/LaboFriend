@@ -10,9 +10,9 @@ const ModalDescriptionFungible = ({ show, onHide, fungible, onSave }) => {
     setIsEditing(true);
     setEditedFungible({
       nombre: fungible.nombre,
-      procedencia: fungible.procedencia,
+      tipo: fungible.tipo,
       ubicacion: fungible.ubicacion,
-      detalles: fungible.detalles,
+      // detalles: fungible.detalles,
     });
   };
 
@@ -58,17 +58,17 @@ const ModalDescriptionFungible = ({ show, onHide, fungible, onSave }) => {
             <div className="black-square"></div>
             <div className="text-container">
               <div className="data-item">
-                <p>Procedencia:</p>
+                <p>Tipo:</p>
                 {isEditing ? (
                   <Form.Control
                     type="text"
                     name="procedencia"
-                    value={editedFungible.procedencia}
+                    value={editedFungible.tipo}
                     onChange={handleInputChange}
                     className="custom-input"
                   />
                 ) : (
-                  <div className="scrollable-text">{fungible.procedencia}</div>
+                  <div className="scrollable-text">{fungible.tipo}</div>
                 )}
               </div>
               <div className="data-item">
@@ -85,7 +85,7 @@ const ModalDescriptionFungible = ({ show, onHide, fungible, onSave }) => {
                   <div className="scrollable-text">{fungible.ubicacion}</div>
                 )}
               </div>
-              <div className="data-item">
+              {/* <div className="data-item">
                 <p>Detalles:</p>
                 {isEditing ? (
                   <Form.Control
@@ -98,7 +98,7 @@ const ModalDescriptionFungible = ({ show, onHide, fungible, onSave }) => {
                 ) : (
                   <div className="scrollable-text">{fungible.detalles}</div>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         )}
