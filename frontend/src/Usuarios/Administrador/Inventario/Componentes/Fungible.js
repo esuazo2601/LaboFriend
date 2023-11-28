@@ -9,7 +9,7 @@ import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css';
 import {getProducto,deleteProducto} from '../../../../api_service/inventario_api.js'
 
-const Fungible = ({ searchTerm }) => {
+const Fungible = ({ searchTerm, refreshFungibles }) => {
 
   const [loading, setLoading] =useState(true);
   //const [refresh, setRefresh] =useState(false);
@@ -25,6 +25,8 @@ const Fungible = ({ searchTerm }) => {
     // detalles: '',
     // imagen: '',
   });
+  const [refreshDelete, setRefreshDelete] = useState(false)
+
   useEffect(()=>{
     try {
       const getData = async () => {
@@ -33,11 +35,11 @@ const Fungible = ({ searchTerm }) => {
           console.log(data)
           setListaFungibles(data)
           setLoading(false)
-          //setRefresh(false)
+          setRefreshDelete(false)
         }else{
           setListaFungibles([])
           setLoading(false)
-          //setRefresh(false)
+          setRefreshDelete(false)
         }
       };
       getData();
@@ -46,9 +48,9 @@ const Fungible = ({ searchTerm }) => {
       console.log("se encontro un error: ",error);
       setListaFungibles([])
         setLoading(false)
-        //setRefresh(false)
+        setRefreshDelete(false)
     }
-  },[])
+  },[refreshFungibles,refreshDelete])
 
   const [newStock, setNewStock] = useState(0);
   const handleEliminarClick = (fungible, tipo) => {
@@ -61,6 +63,7 @@ const Fungible = ({ searchTerm }) => {
     try{
       const resp = await deleteProducto(id)
       console.log(resp)
+      setRefreshDelete(true)
     }catch(error){
       console.log(error)
     }
@@ -103,7 +106,6 @@ const Fungible = ({ searchTerm }) => {
   const handleSaveDescription = () => {
     setShowModalDescription(false);
   };
-  
   /*   const handleAgregar = () =>{
     setRefresh(true);
   } 

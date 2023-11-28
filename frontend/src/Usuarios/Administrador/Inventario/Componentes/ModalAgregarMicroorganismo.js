@@ -21,6 +21,7 @@ const ModalAgregarMicroorganismo = (props) => {
       try{
         const resp = await postMicroorganismo(nombreCientifico, nombre, procedencia,detalles);
         console.log(resp)
+        props.onAddMicroorganismo()
       }catch(error){
         alert('Error al agregar microorganismo')
         console.log(error);
@@ -35,6 +36,7 @@ const ModalAgregarMicroorganismo = (props) => {
     setNombre('');
     setNombreCientifico('');
     setProcedencia('');
+    setDetalles('');
     setShowAlert(false);
     setSuccess(false);
     props.onHide();

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 
-const ModalStockFungible = ({ show, onHide, fungible, newStock, onIncrease, onDecrease, onSave }) => {
+const ModalStockFungible = ({ show, onHide, fungible, newStock, onIncrease, onDecrease, onSave, onAdd }) => {
   return (
     <Modal show={show} onHide={onHide} centered={true}>
       <Modal.Header closeButton className="modal-header-custom">

@@ -7,9 +7,9 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalStockMicroorganismo from './ModalStockMicroorganismo';
 import ModalDescriptionMicroorganismo from './ModalDescriptionMicroorganismo';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
-import { getAllMicroorg, postMicroorganismo } from '../../../../api_service/microorganismo_api';
+import { deleteMicroorganismo, getAllMicroorg, postMicroorganismo } from '../../../../api_service/microorganismo_api';
 
-const Microorganismo = ({ searchTerm }) => {
+const Microorganismo = ({ searchTerm, refreshMicroorganismos }) => {
   const microorganismosData = [
     {
       
@@ -27,9 +27,11 @@ const Microorganismo = ({ searchTerm }) => {
   const [showModalStock, setShowModalStock] = useState(false);
   const [selectedMicroorganismo, setSelectedMicroorganismo] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState({
+    nombre_cientifico: '',
     procedencia: '',
     detalles: '',
   });
+  const [refreshDelete, setRefreshDelete] = useState(false)
 
 
   useEffect(() => {
@@ -41,9 +43,11 @@ const Microorganismo = ({ searchTerm }) => {
           setMicroorganismos(data)
           setLoading(false)
           console.log(data)
+          setRefreshDelete(false)
         }else{
           setMicroorganismos([])
           setLoading(false)
+          setRefreshDelete(false)
         }
       }  
       fetchData();
@@ -53,8 +57,9 @@ const Microorganismo = ({ searchTerm }) => {
       console.log(error)
       setMicroorganismos([])
       setLoading(false)
+      setRefreshDelete(false)
     }
-  },[])
+  },[refreshMicroorganismos, refreshDelete])
   
 
   // Stock del microorganismo seleccionado
@@ -69,6 +74,7 @@ const Microorganismo = ({ searchTerm }) => {
     setShowModalDescription(true);
     setSelectedMicroorganismo(microorganismo);
     setSelectedDescription({
+      nombre_cientifico: microorganismo.nombre_cientifico,
       procedencia: microorganismo.procedencia,
       detalles: microorganismo.detalles,
     });
@@ -113,7 +119,15 @@ const Microorganismo = ({ searchTerm }) => {
     setShowModalEliminar(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async (id) => {
+    console.log(id)
+    try{
+      const resp = await deleteMicroorganismo(id)
+      console.log(resp)
+      setRefreshDelete(true)
+    }catch(error){
+      console.log(error)
+    }
     console.log("Microorganismo eliminado"); // Simulación con backend
   };
 
@@ -188,6 +202,15 @@ const Microorganismo = ({ searchTerm }) => {
               onHide={() => setShowModalEliminar(false)}
               tipoElemento="Microorganismo"
               nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre_comun : ''}
+              onDelete={handleDelete}
+            />
+
+            <ModalEliminarConfirmar
+              show={showModalEliminar}
+              onHide={() => setShowModalEliminar(false)}
+              tipoElemento="Microorganismo" 
+              nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre_comun : ''}
+              id = {selectedMicroorganismo ? selectedMicroorganismo.id : ''}
               onDelete={handleDelete}
             />
           </div>
