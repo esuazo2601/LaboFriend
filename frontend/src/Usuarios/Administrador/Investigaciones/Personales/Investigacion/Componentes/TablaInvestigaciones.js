@@ -7,7 +7,7 @@ import '../../../../../../EstilosGlobales/basicos.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import DetalleAvance from './ModalDetalle';
-import EliminarAvance from './ModalEliminacion';
+import EliminarInvestigacion from './ModalEliminacion';
 import { getInvestigaciones, deleteInvestigacion } from '../../../../../../api_service/investigaciones_api'; 
 
 
@@ -16,47 +16,60 @@ const TablaAvances = ({ searchTerm }) => {
 
     const [investigaciones, setInvestgaciones] = useState([]);
     const [loading, setLoading] = useState(true);
-
+    const [showModalDetalle, setShowModalDetalle] = useState(false);
+    const [showModalEliminacion, setShowModalEliminacion] = useState(false);
+    const [selectedInvestigacion, setSelectedInvestigacion] = useState(null);
+    const [refreshDelete, setRefreshDelete] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const data = await getInvestigaciones();
+                console.log(data)
                 if(data){
                     setInvestgaciones(data);
                     setLoading(false);
+                    setRefreshDelete(false);
                 }
                 else{
                     setInvestgaciones([]);
                     setLoading(false);
+                    setRefreshDelete(false);
+
                 }
 
             } catch (error) {
                 console.error(error);
                 setLoading(false);
                 setInvestgaciones([]);
+                setRefreshDelete(false);
             }
         };
 
         fetchData();
-    }, []); 
+    }, [refreshDelete]); 
 
     //console.log("investigaciones",investigaciones);
-    const [showModalDetalle, setShowModalDetalle] = useState(false);
-    const [showModalEliminacion, setShowModalEliminacion] = useState(false);
-    const [selectedAvance, setSelectedAvance] = useState(null);
+    
 
 
     //Visualizacion de confirmacion de eliminacion
-    const handleEliminationClick = (avance) => {
+    const handleEliminationClick = (investigacion) => {
+        setSelectedInvestigacion(investigacion);
         setShowModalEliminacion(true);
-        setSelectedAvance(avance);
     };
 
     //Eliminar avance
-    const handleEliminarAvance = async(avance) => {
-        setShowModalEliminacion(false);
-        setSelectedAvance(avance);
+    const handleEliminarInvestigacion = async(id) => {
+        console.log(id)
+        try{
+            const resp = await deleteInvestigacion(id)
+            console.log(resp)
+            setRefreshDelete(true)
+          }catch(error){
+            console.log(error)
+          }
+          console.log("Investigación eliminada");
         //MANEJAR ELIMINACION DE AVNACE CON LLAMADA A API
         // await deleteInvestigacion(avance.id)
     };
@@ -156,15 +169,15 @@ const TablaAvances = ({ searchTerm }) => {
                             </div>
 
                             <DetalleAvance
-                                show={showModalDetalle}
-                                avance={selectedAvance}
+                                
+                                
                                 onHide={() => setShowModalDetalle(false)}
                             />
-                            <EliminarAvance
+                            <EliminarInvestigacion
                                 show={showModalEliminacion}
-                                avance={selectedAvance}
+                                id={selectedInvestigacion? selectedInvestigacion.id:''}
                                 onHide={() => setShowModalEliminacion(false)}
-                                onEliminarAvance={handleEliminarAvance}
+                                onDelete={handleEliminarInvestigacion}
                             />
                         </>
                     )}

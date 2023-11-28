@@ -3,14 +3,20 @@ import { Modal, Button } from 'react-bootstrap';
 
 
 
-const EliminarAvance = ({ show, avance, onHide, onEliminarAvance }) => {
+const EliminarInvestigacion = ({ show, onHide, id, onDelete }) => {
     const [showModal, setShowModal] = useState(false);
+    const [isConfirmed, setIsConfirmed] = useState(false);
+    const [isDeleted, setIsDeleted] = useState(false);
 
-    const openModal = () => {
-        setShowModal(true);
+    const handleDelete = () => {
+        setIsConfirmed(true);
+        onDelete(id);
+        setIsDeleted(true);
     };
 
     const closeModal = () => {
+        setIsConfirmed(false);
+        setIsDeleted(false);
         onHide();
     };
 
@@ -23,19 +29,29 @@ const EliminarAvance = ({ show, avance, onHide, onEliminarAvance }) => {
                     <Modal.Title className="ms-auto header-name">Confirmar Eliminación</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="modal-body-custom-description" style={{ textAlign: "center" }} >
-                    <p>¿Está seguro que desea eliminar la investigacion {avance ? avance.titulo : "No hay datos disponibles"}?</p>
+                    {!isConfirmed && !isDeleted ?(
+                        <p className="modal-text">¿Estás seguro de que quieres eliminar la investigación?</p>
+                    ): isDeleted?(
+                        <p className="modal-text">La investigación se ha eliminado con éxito</p>
+                    ):null
+                    }
                 </Modal.Body>
                 <Modal.Footer className="d-flex justify-content-center modal-footer-custom">
-                    <Button variant="primary" onClick={closeModal} className="modal-button btn-cancel">
-                        Cancelar
-                    </Button>
-                    <Button variant="danger" onClick={onEliminarAvance} className="modal-button btn-save">
-                        Eliminar
-                    </Button>
+                {!isConfirmed && !isDeleted ? (
+                    <>
+                        <Button variant="primary" onClick={closeModal} className="modal-button btn-cancel">Cancelar</Button>
+                        <Button variant="danger" onClick={handleDelete} className="modal-button btn-save">Eliminar</Button>
+                    </>
+                    
+                ):(
+                    <Button variant="primary" onClick={closeModal}>Cerrar</Button>
+                )
+                }
+                    
                 </Modal.Footer>
             </Modal>
         </div >
     );
 };
 
-export default EliminarAvance;
+export default EliminarInvestigacion;
