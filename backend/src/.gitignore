@@ -1,3 +1,4 @@
+.env
 __pycache__
 backend\src\view\__pycache__
 \LaboFriend\venv

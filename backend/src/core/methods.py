@@ -53,7 +53,12 @@ async def delete_room(sala_nombre:str):
         return {'message':f'Sala con nombre: {sala_nombre} fue borrada'}
     else:
         return {'message':'No se encuentra la sala con esta id'} 
-    
+
+async def get_room_id(id: int):
+    response = supabase.table('Sala').select('nombre').eq('id',id).execute()
+    return response
+
+
 ################################### MICROORGANISMOS METHODS ################################### 
 
 async def add_microorg(microorganismo:Microorganismo):
