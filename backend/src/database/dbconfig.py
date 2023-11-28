@@ -7,6 +7,7 @@ dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 # Carga las variables de entorno desde el archivo .env
 load_dotenv(dotenv_path)
 
+#URL y key para conectar a la base de datos
 url:str = os.environ.get("SUPABASE_URL")
 key:str = os.environ.get("SUPABASE_KEY")
 

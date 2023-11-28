@@ -1,6 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 
+#A continuación se definen los modelos utilizados para las query a la base de datos
 class Bloque(BaseModel):
     id: Optional[int] = None
     hora_inicio: str

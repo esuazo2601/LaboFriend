@@ -36,7 +36,6 @@ def get_password_hash(password):
     return crypt.hash(password)
 
 #Validación de alcance de usuario
-
 def auth_scope_value(security_scopes: SecurityScopes):
     if security_scopes.scopes:
         authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'

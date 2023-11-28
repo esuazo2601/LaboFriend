@@ -4,16 +4,19 @@ from fastapi import HTTPException
 from datetime import datetime,timedelta
 
 ################################### BLOQUES METHODS ################################### 
+#Metodo para consultar todas las entradas de la tabla bloques
 async def get_blocks():
     response = supabase.table('Bloque').select("*").execute()
     print(response)
     return response.data
 
+#Metodo para consultar un bloque dado su id
 async def get_block(bloque_id:int):
     response = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
     print(response)
     return response
 
+#Metodo para crear un bloque
 async def newblock(bloque: Bloque):
     print(bloque.model_dump())  # Asegúrate de que los datos se imprimen correctamente
     response = supabase.table('Bloque').insert({
@@ -22,6 +25,8 @@ async def newblock(bloque: Bloque):
         }).execute()
     return response
 
+
+#Metodo para borrar bloque
 async def delete_block(bloque_id:int):
     data = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
     print (data)
@@ -81,22 +86,25 @@ async def delete_microorg(id:int):
         return {'message':f'No se encontró microorganismo de id: {id}'}
     
 
+#Obtener un microorganismo en base a su nombre comun
 async def get_microorg_cm(nombre_comun:str):
     response = supabase.table('Microorganismo').select('*').eq('nombre_comun',nombre_comun).execute()
     return response
 
+#Obtener un microorganismo en base a su nombre cientifico
 async def get_microorg_cin(nombre_cientifico:str):
     response = supabase.table('Microorganismo').select('*').eq('nombre_cientifico',nombre_cientifico).execute()
     return response
 
+# Actualizar un microorganismo
 async def update_microorg(id:int,nuevo:ActualizarMicroorganismo):
-    if nuevo.procedencia and nuevo.detalles:
+    if nuevo.procedencia and nuevo.detalles: #Si se entregan nueva procedencia y detalles
         response = supabase.table('Microorganismo').update({"detalles":nuevo.detalles, "procedencia":nuevo.procedencia}).eq('id',id).execute()
         return response
-    elif nuevo.detalles:
+    elif nuevo.detalles: #Si solo se entra detalles
         response = supabase.table('Microorganismo').update({"detalles":nuevo.detalles}).eq('id',id).execute()
         return response
-    elif nuevo.procedencia:
+    elif nuevo.procedencia: #Si solo se entra la procedencia nueva
         response = supabase.table('Microorganismo').update({"procedencia":nuevo.procedencia}).eq('id',id).execute()
         return response
     else:
@@ -125,6 +133,7 @@ async def get_investigacion_nm(name_inv:str):
     response = supabase.table('Investigacion').select('*').eq('titulo',name_inv).execute()
     return response
 
+#consulta todas las investigaciones dada una fecha
 async def get_investigacion_date(fecha: str):
     # Convierte la fecha proporcionada en un objeto datetime
     fecha_obj = datetime.strptime(fecha, '%Y-%m-%d')
@@ -212,6 +221,7 @@ async def delete_product(id:int):
         return {'message':f'No se encontró el producto de id: {id}'}
 
 ################################### TRABAJANDO METHODS ################################### 
+# Añade entrada a la tabla trabaja
 async def add_trabajando(trabaja:Trabaja):
     query = supabase.table('Investigacion').select('*').eq('id',trabaja.id_investigacion).execute()
     if query.data:
@@ -228,6 +238,7 @@ async def get_trabajando():
     query = supabase.table('Trabaja').select('*').execute()
     return query.data
 
+#Retorna las investigaciones en las que esta trabajando el usuario con el email dado
 async def get_trabajando_email(email:str):
     query = supabase.table('Trabaja').select('id_investigacion').eq('email_usuario',email).execute()
     print(query.data)
@@ -240,14 +251,18 @@ async def delete_trabajando_id(id:int):
     query = supabase.table('Trabaja').delete().eq('id_investigacion',id).execute()
     return query
 
-################################### AGENDA METHODS ################################### 
+################################### AGENDA METHODS ###################################
+
+#retorna los bloques disponibles en la sala seleccionada en la fecha seleccionada
 async def check_availability(check_agenda:CheckAgenda):
+    #Se pregunta por los bloques disponibles en funcion de la sala y su capacidad
     block_query = supabase.table('Agenda').select('id_bloque').match({'id_sala':check_agenda.id_sala,'fecha':check_agenda.fecha}).execute()
     sala_query = supabase.table('Sala').select('capacidad').eq('id',check_agenda.id_sala).execute()
     
     capacidad_sala = sala_query.data[0]['capacidad']
     bloques = block_query.data
     
+    # se quitan bloques en funcion de los que esten ocupados (los recuperados de la query de bloques)
     available_list = [1,2,3,4,5,6,7,8,9,10]
     block_dict = {}
     for bloque in bloques:
@@ -257,14 +272,16 @@ async def check_availability(check_agenda:CheckAgenda):
         else:
             block_dict[id_bloque] = 1
 
+    #Si la cantidad de personas que agendan es mayor a la capacidad de la sala, se quita el bloque de disponible
     print('CAPACIDAD SALA: ',capacidad_sala)
     for key,value in block_dict.items():
         if value >= capacidad_sala:
             available_list.remove(key)
 
-    return {'available_blocks': available_list}
+    return {'available_blocks': available_list} 
 
 async def new_agendamiento(agendamiento:Agenda):
+    #Solo se puede agendar si no tiene otro agendamiento previo en la misma sala en el mismo bloque en la misma sala
     user_reservation = supabase.table('Agenda').select('id_bloque').match({'id_sala':agendamiento.id_sala, 'fecha':agendamiento.fecha, 'email_estudiante':agendamiento.email_estudiante}).execute()
     if not user_reservation.data:
         response = supabase.table('Agenda').insert({
@@ -289,7 +306,7 @@ async def update_agendamiento(id:int,new_agendamiento:ActualizarAgenda):
         }).eq('id',id).execute()
     return response
 
-################################### PRODUCTO_EN_SALA METHODS ################################### 
+################################### PRODUCTO_EN_SALA METHODS (NO USADOS EN MVP) ################################### 
 async def get_prod_by_id(id_producto:int):
     response = supabase.table('Producto_en_sala').select('*').eq('id_producto', id_producto).execute()
     return response
@@ -425,7 +442,7 @@ async def get_user_by_email(email:EmailStr):
     else:
         return {'message':'No existe usuario con este email'}
 
-
+#Se consultan los scopes asociados al usuario con el email dado
 async def get_user_scopes(email:EmailStr):
     # Se pregunta si el usuario existe, si es asi, se verifica que exista en algunas de las tablas de los roles
     scopes = []
