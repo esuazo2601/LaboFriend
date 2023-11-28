@@ -8,6 +8,7 @@ import ModalMantenimientoEquipo from './ModalMantenimientoEquipo';
 import ModalDescriptionEquipo from './ModalDescriptionEquipo';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
 import {deleteEquipo, getEquipo} from '../../../../api_service/equipo_api.js'
+import { getSala } from '../../../../api_service/salas_api.js';
 
 const Equipo = ({ searchTerm, refreshEquipos }) => {
   const equiposData = [
@@ -41,8 +42,22 @@ const Equipo = ({ searchTerm, refreshEquipos }) => {
       const getData = async () => {
         const data = await getEquipo()
         if(data){
-          console.log(data)
-          setListaEquipos(data)
+          const salaEquipo = await Promise.all(
+            data.map(async (equipo) => {
+              if(equipo.id_sala){
+                const sala = await getSala(equipo.id_sala);
+                console.log('sala: ',sala)
+                return{
+                  ...equipo,
+                  nombre_sala: sala.nombre
+                };
+              }else{
+                return equipo
+              }
+            })
+          )
+          console.log(salaEquipo)
+          setListaEquipos(salaEquipo)
           setLoading(false)
           setRefreshDelete(false)
         }else{
@@ -81,7 +96,7 @@ const Equipo = ({ searchTerm, refreshEquipos }) => {
     setSelectedEquipo(equipo);
     setSelectedDescription({
       Sala: equipo.sala,
-      descripcion: equipo.descripcion,
+      descripcion: equipo.descripcion
     });
   };
 

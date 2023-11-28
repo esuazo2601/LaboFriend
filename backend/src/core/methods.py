@@ -43,7 +43,11 @@ async def new_room(sala: Sala):
 
 async def get_rooms():
     response = supabase.table('Sala').select('*').execute()
-    print(response)
+    #print(response)
+    return response
+
+async def get_room_id(id: int):
+    response = supabase.table('Sala').select('nombre').eq('id',id).execute()
     return response
 
 async def delete_room(sala_nombre:str):

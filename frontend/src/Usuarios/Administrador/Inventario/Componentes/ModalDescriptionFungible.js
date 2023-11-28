@@ -68,7 +68,7 @@ const ModalDescriptionFungible = ({ show, onHide, fungible, onSave }) => {
                     className="custom-input"
                   />
                 ) : (
-                  <div className="scrollable-text">{fungible.tipo}</div>
+                  <div className="scrollable-text" >{fungible.tipo}</div>
                 )}
               </div>
               <div className="data-item">

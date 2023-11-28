@@ -18,3 +18,8 @@ async def getRoom():
 async def deleteRoom(sala_nombre:str):
     result = await delete_room(sala_nombre)
     return result
+
+@router.get("/sala/{sala_id}")
+async def getRoomId(sala_id:int):
+    result = await get_room_id(sala_id)
+    return result

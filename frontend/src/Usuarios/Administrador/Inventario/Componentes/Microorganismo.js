@@ -87,7 +87,8 @@ const Microorganismo = ({ searchTerm, refreshMicroorganismos }) => {
 
   // Filtra los elementos 
   const filteredMicroorganismos = microorganismos.filter((microorganismo) =>
-    microorganismo.nombre_comun.toLowerCase().includes(searchTerm.toLowerCase())
+    microorganismo.nombre_comun.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    microorganismo.nombre_cientifico.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const itemsPerPage = 5; // Cantidad de elementos por pág

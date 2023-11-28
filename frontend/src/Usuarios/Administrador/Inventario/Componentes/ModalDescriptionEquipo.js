@@ -10,7 +10,7 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
     setIsEditing(true);
     setEditedEquipo({
       nombre: equipo.nombre,
-      sala: equipo.ubicacion,
+      sala: equipo.nombre_sala,
       descripcion: equipo.descripcion,
     });
   };
@@ -61,13 +61,13 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
                 {isEditing ? (
                   <Form.Control
                     type="text"
-                    name="ubicacion"
+                    name="sala"
                     value={editedEquipo.sala}
                     onChange={handleInputChange}
                     className="custom-input"
                   />
                 ) : (
-                  <div className="scrollable-text">{equipo.sala}</div>
+                  <div className="scrollable-text">{equipo.nombre_sala}</div>
                 )}
               </div>
           
@@ -76,7 +76,7 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
                 {isEditing ? (
                   <Form.Control
                     as="textarea"
-                    name="detalles"
+                    name="descripcion"
                     value={editedEquipo.descripcion}
                     onChange={handleInputChange}
                     className="custom-input"

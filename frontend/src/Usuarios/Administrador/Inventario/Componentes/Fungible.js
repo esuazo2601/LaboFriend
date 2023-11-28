@@ -53,7 +53,7 @@ const Fungible = ({ searchTerm, refreshFungibles }) => {
   },[refreshFungibles,refreshDelete])
 
   const [newStock, setNewStock] = useState(0);
-  const handleEliminarClick = (fungible, tipo) => {
+  const handleEliminarClick = (fungible) => {
     setSelectedFungible(fungible);
     setShowModalEliminar(true);
   };
