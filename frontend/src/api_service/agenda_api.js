@@ -1,4 +1,4 @@
-import client  from './user_api.js';
+import {client} from './user_api.js';
 
 /*funciones de administrador*/
 
@@ -10,7 +10,7 @@ export async function checkAvailability(id_sala,fecha) {
         "fecha":fecha
     }
     const response = await client.post("check_availability",query)
-    .then(response => response.data)
+    .then(response => response.data.available_blocks)
     .catch(error => console.log("Error en la petición a la api: ",error))
     return response
 }

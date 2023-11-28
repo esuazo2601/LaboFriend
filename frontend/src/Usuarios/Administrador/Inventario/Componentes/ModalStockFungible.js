@@ -5,7 +5,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 
-const ModalStockFungible = ({ show, onHide, fungible, newStock, onIncrease, onDecrease, onSave, onAdd }) => {
+const ModalStockFungible = ({ show, onHide, fungible, newStock, onIncrease, onDecrease, onSave}) => {
+
+  const handleConfirm = () =>{
+    onSave(fungible.id, newStock)
+  }
   return (
     <Modal show={show} onHide={onHide} centered={true}>
       <Modal.Header closeButton className="modal-header-custom">
@@ -28,7 +32,7 @@ const ModalStockFungible = ({ show, onHide, fungible, newStock, onIncrease, onDe
         <Button variant="secondary" onClick={onHide} className="modal-button btn-cancel">
           Cancelar
         </Button>
-        <Button variant="primary" onClick={onSave} className="modal-button btn-save">
+        <Button variant="primary" onClick={handleConfirm} className="modal-button btn-save">
           Guardar
         </Button>
       </Modal.Footer>

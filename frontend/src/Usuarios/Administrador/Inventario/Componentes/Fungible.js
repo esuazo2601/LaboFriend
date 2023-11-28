@@ -7,7 +7,7 @@ import ModalDescriptionFungible from './ModalDescriptionFungible';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css';
-import {getProducto,deleteProducto} from '../../../../api_service/inventario_api.js'
+import {getProducto,deleteProducto, updateProducto} from '../../../../api_service/inventario_api.js'
 
 const Fungible = ({ searchTerm, refreshFungibles }) => {
 
@@ -99,7 +99,16 @@ const Fungible = ({ searchTerm, refreshFungibles }) => {
     }
   };
   
-  const handleSaveStock = () => {
+  const handleSaveStock = async (id,newStock) => {
+    //console.log('id:',id)
+    //console.log('nuevo stock:',newStock)
+    try{
+      const resp = await updateProducto(id, newStock)
+      console.log(resp)
+      setRefreshDelete(true)
+    }catch(error){
+      console.log(error)
+    }
     setShowModalStock(false);
   };
   

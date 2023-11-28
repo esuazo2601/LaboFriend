@@ -19,7 +19,7 @@ async def updateAgendamiento(id:int,new_agendamiento:ActualizarAgenda):
     result = await update_agendamiento(id,new_agendamiento)
     return result
 
-@router.get('/check_availability')
+@router.post('/check_availability')
 async def checkAvailability(check_agenda:CheckAgenda):
     result = await check_availability(check_agenda)
     return result

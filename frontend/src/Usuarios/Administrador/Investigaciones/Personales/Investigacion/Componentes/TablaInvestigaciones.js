@@ -169,8 +169,6 @@ const TablaAvances = ({ searchTerm }) => {
                             </div>
 
                             <DetalleAvance
-                                
-                                
                                 onHide={() => setShowModalDetalle(false)}
                             />
                             <EliminarInvestigacion
