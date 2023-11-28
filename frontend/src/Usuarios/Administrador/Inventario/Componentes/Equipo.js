@@ -42,22 +42,8 @@ const Equipo = ({ searchTerm, refreshEquipos }) => {
       const getData = async () => {
         const data = await getEquipo()
         if(data){
-          const salaEquipo = await Promise.all(
-            data.map(async (equipo) => {
-              if(equipo.id_sala){
-                const sala = await getSala(equipo.id_sala);
-                console.log('sala: ',sala)
-                return{
-                  ...equipo,
-                  nombre_sala: sala.nombre
-                };
-              }else{
-                return equipo
-              }
-            })
-          )
-          console.log(salaEquipo)
-          setListaEquipos(salaEquipo)
+          console.log(data)
+          setListaEquipos(data)
           setLoading(false)
           setRefreshDelete(false)
         }else{
