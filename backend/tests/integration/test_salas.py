@@ -35,6 +35,6 @@ async def test_delete_room_with_no_valid_id():
     sala_nombre = "a"
 
     with pytest.raises(HTTPException) as exc:
-        result = result = await delete_room(sala_nombre)
+        result = await delete_room(sala_nombre)
     assert exc.value.detail == 'No se encuentra la sala con este nombre'
     assert exc.value.status_code == 500

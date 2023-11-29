@@ -98,7 +98,7 @@ async def get_all_microorg():
 
 async def delete_microorg(id:int):
     response = supabase.table('Microorganismo').delete().eq('id',id).execute()
-    if response:
+    if response.data :
         return response
     else:
         return {'message':f'No se encontró microorganismo de id: {id}'}
@@ -116,6 +116,7 @@ async def get_microorg_cin(nombre_cientifico:str):
 
 # Actualizar un microorganismo
 async def update_microorg(id:int,nuevo:ActualizarMicroorganismo):
+
     if nuevo.procedencia and nuevo.detalles: #Si se entregan nueva procedencia y detalles
         response = supabase.table('Microorganismo').update({"detalles":nuevo.detalles, "procedencia":nuevo.procedencia}).eq('id',id).execute()
         return response
