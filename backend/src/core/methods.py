@@ -79,7 +79,7 @@ async def delete_room(sala_nombre:str):
         else:
             raise HTTPException(status_code=404, detail='No se encuentra la sala con este nombre')
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail='No se encuentra la sala con este nombre')
     
 ################################### MICROORGANISMOS METHODS ################################### 
 

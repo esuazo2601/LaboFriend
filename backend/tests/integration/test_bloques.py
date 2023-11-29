@@ -12,8 +12,6 @@ from src.core.methods import (
 
 )
 
-
-
 @pytest.mark.asyncio
 async def test_get_blocks():
     result = await get_blocks()
