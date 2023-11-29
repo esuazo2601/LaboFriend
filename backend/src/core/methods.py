@@ -267,8 +267,12 @@ async def get_trabajando_email(email:str):
         return {'message':f'el usuario {email} no tiene investigaciones'}
 
 async def delete_trabajando_id(id:int):
-    query = supabase.table('Trabaja').delete().eq('id_investigacion',id).execute()
-    return query
+    query = supabase.table('Trabaja').select('*').eq('id',id).execute()
+    if query.data:
+        response = supabase.table('Trabaja').delete().eq('id',id).execute()
+        return response
+    else:
+        return {'message':f'No se encontró la relacion Trabaja de id: {id}'}
 
 ################################### AGENDA METHODS ###################################
 
