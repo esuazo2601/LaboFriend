@@ -288,6 +288,7 @@ async def check_availability(check_agenda:CheckAgenda):
     
     capacidad_sala = sala_query.data[0]['capacidad']
     bloques = block_query.data
+
     
     # se quitan bloques en funcion de los que esten ocupados (los recuperados de la query de bloques)
     available_list = [1,2,3,4,5,6,7,8,9,10]
@@ -327,8 +328,12 @@ async def new_agendamiento(agendamiento:Agenda):
     raise HTTPException(status_code=409, detail='Bloque ya reservado') 
 
 async def delete_agendamiento(id:int):
-    response = supabase.table('Agenda').delete().eq('id',id).execute()
-    return response
+    query = supabase.table('Agenda').select('*').eq('id',id).execute()
+    if query.data:
+        response = supabase.table('Agenda').delete().eq('id',id).execute()
+        return response
+    else:
+        return {'message':f'No se encontró agendamiento con id: {id}'}
 
 async def update_agendamiento(id:int,new_agendamiento:ActualizarAgenda):
     response = supabase.table('Agenda').update({
