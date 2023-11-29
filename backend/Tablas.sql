@@ -204,15 +204,14 @@ CREATE TABLE "Producto_en_sala" (
 
 -- DROP TABLE "Trabaja";
 
-CREATE TABLE "Trabaja" (
-	id serial4 NOT NULL,
-	email_usuario text NOT NULL,
-	id_investigacion int4 NOT NULL,
-	CONSTRAINT trabaja_pkey PRIMARY KEY (id),
-	CONSTRAINT trabaja_email_usuario_fkey FOREIGN KEY (email_usuario) REFERENCES "Usuario"(email) ON DELETE CASCADE,
-	CONSTRAINT trabaja_id_investigacion_fkey FOREIGN KEY (id_investigacion) REFERENCES "Investigacion"(id)
-);
-
+CREATE TABLE public."Trabaja" (
+    id serial,
+    email_usuario text not null,
+    id_investigacion integer not null,
+    constraint "trabaja_pkey" primary key (id),
+    constraint "trabaja_email_usuario_fkey" foreign key (email_usuario) references "Usuario" (email) on delete cascade,
+    constraint "trabaja_id_investigacion_fkey" foreign key (id_investigacion) references "Investigacion" (id) on update cascade on delete cascade
+  ) 
 
 -- public."Agenda" definition
 
