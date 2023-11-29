@@ -164,7 +164,7 @@ const Fungible = ({ searchTerm, refreshFungibles }) => {
                 <tr>
                   <th className="encabezado-tabla text-center align-middle">Nombre</th>
                   <th className="encabezado-tabla text-center align-middle">Stock</th>
-                  <th className="encabezado-tabla text-center align-middle">Acción</th>
+                  <th colSpan="2"className="encabezado-tabla text-center align-middle">Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -179,17 +179,20 @@ const Fungible = ({ searchTerm, refreshFungibles }) => {
                     >
                       {fungible.cantidad_total}
                     </td>
-                    <td className="celdas-restantes-tabla text-center align-middle">
-                      <div className="action-container">
-                        <div className="action-item" onClick={() => handleDescriptionClick(fungible)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} />
-                        </div>
-                        <div className="action-divider"></div>
-                        <div className="action-item" onClick={() => handleEliminarClick(fungible)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faTrash} />
-                        </div>
-                      </div>
-                    </td>
+
+                    <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleDescriptionClick(fungible)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faEye} />
+                      </td>
+                      <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleEliminarClick(fungible)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faTrash} />
+                      </td>
+
                   </tr>
                 ))}
               </tbody>

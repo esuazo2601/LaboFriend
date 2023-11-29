@@ -147,7 +147,7 @@ const Microorganismo = ({ searchTerm, refreshMicroorganismos }) => {
               <thead>
                 <tr>
                   <th className="encabezado-tabla text-center align-middle">Nombre</th>
-                  <th className="encabezado-tabla text-center align-middle">Acción</th>
+                  <th colSpan="2" className="encabezado-tabla text-center align-middle">Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,17 +157,19 @@ const Microorganismo = ({ searchTerm, refreshMicroorganismos }) => {
                       {microorganismo.nombre_comun}
                     </td>
 
-                    <td className="celdas-restantes-tabla text-center align-middle">
-                      <div className="action-container">
-                        <div className="action-item" onClick={() => handleDescriptionClick(microorganismo)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} />
-                        </div>
-                        <div className="action-divider"></div>
-                        <div className="action-item" onClick={() => handleEliminarClick(microorganismo)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faTrash} />
-                        </div>
-                      </div>
-                    </td>
+                    <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleDescriptionClick(microorganismo)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faEye} />
+                      </td>
+                      <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleEliminarClick(microorganismo)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faTrash} />
+                      </td>
+
                   </tr>
                 ))}
               </tbody>
