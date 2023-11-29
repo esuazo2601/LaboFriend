@@ -6,62 +6,80 @@ from datetime import datetime,timedelta
 ################################### BLOQUES METHODS ################################### 
 #Metodo para consultar todas las entradas de la tabla bloques
 async def get_blocks():
-    response = supabase.table('Bloque').select("*").execute()
-    print(response)
-    return response.data
+    try:
+        response = supabase.table('Bloque').select("*").execute()
+        print(response)
+        return response.data
+    except Exception:
+        raise HTTPException(status_code=400, detail="database blocks error" )
+
 
 #Metodo para consultar un bloque dado su id
 async def get_block(bloque_id:int):
-    response = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
-    print(response)
-    return response
+    try:
+        response = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
+        print(response)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="database block error" )
 
 #Metodo para crear un bloque
 async def newblock(bloque: Bloque):
-    print(bloque.model_dump())  # Asegúrate de que los datos se imprimen correctamente
-    response = supabase.table('Bloque').insert({
-        "hora_inicio":bloque.hora_inicio,
-        "hora_fin":bloque.hora_fin    
-        }).execute()
-    return response
+    try:
+        print(bloque.model_dump())  # Asegúrate de que los datos se imprimen correctamente
+        response = supabase.table('Bloque').insert({
+            "hora_inicio":bloque.hora_inicio,
+            "hora_fin":bloque.hora_fin    
+            }).execute()
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="database newblock error")
 
 
 #Metodo para borrar bloque
 async def delete_block(bloque_id:int):
-    data = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
-    print (data)
-    if data.data:
-        response = supabase.table('Bloque').delete().eq("id",bloque_id).execute()
-        return {'message':f'Se elimino el bloque con id: {bloque_id}'},response
-    else:
-        return {'message':'No existe el bloque con esta id'}
+    try:
+        data = supabase.table('Bloque').select('*').eq('id',bloque_id).execute()
+        print(data)
+        if data.data:
+            response = supabase.table('Bloque').delete().eq("id",bloque_id).execute()
+            return {'message':f'Se elimino el bloque con id: {bloque_id}'}, response
+        else:
+            return {'message':'No existe el bloque con esta id'}, None
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="database deleteblock error")
 
 ################################### SALAS METHODS ################################### 
 
 async def new_room(sala: Sala):
-    print(sala.model_dump())
-    response = supabase.table('Sala').insert({
-        "capacidad":sala.capacidad,
-        "nombre":sala.nombre
-    }).execute()
-    return response
+    try:
+        print(sala.model_dump())
+        response = supabase.table('Sala').insert({
+            "capacidad":sala.capacidad,
+            "nombre":sala.nombre
+        }).execute()
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 async def get_rooms():
-    response = supabase.table('Sala').select('*').execute()
-    #print(response)
-    return response
-
-async def get_room_id(id: int):
-    response = supabase.table('Sala').select('nombre').eq('id',id).execute()
-    return response
+    try:
+        response = supabase.table('Sala').select('*').execute()
+        print(response)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 async def delete_room(sala_nombre:str):
-    response = supabase.table('Sala').select('*').eq('nombre', sala_nombre).execute()
-    if response.data:
-        supabase.table('Sala').delete().eq('nombre', sala_nombre).execute()
-        return {'message':f'Sala con nombre: {sala_nombre} fue borrada'}
-    else:
-        return {'message':'No se encuentra la sala con esta id'} 
+    try:
+        response = supabase.table('Sala').select('*').eq('nombre', sala_nombre).execute()
+        if response.data:
+            supabase.table('Sala').delete().eq('nombre', sala_nombre).execute()
+            return {'message':f'Sala con nombre: {sala_nombre} fue borrada'}
+        else:
+            raise HTTPException(status_code=404, detail='No se encuentra la sala con este nombre')
+    except Exception as e:
+        raise HTTPException(status_code=500, detail='No se encuentra la sala con este nombre')
     
 ################################### MICROORGANISMOS METHODS ################################### 
 
@@ -80,7 +98,7 @@ async def get_all_microorg():
 
 async def delete_microorg(id:int):
     response = supabase.table('Microorganismo').delete().eq('id',id).execute()
-    if response:
+    if response.data :
         return response
     else:
         return {'message':f'No se encontró microorganismo de id: {id}'}
@@ -98,6 +116,7 @@ async def get_microorg_cin(nombre_cientifico:str):
 
 # Actualizar un microorganismo
 async def update_microorg(id:int,nuevo:ActualizarMicroorganismo):
+
     if nuevo.procedencia and nuevo.detalles: #Si se entregan nueva procedencia y detalles
         response = supabase.table('Microorganismo').update({"detalles":nuevo.detalles, "procedencia":nuevo.procedencia}).eq('id',id).execute()
         return response
@@ -153,7 +172,7 @@ async def get_investigacion_date(fecha: str):
 
 async def delete_inv(id:int):
     response = supabase.table('Investigacion').delete().eq('id',id).execute()
-    if response:
+    if response.data:
         return response
     else:
         return {'message':f'No se encontró la investigación de id: {id}'}
@@ -206,7 +225,7 @@ async def get_producto_id(id_prod:str):
 
 async def update_producto(id:int,nuevo:ActualizarProducto):
     response = supabase.table('Producto').select('*').eq('id',id).execute()
-    if response:
+    if response.data:
         query = supabase.table('Producto').update({"cantidad_total":nuevo.cantidad_total}).eq('id',id).execute()
         return query
     else:
@@ -248,8 +267,12 @@ async def get_trabajando_email(email:str):
         return {'message':f'el usuario {email} no tiene investigaciones'}
 
 async def delete_trabajando_id(id:int):
-    query = supabase.table('Trabaja').delete().eq('id_investigacion',id).execute()
-    return query
+    query = supabase.table('Trabaja').select('*').eq('id',id).execute()
+    if query.data:
+        response = supabase.table('Trabaja').delete().eq('id',id).execute()
+        return response
+    else:
+        return {'message':f'No se encontró la relacion Trabaja de id: {id}'}
 
 ################################### AGENDA METHODS ###################################
 
@@ -265,6 +288,7 @@ async def check_availability(check_agenda:CheckAgenda):
     
     capacidad_sala = sala_query.data[0]['capacidad']
     bloques = block_query.data
+
     
     # se quitan bloques en funcion de los que esten ocupados (los recuperados de la query de bloques)
     available_list = [1,2,3,4,5,6,7,8,9,10]
@@ -304,8 +328,12 @@ async def new_agendamiento(agendamiento:Agenda):
     raise HTTPException(status_code=409, detail='Bloque ya reservado') 
 
 async def delete_agendamiento(id:int):
-    response = supabase.table('Agenda').delete().eq('id',id).execute()
-    return response
+    query = supabase.table('Agenda').select('*').eq('id',id).execute()
+    if query.data:
+        response = supabase.table('Agenda').delete().eq('id',id).execute()
+        return response
+    else:
+        return {'message':f'No se encontró agendamiento con id: {id}'}
 
 async def update_agendamiento(id:int,new_agendamiento:ActualizarAgenda):
     response = supabase.table('Agenda').update({
