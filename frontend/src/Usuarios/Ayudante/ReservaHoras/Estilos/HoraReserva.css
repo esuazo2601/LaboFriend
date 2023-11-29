@@ -1,5 +1,4 @@
 .hora-reserva-container {
-  display: flex;
   flex-direction: row;
   margin: 30px;
 }
@@ -9,48 +8,18 @@
   align-items: center;
 }
 
-.horas-dia {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 60px;
-}
-
-.hora-dia {
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
-  text-align: center;
-}
-
-.horas-disponibles {
-  display: flex;
-  flex-grow: 1;
-  justify-content: space-around;
-}
-
-.dia-hora {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
 .horas-column{
-  max-width: 1000px;
+  max-width: 75em;
   display: flex;
   flex-direction: column;
-  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .horas-column-agendadas{
-  max-width: 1000px;
+  max-width: 75em;
   display: flex;
   flex-direction: column;
-  margin-left:23px;
+  margin-left:30px;
 }
 
 .hora-agendada {
@@ -93,33 +62,35 @@ ul {
 
 .hora-item span {
   font-size: 18px;
+  padding:8px;
+  margin-right: 15px;
 }
 
 .hora-disponible {
-  background-color: #003966; /* Color para horas disponibles */
+  background-color: #003966;
   color: #fff;
   border: none;
 }
 
 .hora-disponible:disabled {
-  background-color: #D5D7E5; /* Color para horas no disponibles */
+  background-color: #D5D7E5;
   cursor: not-allowed;
   border: none;
 }
 
 .hora-disponible:not(:disabled):hover {
-  background-color: #D5D7E5; /* Color para horas disponibles al pasar el ratón */
+  background-color: #D5D7E5;
   color: #000;
   border: none;
 }
 
 .no-disponible {
-  background-color: #D5D7E5; /* Color para horas no disponibles */
+  background-color: #D5D7E5; 
   cursor: not-allowed;
   border: none;
 }
 
 .no-disponible:hover {
-  background-color: #D5D7E5; /* Color para horas no disponibles al pasar el ratón */
+  background-color: #D5D7E5; 
   border: none;
 }

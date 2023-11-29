@@ -1,104 +1,58 @@
-import React, { useState } from 'react';
-import { Table, Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Spinner } from 'react-bootstrap';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalStockMicroorganismo from './ModalStockMicroorganismo';
 import ModalDescriptionMicroorganismo from './ModalDescriptionMicroorganismo';
+import ModalEliminarConfirmar from './ModalEliminarConfirmar';
+import { deleteMicroorganismo, getAllMicroorg} from '../../../../api_service/microorganismo_api';
 
-const Microorganismo = ({ searchTerm }) => {
-  const microorganismosData = [
-    {
-      
-      nombre: 'Microorganismo 1',
-      nombreCientifico: 'Cientifico 1',
-      procedencia: 'Origen 1',
-      ubicacion: 'Ubicación 1',
-      detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Microorganismo 2',
-      nombreCientifico: 'Cientifico 2',
-      procedencia: 'Origen 2',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      
-      nombre: 'Microorganismo 1',
-      nombreCientifico: 'Cientifico 1',
-      procedencia: 'Origen 1',
-      ubicacion: 'Ubicación 1',
-      detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Microorganismo 2',
-      nombreCientifico: 'Cientifico 2',
-      procedencia: 'Origen 2',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      
-      nombre: 'Microorganismo 1',
-      nombreCientifico: 'Cientifico 1',
-      procedencia: 'Origen 1',
-      ubicacion: 'Ubicación 1',
-      detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Microorganismo 2',
-      nombreCientifico: 'Cientifico 2',
-      procedencia: 'Origen 2',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      
-      nombre: 'Microorganismo 1',
-      nombreCientifico: 'Cientifico 1',
-      procedencia: 'Origen 1',
-      ubicacion: 'Ubicación 1',
-      detalles: 'Detalles 1',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-    {
-      nombre: 'Microorganismo 2',
-      nombreCientifico: 'Cientifico 2',
-      procedencia: 'Origen 2',
-      ubicacion: 'Ubicación 2',
-      detalles: 'Detalles 2',
-      imagen: 'imagen.jpg', 
-      stock: 10
-    },
-  ];
-
-  const [showModalStock, setShowModalStock] = useState(false);
+const Microorganismo = ({ searchTerm, refreshMicroorganismos }) => {
+ 
+  const [microorganismos, setMicroorganismos] = useState([]);
+  const [newStock, setNewStock] = useState(0);
+  const [loading, setLoading] =useState(true);
+  const [showModalEliminar, setShowModalEliminar] = useState(false);
   const [showModalDescription, setShowModalDescription] = useState(false);
+  const [showModalStock, setShowModalStock] = useState(false);
   const [selectedMicroorganismo, setSelectedMicroorganismo] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState({
-    descripcion: '',
+    nombre_cientifico: '',
     procedencia: '',
-    ubicacion: '',
     detalles: '',
-    imagen: '',
   });
+  const [refreshDelete, setRefreshDelete] = useState(false)
 
-  const [newStock, setNewStock] = useState(0);
+
+  useEffect(() => {
+    try
+    {
+      const fetchData  = async () =>{
+        const data = await getAllMicroorg();
+        if(data){
+          setMicroorganismos(data)
+          setLoading(false)
+          console.log(data)
+          setRefreshDelete(false)
+        }else{
+          setMicroorganismos([])
+          setLoading(false)
+          setRefreshDelete(false)
+        }
+      }  
+      fetchData();
+    }
+    catch(error)
+    {
+      console.log(error)
+      setMicroorganismos([])
+      setLoading(false)
+      setRefreshDelete(false)
+    }
+  },[refreshMicroorganismos, refreshDelete])
+  
 
   // Stock del microorganismo seleccionado
   const handleStockClick = (microorganismo) => {
@@ -112,35 +66,21 @@ const Microorganismo = ({ searchTerm }) => {
     setShowModalDescription(true);
     setSelectedMicroorganismo(microorganismo);
     setSelectedDescription({
-      descripcion: microorganismo.descripcion,
+      nombre_cientifico: microorganismo.nombre_cientifico,
       procedencia: microorganismo.procedencia,
-      ubicacion: microorganismo.ubicacion,
       detalles: microorganismo.detalles,
-      imagen: microorganismo.imagen,
     });
   };
 
-  const handleIncreaseStock = () => {
-    setNewStock(newStock + 1);
-  };
-
-  const handleDecreaseStock = () => {
-    if (newStock > 0) {
-      setNewStock(newStock - 1);
-    }
-  };
-
-  const handleSaveStock = () => {
-    setShowModalStock(false);
-  };
 
   const handleSaveDescription = () => {
     setShowModalDescription(false);
   };
 
   // Filtra los elementos 
-  const filteredMicroorganismos = microorganismosData.filter((microorganismo) =>
-    microorganismo.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMicroorganismos = microorganismos.filter((microorganismo) =>
+    microorganismo.nombre_comun.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    microorganismo.nombre_cientifico.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const itemsPerPage = 5; // Cantidad de elementos por pág
@@ -167,73 +107,112 @@ const Microorganismo = ({ searchTerm }) => {
     }
   };
 
+  const handleEliminarClick = (microorganismo) => {
+    setSelectedMicroorganismo(microorganismo);
+    setShowModalEliminar(true);
+  };
+
+  const handleDelete = async (id) => {
+    console.log(id)
+    try{
+      const resp = await deleteMicroorganismo(id)
+      console.log(resp)
+      setRefreshDelete(true)
+    }catch(error){
+      console.log(error)
+    }
+    console.log("Microorganismo eliminado"); // Simulación con backend
+  };
+
   return (
     <div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th className="encabezado-tabla text-center align-middle">Nombre</th>
-            <th className="encabezado-tabla text-center align-middle">Descripción</th>
-            <th className="encabezado-tabla text-center align-middle">Stock</th>
-          </tr>
-        </thead>
-        <tbody>
-          {paginatedMicroorganismos.map((microorganismo, index) => (
-            <tr key={index}>
-              <td className="columna-nombre-tabla text-center align-middle">
-                {microorganismo.nombre}
-              </td>
-              <td
-                className="celdas-restantes-tabla text-center align-middle"
-                onClick={() => handleDescriptionClick(microorganismo)}
-              >
-                <FontAwesomeIcon icon={faEye} />
-              </td>
-              <td
-                className="celdas-restantes-tabla text-center align-middle"
-                onClick={() => handleStockClick(microorganismo)}
-              >
-                {microorganismo.stock}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      {loading ? (
+        <div className='loading-spinner'>
+          <Spinner animation="border" role="status" size="lg">
+            <span className="visually-hidden">Cargando...</span>
+          </Spinner>
+        </div>
+      ) : (
+        microorganismos.length > 0 ? (
+          <div>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th className="encabezado-tabla text-center align-middle">Nombre</th>
+                  <th colSpan="2" className="encabezado-tabla text-center align-middle">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedMicroorganismos.map((microorganismo, index) => (
+                  <tr key={index}>
+                    <td className="columna-nombre-tabla text-center align-middle">
+                      {microorganismo.nombre_comun}
+                    </td>
 
-      <div className="pagination">
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          Anterior
-        </button>
-        {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(page)}
-            className={currentPage === page ? "active" : ""}
-          >
-            {page}
-          </button>
-        ))}
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Siguiente
-        </button>
-      </div>
+                    <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleDescriptionClick(microorganismo)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faEye} />
+                      </td>
+                      <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleEliminarClick(microorganismo)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faTrash} />
+                      </td>
 
-      <ModalStockMicroorganismo
-        show={showModalStock}
-        onHide={() => setShowModalStock(false)}
-        microorganismo={selectedMicroorganismo}
-        newStock={newStock}
-        onIncrease={handleIncreaseStock}
-        onDecrease={handleDecreaseStock}
-        onSave={handleSaveStock}
-      />
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
 
-      <ModalDescriptionMicroorganismo
-        show={showModalDescription}
-        onHide={() => setShowModalDescription(false)}
-        microorganismo={selectedMicroorganismo}
-        onSave={handleSaveDescription}
-      />
+            <div className="pagination">
+              <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                Anterior
+              </button>
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPage(page)}
+                  className={currentPage === page ? "active" : ""}
+                >
+                  {page}
+                </button>
+              ))}
+              <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                Siguiente
+              </button>
+            </div>
+
+            <ModalDescriptionMicroorganismo
+              show={showModalDescription}
+              onHide={() => setShowModalDescription(false)}
+              microorganismo={selectedMicroorganismo}
+              onSave={handleSaveDescription}
+            />
+
+            <ModalEliminarConfirmar
+              show={showModalEliminar}
+              onHide={() => setShowModalEliminar(false)}
+              tipoElemento="Microorganismo"
+              nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre_comun : ''}
+              onDelete={handleDelete}
+            />
+
+            <ModalEliminarConfirmar
+              show={showModalEliminar}
+              onHide={() => setShowModalEliminar(false)}
+              tipoElemento="Microorganismo" 
+              nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre_comun : ''}
+              id = {selectedMicroorganismo ? selectedMicroorganismo.id : ''}
+              onDelete={handleDelete}
+            />
+          </div>
+        ) : (
+          <p className="text-center">No se encontraron datos.</p>
+        )
+      )}
     </div>
   );
 };

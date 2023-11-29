@@ -1,6 +1,6 @@
 function AyudanteCuenta() {
   return (
-    <h1>AyudanteCuenta</h1>
+    <h1 style={{ textAlign: 'center' }} >En construcción . . .</h1>
   );
 }
 

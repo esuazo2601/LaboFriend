@@ -12,7 +12,7 @@ import { getInvestigacionById } from '../../../api_service/investigaciones_api';
 
 const TablaInvestigacionesPersonales = ({ searchTerm }) => {
 
-    const [InvestigacionesPersonales,setInvestigacionesPersonales] = useState([])
+    const [InvestigacionesPersonales, setInvestigacionesPersonales] = useState([])
     const [loading, setLoading] = useState(false)
     useEffect(() => {
         try {
@@ -20,22 +20,22 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
                 setLoading(true);
                 const data = await getTrabajandoEmail(localStorage.getItem('email'));
                 let investigacion_list = [];
-    
+
                 console.log('Data:', data);
-    
+
                 if (data) {
                     await Promise.all(data.map(async (item) => {
                         const id = item.id_investigacion;
                         const investigacionArray = await getInvestigacionById(id);
-                        
+
                         if (investigacionArray && investigacionArray.length > 0) {
                             const investigacion = investigacionArray[0];
                             investigacion_list.push(investigacion);
                         }
                     }));
-    
+
                     console.log('Investigacion list:', investigacion_list);
-    
+
                     setInvestigacionesPersonales(investigacion_list);
                     setLoading(false);
                 } else {
@@ -43,7 +43,7 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
                     setLoading(false);
                 }
             };
-    
+
             getData();
         } catch (error) {
             console.log("Se encontró un error: ", error);
@@ -52,7 +52,7 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
         }
     }, []);
 
-    console.log("Inv",InvestigacionesPersonales)
+    console.log("Inv", InvestigacionesPersonales)
 
     const [showModalDetalle, setShowModalDetalle] = useState(false);
     const [showModalEliminacion, setShowModalEliminacion] = useState(false);

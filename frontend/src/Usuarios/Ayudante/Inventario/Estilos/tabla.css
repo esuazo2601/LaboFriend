@@ -21,7 +21,24 @@
   font-size: 22px;
 }
 
+.action-subcell {
+  text-align: center;
+  width: 50%;
+  vertical-align: middle;
+}
 
+.action-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.action-item {
+  flex: 1; 
+  text-align: center;
+}
 
-  
+.action-divider {
+  border-right: 1px solid #dee2e6;
+  height: 100%;
+}

@@ -1,18 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import '../Estilos/modal.css';
+import { getSala } from '../../../../api_service/salas_api';
 
 const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedEquipo, setEditedEquipo] = useState({});
-
+  const [nombreSala, setNombreSala] = useState("");
+  useEffect(()=>{
+    try {
+      const getData = async () => {
+        if(equipo && equipo.id_sala){
+          const nombre = await getSala(equipo.id_sala)
+          console.log("nombre sala: ",nombre.nombre)
+          if(nombre){
+            setNombreSala(nombre.nombre)
+          }else{
+            setNombreSala('')
+          }
+        }
+        else{
+          setNombreSala('')
+        }
+      };
+      getData();
+    } catch (error) {
+      setNombreSala('')
+    }
+  },[equipo])
   const handleEditClick = () => {
     setIsEditing(true);
     setEditedEquipo({
       nombre: equipo.nombre,
-      ubicacion: equipo.ubicacion,
-      modoUso: equipo.modoUso,
-      detalles: equipo.detalles,
+      sala: nombreSala,
+      descripcion: equipo.descripcion,
     });
   };
 
@@ -58,45 +79,32 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
             <div className="black-square"></div>
             <div className="text-container">
               <div className="data-item">
-                <p>Ubicación:</p>
+                <p>Sala:</p>
                 {isEditing ? (
                   <Form.Control
                     type="text"
-                    name="ubicacion"
-                    value={editedEquipo.ubicacion}
+                    name="sala"
+                    value={editedEquipo.sala}
                     onChange={handleInputChange}
                     className="custom-input"
                   />
                 ) : (
-                  <div className="scrollable-text">{equipo.ubicacion}</div>
+                  <div className="scrollable-text">{nombreSala}</div>
                 )}
               </div>
-              <div className="data-item">
-                <p>Modo de uso:</p>
-                {isEditing ? (
-                  <Form.Control
-                    type="text"
-                    name="modoUso"
-                    value={editedEquipo.modoUso}
-                    onChange={handleInputChange}
-                    className="custom-input"
-                  />
-                ) : (
-                  <div className="scrollable-text">{equipo.modoUso}</div>
-                )}
-              </div>
+          
               <div className="data-item">
                 <p>Detalles:</p>
                 {isEditing ? (
                   <Form.Control
                     as="textarea"
-                    name="detalles"
-                    value={editedEquipo.detalles}
+                    name="descripcion"
+                    value={editedEquipo.descripcion}
                     onChange={handleInputChange}
                     className="custom-input"
                   />
                 ) : (
-                  <div className="scrollable-text">{equipo.detalles}</div>
+                  <div className="scrollable-text">{equipo.descripcion}</div>
                 )}
               </div>
             </div>

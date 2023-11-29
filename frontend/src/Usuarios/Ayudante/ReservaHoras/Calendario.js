@@ -8,23 +8,10 @@ const Calendario = ({ onFechaSeleccionada, diasSinHorasDisponibles }) => {
     onFechaSeleccionada(date);
   };
 
-  const tileContent = ({ date, view }) => {
-    const fechaSinHoras =
-      diasSinHorasDisponibles && diasSinHorasDisponibles.some(
-        (fecha) =>
-          fecha.getFullYear() === date.getFullYear() &&
-          fecha.getMonth() === date.getMonth() &&
-          fecha.getDate() === date.getDate()
-      );
-
-    return fechaSinHoras ? <div className="sin-horas">X</div> : null;
-  };
-
   return (
     <div className="contenedor-calendario">
       <Calendar
         onChange={handleFechaChange}
-        tileContent={tileContent}
       />
     </div>
   );

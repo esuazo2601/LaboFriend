@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from 'react-bootstrap/Button';
 import { Container } from 'react-bootstrap';
 import { motion } from 'framer-motion';
 import '../../../EstilosGlobales/basicos.css';
@@ -7,21 +8,66 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Fungible from './Componentes/Fungible';
 import Microorganismo from './Componentes/Microorganismo';
 import Equipo from './Componentes/Equipo';
-
+import ModalAgregarFungible from './Componentes/ModalAgregarFungible';
+import ModalAgregarMicroorganismo from './Componentes/ModalAgregarMicroorganismo';
+import ModalAgregarEquipo from './Componentes/ModalAgregarEquipo';
 function AyudanteInventario() {
   const [selectedOption, setSelectedOption] = useState('fungible');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
+  const [refreshFungibles, setRefreshFungibles] = useState(false);
+  const [refreshMicroorganismos, setRefreshMicroorganismos] = useState(false);
+  const [refreshEquipos, setRefreshEquipos] = useState(false);
+
+  const handleFungiblesRefresh = () => {
+    // Cambia el estado para forzar la actualización de la lista de fungibles
+    setRefreshFungibles((prev) => !prev);
+  };
+  const handleMicroorganismosRefresh = () => {
+    // Cambia el estado para forzar la actualización de la lista de fungibles
+    setRefreshMicroorganismos((prev) => !prev);
+  };
+  const handleEquipoRefresh = () => {
+    // Cambia el estado para forzar la actualización de la lista de fungibles
+    setRefreshEquipos((prev) => !prev);
+  };
   const renderSelectedComponent = () => {
     switch (selectedOption) {
       case 'fungible':
-        return <Fungible searchTerm={searchTerm} />;
+        return <Fungible searchTerm={searchTerm} refreshFungibles={refreshFungibles} />;
       case 'microorganismo':
-        return <Microorganismo searchTerm={searchTerm} />;
+        return <Microorganismo searchTerm={searchTerm} refreshMicroorganismos={refreshMicroorganismos} />;
       case 'equipo':
-        return <Equipo searchTerm={searchTerm} />;
+        return <Equipo searchTerm={searchTerm} refreshEquipos={refreshEquipos} />;
       default:
         return null;
+    }
+  };
+
+  const renderModal = () => {
+    switch (selectedOption) {
+      case 'fungible':
+        return <ModalAgregarFungible show={showModal} onHide={() => setShowModal(false)} onAddFungible={handleFungiblesRefresh} />;
+      case 'microorganismo':
+        return <ModalAgregarMicroorganismo show={showModal} onHide={() => setShowModal(false)} onAddMicroorganismo={handleMicroorganismosRefresh} />;
+      case 'equipo':
+        return <ModalAgregarEquipo show={showModal} onHide={() => setShowModal(false)} onAddEquipo={handleEquipoRefresh} />;
+      default:
+        return null;
+    }
+  };
+
+  const addButtonLabel = () => {
+    switch (selectedOption) {
+      case 'fungible':
+        return 'Agregar Fungible';
+      case 'microorganismo':
+        return 'Agregar Microorganismo';
+      case 'equipo':
+        return 'Agregar Equipo';
+      default:
+        return 'Agregar al Inventario';
     }
   };
 
@@ -60,6 +106,15 @@ function AyudanteInventario() {
               Equipo
             </p>
           </div>
+
+          <Button
+            className='boton-modal-avance'
+            onClick={() => setShowModal(true)}
+          >
+            {selectedOption === 'fungible' ? 'Agregar Fungible' :
+              selectedOption === 'microorganismo' ? 'Agregar Microorganismo' :
+                'Agregar Equipo'}
+          </Button>
         </nav>
         <div className="search-container">
           <input
@@ -74,6 +129,7 @@ function AyudanteInventario() {
           </span>
         </div>
         {renderSelectedComponent()}
+        {renderModal()}
       </Container>
     </motion.div>
   );

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import '../Estilos/Modales.css';
+import '../Estilos/Modales.css'
 
-const ModalCancelarReserva = ({ show, handleClose, fecha, hora, onCancelarReserva }) => {
+
+const ModalCancelarReserva = ({ show, handleClose, fecha, hora, sala, onCancelarReserva }) => {
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton className="modal-header-custom">
@@ -11,6 +12,7 @@ const ModalCancelarReserva = ({ show, handleClose, fecha, hora, onCancelarReserv
       <Modal.Body className="modal-body">
         <p>Fecha: {fecha}</p>
         <p>Hora: {hora}</p>
+        <p>Sala: {sala}</p>
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-center modal-footer-custom">
         <Button variant="secondary" onClick={handleClose} className="modal-button btn-cancel">

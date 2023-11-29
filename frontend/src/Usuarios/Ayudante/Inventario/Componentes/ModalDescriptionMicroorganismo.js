@@ -9,11 +9,10 @@ const ModalDescriptionMicroorganismo = ({ show, onHide, microorganismo, onSave }
   const handleEditClick = () => {
     setIsEditing(true);
     setEditedMicroorganismo({
-      nombre: microorganismo.nombre,
-      nombreCientifico: microorganismo.nombreCientifico,
+      nombre: microorganismo.nombre_comun,
+      nombreCientifico: microorganismo.nombre_cientifico,
       procedencia: microorganismo.procedencia,
-      ubicacion: microorganismo.ubicacion,
-      detalles: microorganismo.detalles,
+      detalles: microorganismo.detalles
     });
   };
 
@@ -71,7 +70,7 @@ const ModalDescriptionMicroorganismo = ({ show, onHide, microorganismo, onSave }
             />
           ) : (
             <div className="scrollable-text">
-              <i>{microorganismo.nombreCientifico}</i> 
+              <i>{microorganismo.nombre_cientifico}</i> 
             </div>
           )}
         </div>
@@ -87,20 +86,6 @@ const ModalDescriptionMicroorganismo = ({ show, onHide, microorganismo, onSave }
             />
           ) : (
             <div className="scrollable-text">{microorganismo.procedencia}</div>
-          )}
-        </div>
-        <div className="data-item">
-          <p>Ubicación:</p>
-          {isEditing ? (
-            <Form.Control
-              type="text"
-              name="ubicacion"
-              value={editedMicroorganismo.ubicacion}
-              onChange={handleInputChange}
-              className="custom-input"
-            />
-          ) : (
-            <div className="scrollable-text">{microorganismo.ubicacion}</div>
           )}
         </div>
         <div className="data-item">
