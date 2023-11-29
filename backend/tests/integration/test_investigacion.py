@@ -37,7 +37,7 @@ async def test_add_and_delete_investigacion_with_valid_data():
     result_add_investigacion = await add_investigacion(investigacion)
     last_row = result_add_investigacion.data[-1]
     last_row_id = last_row['id']
-    result_delete_block = await delete_inv(last_row_id)
+    result_delete_investigacion = await delete_inv(last_row_id)
 
     assert last_row['titulo'] == 'testeo1'
     assert last_row['descripcion'] == 'primera investigacion de test'

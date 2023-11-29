@@ -225,7 +225,7 @@ async def get_producto_id(id_prod:str):
 
 async def update_producto(id:int,nuevo:ActualizarProducto):
     response = supabase.table('Producto').select('*').eq('id',id).execute()
-    if response:
+    if response.data:
         query = supabase.table('Producto').update({"cantidad_total":nuevo.cantidad_total}).eq('id',id).execute()
         return query
     else:
