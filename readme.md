@@ -56,13 +56,13 @@ npm run build
 
 # Backend:
 
-1. El despliegue fue realizado en render.com, se debe desplegar como Web Service
-2. Seleccionar la opcion de docker e incluir el siguiente repo: 
+* El despliegue fue realizado en render.com, se debe desplegar como Web Service
+1. Seleccionar la opcion de docker e incluir el siguiente repo: 
 ```
 did02601/labo_friend_backend:0.0.7
 ```
-3. Se deben incluir las variables de entorno .env (son secretos)
-4. El docker contendrá las instrucciones para arrancar el proyecto, por lo que no hace falta configurar nada.
+2. Se deben incluir las variables de entorno .env (son secretos)
+3. El docker contendrá las instrucciones para arrancar el proyecto, por lo que no hace falta configurar nada.
 
 # Ejemplos desplegados:
 * Frontend:
