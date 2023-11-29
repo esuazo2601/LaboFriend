@@ -172,7 +172,7 @@ async def get_investigacion_date(fecha: str):
 
 async def delete_inv(id:int):
     response = supabase.table('Investigacion').delete().eq('id',id).execute()
-    if response:
+    if response.data:
         return response
     else:
         return {'message':f'No se encontró la investigación de id: {id}'}
