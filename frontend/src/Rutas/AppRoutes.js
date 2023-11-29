@@ -67,7 +67,7 @@ const AppRoutes = () => {
         <Route path="reservaHora" element={<EstudianteReservaHora />} />
         <Route path="notificaciones" element={<EstudianteNotificaciones />} />
         <Route path="investigaciones/personales" element={<EstudianteInvestigaciones />} />
-        <Route path="investigaciones/personales/investigacion" element={<EstudianteInvestigacion/>} />
+        <Route path="investigaciones/personales/:investigacionId" element={<EstudianteInvestigacion />} />
         </Route>
     </Routes>
   );

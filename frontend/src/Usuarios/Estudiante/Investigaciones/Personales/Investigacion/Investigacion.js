@@ -8,11 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useParams } from 'react-router-dom';
 
 
-function AyudanteInvestigacion() {
+function AyudanteInvestigacion({investigaciones}) {
     const [searchTerm, setSearchTerm] = useState('');
-
+    const {investigacionId} = useParams();
+    const investigacion = investigaciones.find(investigacion => investigacion.id === investigacionId);
     return (
         <Container>
             <h1 className="letra-grande">Investigación</h1>

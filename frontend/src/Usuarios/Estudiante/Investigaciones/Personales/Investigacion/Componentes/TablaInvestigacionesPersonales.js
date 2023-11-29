@@ -9,6 +9,7 @@ import DetalleAvance from './ModalDetalle';
 import EliminarInvestigacion from './ModalEliminacion';
 import { getTrabajandoEmail } from '../../../../../../api_service/investigaciones_api';
 import { getInvestigacionById, deleteInvestigacion } from '../../../../../../api_service/investigaciones_api';
+import { Link } from 'react-router-dom';
 
 const TablaInvestigacionesPersonales = ({ searchTerm }) => {
 
@@ -153,7 +154,7 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
                                             <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
-                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => window.location.href = '/ayudante/investigaciones/terceros/investigacion'}><FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} /></td>
+                                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle"><Link to = {`/estudiante/investigaciones/personales/${investigacion.id}`}><FontAwesomeIcon icon={faEye} style={{color:"black"}} /></Link></td>
                                             <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" , cursor: 'pointer'}} /></td>
                                         </tr>
                                     ))}
