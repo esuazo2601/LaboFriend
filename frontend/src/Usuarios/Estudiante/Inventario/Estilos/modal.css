@@ -93,7 +93,7 @@
 }
 
 .scrollable-text {
-  max-height: 100px;
+  max-height: 120px;
   overflow-y: auto;
   white-space: pre-wrap;
 }

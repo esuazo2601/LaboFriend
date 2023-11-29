@@ -7,6 +7,7 @@ import {
   Stack,
   Button,
   Form,
+  Spinner
 } from "react-bootstrap";
 import { FaVial } from 'react-icons/fa';
 import { motion } from "framer-motion";
@@ -16,6 +17,7 @@ import {client, login, getUser, decodedToken, register} from '../api_service/use
 //import {jwt} from 'jsonwebtoken'
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
   
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
   const mostrarFormularioRegistro = () => {
@@ -55,6 +57,7 @@ const volverAInicioSesion = () => {
     }
 
     try{
+      setLoading(true)
       const token = await login(email,contrasena)
       console.log(token.data)
       const data = await decodedToken(token.data['access_token'])
@@ -83,7 +86,7 @@ const volverAInicioSesion = () => {
       console.log("ha ocurrido un error " + error)
       alert("Email o contraseña incorrectos")
     }
-      
+    setLoading(false)
   };
 
   const handleSubmit = async(event) => {
@@ -97,17 +100,18 @@ const volverAInicioSesion = () => {
     }
     try
     {
+      setLoading(true)
       console.log("email",email,"nombre",nombre,"password",contrasena)
       const registered = await register(email,nombre,contrasena)
       console.log(registered)
-      navigate("/")
+      setMostrarRegistro(false)
     }
     catch(error)
     {
       console.log("ha ocurrido un error " + error)
       alert("Ya existe un usuario con ese correo")
     }
-
+    setLoading(false)
   };
 
 
@@ -691,9 +695,15 @@ const volverAInicioSesion = () => {
               className="d-flex justify-content-center align-items-center Columna-formulario "
             >
 
-            {!mostrarRegistro ? (
+            {loading ? (
+            <div className='loading-spinner'>
+                <Spinner animation="border" role="status" size="lg">
+                  <span className="visually-hidden">Cargando...</span>
+                </Spinner>
+            </div>
+            ):  
+            !mostrarRegistro ? (  
             <Form>
-              {/* INICIAR SESIÓN */}
               <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
