@@ -287,7 +287,13 @@ async def check_availability(check_agenda:CheckAgenda):
 async def new_agendamiento(agendamiento:Agenda):
     #Solo se puede agendar si no tiene otro agendamiento previo en la misma sala en el mismo bloque en la misma sala
     user_reservation = supabase.table('Agenda').select('id_bloque').match({'id_sala':agendamiento.id_sala, 'fecha':agendamiento.fecha, 'email_estudiante':agendamiento.email_estudiante}).execute()
-    if not user_reservation.data:
+    print(user_reservation)
+    isAgended = False
+    for bloque in user_reservation.data:
+        if bloque['id_bloque'] == agendamiento.id_bloque:
+            isAgended= True
+
+    if not isAgended:
         response = supabase.table('Agenda').insert({
             "email_estudiante":agendamiento.email_estudiante,
             "id_sala":agendamiento.id_sala,
