@@ -253,6 +253,10 @@ async def delete_trabajando_id(id:int):
 
 ################################### AGENDA METHODS ###################################
 
+async def get_agendamiento(email: EmailStr):
+    agenda_query = supabase.table('Agenda').select('*').eq('email_estudiante',email).execute()
+    return agenda_query
+
 #retorna los bloques disponibles en la sala seleccionada en la fecha seleccionada
 async def check_availability(check_agenda:CheckAgenda):
     #Se pregunta por los bloques disponibles en funcion de la sala y su capacidad

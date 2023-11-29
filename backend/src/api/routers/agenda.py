@@ -4,6 +4,11 @@ from fastapi import APIRouter
 from fastapi import HTTPException
 router = APIRouter(tags=["agenda"])
 
+@router.get("/agenda/{email}")
+async def getAgendamiento(email:EmailStr):
+    result = await get_agendamiento(email)
+    return result
+
 @router.post("/agenda")
 async def newAgendamiento(agendamiento:Agenda):
     result = await new_agendamiento(agendamiento)
