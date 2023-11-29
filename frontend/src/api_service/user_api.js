@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const client = axios.create({
+export const client = axios.create ({
     baseURL: "https://labo-friend-backend.onrender.com/"
 
 });
