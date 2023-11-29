@@ -7,7 +7,7 @@ import ModalReserva from './Componentes/ModalReserva';
 import ModalCancelarReserva from './Componentes/ModalCancelarReserva';
 import { getBloques } from '../../../api_service/bloque_api';
 import { getSalas } from '../../../api_service/salas_api';
-import { checkAvailability } from '../../../api_service/agenda_api';
+import { checkAvailability, getAgenda } from '../../../api_service/agenda_api';
 
 const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
   const [modalReservaOpen, setModalReservaOpen] = useState(false);
@@ -19,10 +19,11 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
     { sala: 'Sala B', fecha: fechaSeleccionada, hora: '04:00' },
   ]);
 
+
   const [todasLasHoras, setTodasLasHoras]  = useState([])
   const [salasLab, setSalasLab] = useState([])
   const [bloquesDisponibles, setBloquesDisponibles] = useState([]) 
-
+  const [horasAgendadasPorUsuario, setHorasAgendadasPorUsuario] = useState([])
   useEffect (() => {
     try {
       const getData = async () => {
@@ -55,9 +56,20 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
           setBloquesDisponibles([])
         }
       }
+      const getHorasAgendadas = async() =>{
+        const data = await getAgenda(localStorage.getItem("email"))
+        if(data){
+          console.log("horas agendadas usuario: ",data)
+          setHorasAgendadasPorUsuario(data)
+        }else{
+          console.log("No hay datos para mostrar")
+          setHorasAgendadasPorUsuario([])
+        }
+      }
       const getTodo = async () => {
         try {
           await Promise.all([getData(), getSalasLabo(), getDisponibilidad()])
+          await Promise.all([getHorasAgendadas()])
         } finally {
           // Independientemente de si hay un error o no, se llama a handleLoading(false)
           handleLoading(false)
@@ -68,6 +80,8 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
       console.log(error)
       setTodasLasHoras([])
       setSalasLab([])
+      setBloquesDisponibles([])
+      setHorasAgendadasPorUsuario([])
     }    
   },[loading])
     
@@ -111,8 +125,7 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
     const [horas, minutos] = hora.split(':');
     return `${horas}:${minutos}`;
   };
-    //disabled={sala.horasNoDisponibles.includes(hora) || horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.salaId === sala.id)}
-    //className={`hora-disponible${sala.horasNoDisponibles.includes(hora) || horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.salaId === sala.id) ? ' no-disponible' : ' '}`}
+    
     return (
       <div className="hora-reserva-container d-flex" >
       {loading ? (
@@ -133,6 +146,9 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
                   <span>{formatearHora(hora.hora_inicio)} - {formatearHora(hora.hora_fin)}</span>
                   <Button
                     onClick={() => handleHoraSeleccionada(hora, sala.nombre)}
+                    disabled={!bloquesDisponibles.includes(hora.id)}
+                    //disabled={sala.horasNoDisponibles.includes(hora) || horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.salaId === sala.id)}
+                    //className={`hora-disponible${sala.horasNoDisponibles.includes(hora) || horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.salaId === sala.id) ? ' no-disponible' : ' '}`}
                   >
                     {horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.sala === sala.nombre) ? 'Reservado' : 'Reservar'}
                   </Button>
@@ -142,9 +158,9 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
           ))}
           <div className="horas-column-agendadas ml-4">
             <h2 className='letra-mediana'>Horas agendadas del usuario</h2>
-            {horasAgendadasUsuario.map((agenda, index) => (
+            {horasAgendadasPorUsuario.map((agenda, index) => (
               <div key={index} className="hora-agendada d-flex align-items-center">
-                <span>{format(agenda.fecha, "dd/MM/yy")} - {agenda.hora}</span>
+                <span>{agenda.fecha} - {formatearHora(todasLasHoras.find(bloque => bloque.id === agenda.id_bloque)?.hora_inicio)}</span>
                 <Button
                   variant="danger"
                   className="ml-2"
@@ -168,7 +184,7 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
             handleClose={handleCloseModals}
             fecha={fechaHoraReserva.fecha}
             hora={fechaHoraReserva.hora}
-             sala={fechaHoraReserva.sala}
+            sala={fechaHoraReserva.sala}
             onCancelarReserva={handleCancelarReserva}
           />
         </>

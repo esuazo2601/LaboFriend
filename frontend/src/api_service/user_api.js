@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const client = axios.create ({
-    baseURL: "https://labo-friend-backend.onrender.com"
+    baseURL: "http://127.0.0.1:8000"
 
 });
 

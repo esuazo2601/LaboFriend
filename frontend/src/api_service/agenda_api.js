@@ -56,3 +56,10 @@ export async function deleteAgenda(id) {
 }
 
 //console.log(await deleteAgenda(3));
+
+export async function getAgenda(email){
+    const response = await client.get("agenda/"+email)
+    .then(response => response.data.data)
+    .catch(error => console.log("Error en la petición a la api: ",error))
+    return response
+}
