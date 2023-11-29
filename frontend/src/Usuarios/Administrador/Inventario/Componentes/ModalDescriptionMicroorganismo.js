@@ -9,10 +9,10 @@ const ModalDescriptionMicroorganismo = ({ show, onHide, microorganismo, onSave }
   const handleEditClick = () => {
     setIsEditing(true);
     setEditedMicroorganismo({
-      nombre: microorganismo.nombre,
-      nombreCientifico: microorganismo.nombreCientifico,
+      nombre: microorganismo.nombre_comun,
+      nombreCientifico: microorganismo.nombre_cientifico,
       procedencia: microorganismo.procedencia,
-      detalles: microorganismo.detalles,
+      detalles: microorganismo.detalles
     });
   };
 
@@ -70,7 +70,7 @@ const ModalDescriptionMicroorganismo = ({ show, onHide, microorganismo, onSave }
             />
           ) : (
             <div className="scrollable-text">
-              <i>{microorganismo.nombreCientifico}</i> 
+              <i>{microorganismo.nombre_cientifico}</i> 
             </div>
           )}
         </div>

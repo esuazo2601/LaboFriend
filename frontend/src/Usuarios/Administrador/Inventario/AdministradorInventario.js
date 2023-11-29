@@ -16,14 +16,30 @@ function AdministradorInventario() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
 
+  const [refreshFungibles, setRefreshFungibles] = useState(false);
+  const [refreshMicroorganismos, setRefreshMicroorganismos] = useState(false);
+  const [refreshEquipos, setRefreshEquipos] = useState(false);
+
+  const handleFungiblesRefresh = () => {
+    // Cambia el estado para forzar la actualización de la lista de fungibles
+    setRefreshFungibles((prev) => !prev);
+  };
+  const handleMicroorganismosRefresh = () => {
+    // Cambia el estado para forzar la actualización de la lista de fungibles
+    setRefreshMicroorganismos((prev) => !prev);
+  };
+  const handleEquipoRefresh = () => {
+    // Cambia el estado para forzar la actualización de la lista de fungibles
+    setRefreshEquipos((prev) => !prev);
+  };
   const renderSelectedComponent = () => {
     switch (selectedOption) {
       case 'fungible':
-        return <Fungible searchTerm={searchTerm} />;
+        return <Fungible searchTerm={searchTerm} refreshFungibles={refreshFungibles} />;
       case 'microorganismo':
-        return <Microorganismo searchTerm={searchTerm} />;
+        return <Microorganismo searchTerm={searchTerm} refreshMicroorganismos={refreshMicroorganismos} />;
       case 'equipo':
-        return <Equipo searchTerm={searchTerm} />;
+        return <Equipo searchTerm={searchTerm} refreshEquipos={refreshEquipos}/>;
       default:
         return null;
     }
@@ -32,11 +48,11 @@ function AdministradorInventario() {
   const renderModal = () => {
     switch (selectedOption) {
       case 'fungible':
-        return <ModalAgregarFungible show={showModal} onHide={() => setShowModal(false)} />;
+        return <ModalAgregarFungible show={showModal} onHide={() => setShowModal(false)} onAddFungible={handleFungiblesRefresh} />;
       case 'microorganismo':
-        return <ModalAgregarMicroorganismo show={showModal} onHide={() => setShowModal(false)} />;
+        return <ModalAgregarMicroorganismo show={showModal} onHide={() => setShowModal(false)} onAddMicroorganismo={handleMicroorganismosRefresh}/>;
       case 'equipo':
-        return <ModalAgregarEquipo show={showModal} onHide={() => setShowModal(false)} />;
+        return <ModalAgregarEquipo show={showModal} onHide={() => setShowModal(false)} onAddEquipo={handleEquipoRefresh} />;
       default:
         return null;
     }

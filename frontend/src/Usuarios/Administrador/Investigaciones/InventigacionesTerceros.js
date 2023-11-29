@@ -29,7 +29,7 @@ const InvestigacionesTerceros = () => {
       </div>
 
       <div>
-        <TablaInvestigaciones />
+        <TablaInvestigaciones searchTerm={searchTerm} />
       </div>
     </Container>
   );

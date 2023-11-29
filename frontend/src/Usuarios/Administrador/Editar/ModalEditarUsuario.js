@@ -49,7 +49,7 @@ const ModalEditarUsuario = ({ show, onHide, usuario, tipoUsuarioActual, onActual
             <p>{`Tipo de usuario actual: ${tipoUsuarioActual}`}</p>
             <p>Cambiar a:</p> 
             <div>
-              {opcionesTipo[tipoUsuarioActual].map(tipo => (
+              {opcionesTipo[tipoUsuarioActual]?.map(tipo => (
                 <Button 
                   key={tipo} 
                   variant={tipoSeleccionado === tipo ? 'primary' : 'secondary'} 

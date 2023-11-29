@@ -7,9 +7,9 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalStockMicroorganismo from './ModalStockMicroorganismo';
 import ModalDescriptionMicroorganismo from './ModalDescriptionMicroorganismo';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
-import { getAllMicroorg, postMicroorganismo } from '../../../../api_service/microorganismo_api';
+import { deleteMicroorganismo, getAllMicroorg, postMicroorganismo } from '../../../../api_service/microorganismo_api';
 
-const Microorganismo = ({ searchTerm }) => {
+const Microorganismo = ({ searchTerm, refreshMicroorganismos }) => {
   const microorganismosData = [
     {
       
@@ -27,9 +27,11 @@ const Microorganismo = ({ searchTerm }) => {
   const [showModalStock, setShowModalStock] = useState(false);
   const [selectedMicroorganismo, setSelectedMicroorganismo] = useState(null);
   const [selectedDescription, setSelectedDescription] = useState({
+    nombre_cientifico: '',
     procedencia: '',
     detalles: '',
   });
+  const [refreshDelete, setRefreshDelete] = useState(false)
 
 
   useEffect(() => {
@@ -41,9 +43,11 @@ const Microorganismo = ({ searchTerm }) => {
           setMicroorganismos(data)
           setLoading(false)
           console.log(data)
+          setRefreshDelete(false)
         }else{
           setMicroorganismos([])
           setLoading(false)
+          setRefreshDelete(false)
         }
       }  
       fetchData();
@@ -53,8 +57,9 @@ const Microorganismo = ({ searchTerm }) => {
       console.log(error)
       setMicroorganismos([])
       setLoading(false)
+      setRefreshDelete(false)
     }
-  },[])
+  },[refreshMicroorganismos, refreshDelete])
   
 
   // Stock del microorganismo seleccionado
@@ -69,6 +74,7 @@ const Microorganismo = ({ searchTerm }) => {
     setShowModalDescription(true);
     setSelectedMicroorganismo(microorganismo);
     setSelectedDescription({
+      nombre_cientifico: microorganismo.nombre_cientifico,
       procedencia: microorganismo.procedencia,
       detalles: microorganismo.detalles,
     });
@@ -81,7 +87,8 @@ const Microorganismo = ({ searchTerm }) => {
 
   // Filtra los elementos 
   const filteredMicroorganismos = microorganismos.filter((microorganismo) =>
-    microorganismo.nombre_comun.toLowerCase().includes(searchTerm.toLowerCase())
+    microorganismo.nombre_comun.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    microorganismo.nombre_cientifico.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const itemsPerPage = 5; // Cantidad de elementos por pág
@@ -113,7 +120,15 @@ const Microorganismo = ({ searchTerm }) => {
     setShowModalEliminar(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async (id) => {
+    console.log(id)
+    try{
+      const resp = await deleteMicroorganismo(id)
+      console.log(resp)
+      setRefreshDelete(true)
+    }catch(error){
+      console.log(error)
+    }
     console.log("Microorganismo eliminado"); // Simulación con backend
   };
 
@@ -132,7 +147,7 @@ const Microorganismo = ({ searchTerm }) => {
               <thead>
                 <tr>
                   <th className="encabezado-tabla text-center align-middle">Nombre</th>
-                  <th className="encabezado-tabla text-center align-middle">Acción</th>
+                  <th colSpan="2" className="encabezado-tabla text-center align-middle">Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -142,17 +157,19 @@ const Microorganismo = ({ searchTerm }) => {
                       {microorganismo.nombre_comun}
                     </td>
 
-                    <td className="celdas-restantes-tabla text-center align-middle">
-                      <div className="action-container">
-                        <div className="action-item" onClick={() => handleDescriptionClick(microorganismo)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} />
-                        </div>
-                        <div className="action-divider"></div>
-                        <div className="action-item" onClick={() => handleEliminarClick(microorganismo)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faTrash} />
-                        </div>
-                      </div>
-                    </td>
+                    <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleDescriptionClick(microorganismo)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faEye} />
+                      </td>
+                      <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleEliminarClick(microorganismo)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faTrash} />
+                      </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -188,6 +205,15 @@ const Microorganismo = ({ searchTerm }) => {
               onHide={() => setShowModalEliminar(false)}
               tipoElemento="Microorganismo"
               nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre_comun : ''}
+              onDelete={handleDelete}
+            />
+
+            <ModalEliminarConfirmar
+              show={showModalEliminar}
+              onHide={() => setShowModalEliminar(false)}
+              tipoElemento="Microorganismo" 
+              nombreElemento={selectedMicroorganismo ? selectedMicroorganismo.nombre_comun : ''}
+              id = {selectedMicroorganismo ? selectedMicroorganismo.id : ''}
               onDelete={handleDelete}
             />
           </div>

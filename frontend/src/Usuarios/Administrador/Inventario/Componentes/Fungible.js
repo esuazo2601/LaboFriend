@@ -7,9 +7,9 @@ import ModalDescriptionFungible from './ModalDescriptionFungible';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
 import '../Estilos/tabla.css';
 import '../Estilos/paginacion.css';
-import {getProducto,deleteProducto} from '../../../../api_service/inventario_api.js'
+import {getProducto,deleteProducto, updateProducto} from '../../../../api_service/inventario_api.js'
 
-const Fungible = ({ searchTerm }) => {
+const Fungible = ({ searchTerm, refreshFungibles }) => {
 
   const [loading, setLoading] =useState(true);
   //const [refresh, setRefresh] =useState(false);
@@ -25,6 +25,8 @@ const Fungible = ({ searchTerm }) => {
     // detalles: '',
     // imagen: '',
   });
+  const [refreshDelete, setRefreshDelete] = useState(false)
+
   useEffect(()=>{
     try {
       const getData = async () => {
@@ -33,11 +35,11 @@ const Fungible = ({ searchTerm }) => {
           console.log(data)
           setListaFungibles(data)
           setLoading(false)
-          //setRefresh(false)
+          setRefreshDelete(false)
         }else{
           setListaFungibles([])
           setLoading(false)
-          //setRefresh(false)
+          setRefreshDelete(false)
         }
       };
       getData();
@@ -46,12 +48,12 @@ const Fungible = ({ searchTerm }) => {
       console.log("se encontro un error: ",error);
       setListaFungibles([])
         setLoading(false)
-        //setRefresh(false)
+        setRefreshDelete(false)
     }
-  },[])
+  },[refreshFungibles,refreshDelete])
 
   const [newStock, setNewStock] = useState(0);
-  const handleEliminarClick = (fungible, tipo) => {
+  const handleEliminarClick = (fungible) => {
     setSelectedFungible(fungible);
     setShowModalEliminar(true);
   };
@@ -61,6 +63,7 @@ const Fungible = ({ searchTerm }) => {
     try{
       const resp = await deleteProducto(id)
       console.log(resp)
+      setRefreshDelete(true)
     }catch(error){
       console.log(error)
     }
@@ -96,14 +99,22 @@ const Fungible = ({ searchTerm }) => {
     }
   };
   
-  const handleSaveStock = () => {
+  const handleSaveStock = async (id,newStock) => {
+    //console.log('id:',id)
+    //console.log('nuevo stock:',newStock)
+    try{
+      const resp = await updateProducto(id, newStock)
+      console.log(resp)
+      setRefreshDelete(true)
+    }catch(error){
+      console.log(error)
+    }
     setShowModalStock(false);
   };
   
   const handleSaveDescription = () => {
     setShowModalDescription(false);
   };
-  
   /*   const handleAgregar = () =>{
     setRefresh(true);
   } 
@@ -153,7 +164,7 @@ const Fungible = ({ searchTerm }) => {
                 <tr>
                   <th className="encabezado-tabla text-center align-middle">Nombre</th>
                   <th className="encabezado-tabla text-center align-middle">Stock</th>
-                  <th className="encabezado-tabla text-center align-middle">Acción</th>
+                  <th colSpan="2"className="encabezado-tabla text-center align-middle">Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -168,17 +179,20 @@ const Fungible = ({ searchTerm }) => {
                     >
                       {fungible.cantidad_total}
                     </td>
-                    <td className="celdas-restantes-tabla text-center align-middle">
-                      <div className="action-container">
-                        <div className="action-item" onClick={() => handleDescriptionClick(fungible)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} />
-                        </div>
-                        <div className="action-divider"></div>
-                        <div className="action-item" onClick={() => handleEliminarClick(fungible)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faTrash} />
-                        </div>
-                      </div>
-                    </td>
+
+                    <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleDescriptionClick(fungible)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faEye} />
+                      </td>
+                      <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleEliminarClick(fungible)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faTrash} />
+                      </td>
+
                   </tr>
                 ))}
               </tbody>

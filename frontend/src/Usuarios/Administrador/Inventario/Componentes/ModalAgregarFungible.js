@@ -21,6 +21,7 @@ const ModalAgregarFungible = (props) => {
       try{
         const resp = await postProducto(nombre,stock,tipo)
         console.log(resp)
+        props.onAddFungible()
       }catch(error){
         alert('Falla al intentar agregar fungible')
         console.log("Fallo al intentar agregar")

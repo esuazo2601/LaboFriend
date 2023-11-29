@@ -62,6 +62,8 @@
 
 .hora-item span {
   font-size: 18px;
+  padding:8px;
+  margin-right: 15px;
 }
 
 .hora-disponible {

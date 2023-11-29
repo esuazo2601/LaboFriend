@@ -1,16 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
 import '../Estilos/modal.css';
+import { getSala } from '../../../../api_service/salas_api';
 
 const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedEquipo, setEditedEquipo] = useState({});
-
+  const [nombreSala, setNombreSala] = useState("");
+  useEffect(()=>{
+    try {
+      const getData = async () => {
+        if(equipo && equipo.id_sala){
+          const nombre = await getSala(equipo.id_sala)
+          console.log("nombre sala: ",nombre.nombre)
+          if(nombre){
+            setNombreSala(nombre.nombre)
+          }else{
+            setNombreSala('')
+          }
+        }
+        else{
+          setNombreSala('')
+        }
+      };
+      getData();
+    } catch (error) {
+      setNombreSala('')
+    }
+  },[equipo])
   const handleEditClick = () => {
     setIsEditing(true);
     setEditedEquipo({
       nombre: equipo.nombre,
-      sala: equipo.ubicacion,
+      sala: nombreSala,
       descripcion: equipo.descripcion,
     });
   };
@@ -61,13 +83,13 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
                 {isEditing ? (
                   <Form.Control
                     type="text"
-                    name="ubicacion"
+                    name="sala"
                     value={editedEquipo.sala}
                     onChange={handleInputChange}
                     className="custom-input"
                   />
                 ) : (
-                  <div className="scrollable-text">{equipo.sala}</div>
+                  <div className="scrollable-text">{nombreSala}</div>
                 )}
               </div>
           
@@ -76,7 +98,7 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
                 {isEditing ? (
                   <Form.Control
                     as="textarea"
-                    name="detalles"
+                    name="descripcion"
                     value={editedEquipo.descripcion}
                     onChange={handleInputChange}
                     className="custom-input"

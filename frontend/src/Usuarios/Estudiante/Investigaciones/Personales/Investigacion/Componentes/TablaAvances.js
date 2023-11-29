@@ -160,8 +160,8 @@ const TablaAvances = ({ searchTerm }) => {
                             <td className="celdas-restantes-tabla text-center align-middle">{avance.avance}</td>
                             <td className="celdas-restantes-tabla text-center align-middle">{avance.fecha}</td>
                             <td className="celdas-restantes-tabla text-center align-middle" > <FontAwesomeIcon icon={faFile} style={{ color: "#507E9D", }} />&nbsp;&nbsp;<a href='#'>{avance.archivo}</a></td>
-                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleVisualizacionClick(avance)}><FontAwesomeIcon icon={faEye} /></td>
-                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(avance)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></td>
+                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle" onClick={() => handleVisualizacionClick(avance)}><FontAwesomeIcon icon={faEye} /></td>
+                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle" onClick={() => handleEliminationClick(avance)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></td>
                         </tr>
                     ))}
                 </tbody>

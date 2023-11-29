@@ -12,7 +12,6 @@ from pydantic_settings import BaseSettings
 #     BASE_URL:str = "http://localhost:8000"
 #     USE_NGROK:bool = os.environ.get("USE_NGROK", "False") == "True"#True
 
-
 # settings = Settings()
 
 # def init_webhooks(base_url):

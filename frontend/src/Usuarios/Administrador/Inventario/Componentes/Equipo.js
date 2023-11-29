@@ -7,9 +7,10 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalMantenimientoEquipo from './ModalMantenimientoEquipo';
 import ModalDescriptionEquipo from './ModalDescriptionEquipo';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
-import {getEquipo} from '../../../../api_service/equipo_api.js'
+import {deleteEquipo, getEquipo} from '../../../../api_service/equipo_api.js'
+import { getSala } from '../../../../api_service/salas_api.js';
 
-const Equipo = ({ searchTerm }) => {
+const Equipo = ({ searchTerm, refreshEquipos }) => {
   const equiposData = [
     {
       nombre: 'Equipo 1',
@@ -34,6 +35,7 @@ const Equipo = ({ searchTerm }) => {
     oldDate: '',
     newDate: '',
   });
+  const [refreshDelete, setRefreshDelete] = useState(false)
 
   useEffect(()=>{
     try {
@@ -43,18 +45,21 @@ const Equipo = ({ searchTerm }) => {
           console.log(data)
           setListaEquipos(data)
           setLoading(false)
+          setRefreshDelete(false)
         }else{
           setListaEquipos([])
           setLoading(false)
+          setRefreshDelete(false)
         }
       };
       getData();
     } catch (error) {
       console.log("se encontro un error: ",error);
       setListaEquipos([])
-        setLoading(false)
+      setLoading(false)
+      setRefreshDelete(false)
     }
-  },[])
+  },[refreshDelete,refreshEquipos])
 
   const handleMantenimientoClick = (equipo) => {
     setShowModalMantenimiento(true);
@@ -77,7 +82,7 @@ const Equipo = ({ searchTerm }) => {
     setSelectedEquipo(equipo);
     setSelectedDescription({
       Sala: equipo.sala,
-      descripcion: equipo.descripcion,
+      descripcion: equipo.descripcion
     });
   };
 
@@ -119,7 +124,15 @@ const Equipo = ({ searchTerm }) => {
     setShowModalEliminar(true);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async (id) => {
+    console.log(id)
+    try{
+      const resp = await deleteEquipo(id)
+      console.log(resp)
+      setRefreshDelete(true)
+    }catch(error){
+      console.log(error)
+    }
     console.log("Equipo eliminado"); 
   };
 
@@ -139,7 +152,7 @@ const Equipo = ({ searchTerm }) => {
                 <tr>
                   <th className="encabezado-tabla text-center align-middle">Nombre</th>
                   <th className="encabezado-tabla text-center align-middle">Mantenimiento</th>
-                  <th className="encabezado-tabla text-center align-middle">Acción</th>
+                  <th colSpan="2" className="encabezado-tabla text-center align-middle">Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -154,17 +167,20 @@ const Equipo = ({ searchTerm }) => {
                     >
                       {equipo.fecha_mantencion}
                     </td>
-                    <td className="celdas-restantes-tabla text-center align-middle">
-                      <div className="action-container">
-                        <div className="action-item" onClick={() => handleDescriptionClick(equipo)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} />
-                        </div>
-                        <div className="action-divider"></div>
-                        <div className="action-item" onClick={() => handleEliminarClick(equipo)}>
-                          <FontAwesomeIcon style={{cursor:'pointer'}} icon={faTrash} />
-                        </div>
-                      </div>
-                    </td>
+
+                    <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleDescriptionClick(equipo)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faEye} />
+                      </td>
+                      <td
+                        className="celdas-restantes-tabla text-center align-middle"
+                        onClick={() => handleEliminarClick(equipo)}
+                      >
+                        <FontAwesomeIcon style={{ cursor: 'pointer' }} icon={faTrash} />
+                      </td>
+
                   </tr>
                 ))}
               </tbody>
@@ -209,6 +225,7 @@ const Equipo = ({ searchTerm }) => {
               onHide={() => setShowModalEliminar(false)}
               tipoElemento="Equipo"
               nombreElemento={selectedEquipo ? selectedEquipo.nombre : ''}
+              id ={selectedEquipo ? selectedEquipo.id : ''}
               onDelete={handleDelete}
             />
           </div>
