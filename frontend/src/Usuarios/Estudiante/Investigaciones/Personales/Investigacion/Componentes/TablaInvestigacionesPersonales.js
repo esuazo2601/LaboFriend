@@ -22,7 +22,6 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
     useEffect(() => {
         try {
             const getData = async () => {
-                setLoading(true);
                 const data = await getTrabajandoEmail(localStorage.getItem('email'));
                 let investigacion_list = [];
     
@@ -55,8 +54,9 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
             console.log("Se encontró un error: ", error);
             setLoading(false);
             setInvestigacionesPersonales([]);
+            setRefreshDelete(false);
         }
-    }, []);
+    }, [refreshDelete]);
 
     console.log("Inv",InvestigacionesPersonales)
 
