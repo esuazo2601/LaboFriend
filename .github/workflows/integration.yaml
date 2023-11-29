@@ -1,0 +1,17 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lightcurve_tests:
+    uses: ./.github/workflows/test_template.yaml
+    with:
+        python-version: '3.11'
+        sources-folder: 'backend'
+        test-folder: 'tests'
+    secrets:
+      SUPABASE_TEST_URL: "${{ secrets.SUPABASE_TEST_URL }}"
+      SUPABASE_TEST_KEY: "${{ secrets.SUPABASE_TEST_KEY }}"
