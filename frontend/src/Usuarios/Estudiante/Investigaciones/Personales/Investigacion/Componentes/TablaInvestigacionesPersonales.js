@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'react-bootstrap';
 import '../Estilos/tabla-avances.css';
 import '../Estilos/paginacion.css';
@@ -7,115 +7,56 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import DetalleAvance from './ModalDetalle';
 import EliminarAvance from './ModalEliminacion';
+import { getTrabajandoEmail } from '../../../../../../api_service/investigaciones_api';
+import { getInvestigacionById } from '../../../../../../api_service/investigaciones_api';
 
 const TablaInvestigacionesPersonales = ({ searchTerm }) => {
 
-    const investigacionesData = [
-        {
-            id: '01',
-            nombre: 'Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1 Investigación 1',
-            autor: 'cientifico 1, cientifico 2',
-            descripcion: 'descripcion 1',
-            fecha: '10/04/23',
-            investigacion: ''
-        },
-        {
-            id: '02',
-            nombre: 'Investigación 2',
-            autor: 'cientifico 2',
-            descripcion: 'descripcion 2',
-            fecha: '08/07/23',
-            investigacion: ''
-        },
-        {
-            id: '03',
-            nombre: 'Investigación 3',
-            autor: 'cientifico 3',
-            descripcion: 'descripcion 3',
-            fecha: '26/07/23',
-            investigacion: ''
-        },
-        {
-            id: '04',
-            nombre: 'Investigación 4',
-            autor: 'cientifico 4',
-            descripcion: 'descripcion 4',
-            fecha: '16/11/23',
-            investigacion: ''
-        },
-        {
-            id: '05',
-            nombre: 'Investigación 5 Investigación 5 Investigación 5',
-            autor: 'cientifico 5',
-            descripcion: 'descripcion 5',
-            fecha: '11/02/23',
-            investigacion: ''
-        },
-        {
-            id: '06',
-            nombre: 'Investigación 6',
-            autor: 'cientifico 6',
-            descripcion: 'descripcion 6',
-            fecha: '04/05/23',
-            investigacion: ''
-        },
-        {
-            id: '07',
-            nombre: 'Investigación 7',
-            autor: 'cientifico 7',
-            descripcion: 'descripcion 7',
-            fecha: '08/08/23',
-            investigacion: ''
-        },
-        {
-            id: '08',
-            nombre: 'Investigación 8',
-            autor: 'cientifico 8',
-            descripcion: 'descripcion 8',
-            fecha: '22/09/23',
-            investigacion: ''
-        },
-        {
-            id: '09',
-            nombre: 'Investigación 9',
-            autor: 'cientifico 9',
-            descripcion: 'descripcion 9',
-            fecha: '27/10/23',
-            investigacion: ''
-        },
-        {
-            id: '10',
-            nombre: 'Investigación 10',
-            autor: 'cientifico 10',
-            descripcion: 'descripcion 10',
-            fecha: '06/11/23',
-            investigacion: ''
-        },
-        {
-            id: '11',
-            nombre: 'Investigación 11',
-            autor: 'cientifico 11',
-            descripcion: 'descripcion 11',
-            fecha: '08/08/23',
-            investigacion: ''
-        },
-        {
-            id: '12',
-            nombre: 'Investigación 12',
-            autor: 'cientifico 12',
-            descripcion: 'descripcion 12',
-            fecha: '29/12/23',
-            investigacion: ''
-        },
+    const [InvestigacionesPersonales,setInvestigacionesPersonales] = useState([])
+    const [loading, setLoading] = useState(false)
+    useEffect(() => {
+        try {
+            const getData = async () => {
+                setLoading(true);
+                const data = await getTrabajandoEmail(localStorage.getItem('email'));
+                let investigacion_list = [];
+    
+                console.log('Data:', data);
+    
+                if (data) {
+                    await Promise.all(data.map(async (item) => {
+                        const id = item.id_investigacion;
+                        const investigacionArray = await getInvestigacionById(id);
+                        
+                        if (investigacionArray && investigacionArray.length > 0) {
+                            const investigacion = investigacionArray[0];
+                            investigacion_list.push(investigacion);
+                        }
+                    }));
+    
+                    console.log('Investigacion list:', investigacion_list);
+    
+                    setInvestigacionesPersonales(investigacion_list);
+                    setLoading(false);
+                } else {
+                    setInvestigacionesPersonales([]);
+                    setLoading(false);
+                }
+            };
+    
+            getData();
+        } catch (error) {
+            console.log("Se encontró un error: ", error);
+            setLoading(false);
+            setInvestigacionesPersonales([]);
+        }
+    }, []);
 
-      ];
+    console.log("Inv",InvestigacionesPersonales)
 
-    console.log('searchTerm en TablaAvances:', searchTerm);
     const [showModalDetalle, setShowModalDetalle] = useState(false);
     const [showModalEliminacion, setShowModalEliminacion] = useState(false);
-
     const [selectedAvance, setSelectedAvance] = useState(null);
-
 
     //Visualizacion de confirmacion de eliminacion
     const handleEliminationClick = (avance) => {
@@ -137,8 +78,8 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
     };
 
 
-    const filteredAvances = investigacionesData.filter((investigaciones) =>
-        normalizeText(investigaciones.nombre).includes(normalizeText(searchTerm))
+    const filteredAvances = InvestigacionesPersonales.filter((investigaciones) =>
+        normalizeText(investigaciones.titulo).includes(normalizeText(searchTerm))
     );
 
     const itemsPerPage = 10; // Cantidad de elementos por pág
@@ -165,6 +106,11 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
         }
     };
 
+    const formatFecha = (fecha) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        return new Date(fecha).toLocaleDateString(undefined, options);
+    };
+
     return (
 
         <div>
@@ -173,7 +119,6 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
                     <tr>
                         <th className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>#</th>
                         <th className="encabezado-tabla text-center align-middle" style={{ width: '40%' }}>Nombre</th>
-                        <th className="encabezado-tabla text-center align-middle" style={{ width: '40%' }}>Autor</th>
                         <th className="encabezado-tabla text-center align-middle" style={{ width: '10%' }}>Fecha</th>
                         <th colspan="2" className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>Acción</th>
                     </tr>
@@ -182,9 +127,8 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
                     {paginatedAvances.map((investigacion, index) => (
                         <tr key={index}>
                             <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
-                            <td className="celdas-restantes-tabla text-center align-middle">{investigacion.nombre}</td>
-                            <td className="celdas-restantes-tabla text-center align-middle">{investigacion.autor}</td>
-                            <td className="celdas-restantes-tabla text-center align-middle">{investigacion.fecha}</td>
+                            <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
+                            <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
                             <td className="celdas-restantes-tabla opcion-accion text-center align-middle" onClick={() => window.location.href = '/ayudante/investigaciones/personales/investigacion'}><FontAwesomeIcon icon={faEye} /></td>
                             <td className="celdas-restantes-tabla opcion-accion text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></td>
                         </tr>
