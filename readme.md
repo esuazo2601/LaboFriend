@@ -39,8 +39,8 @@ uvicorn src.api.app:app --reload
 ## Instrucciones de Deploy
 
 # Frontend:
-    El despliegue fue realizado en Vercel, las instrucciones son las siguientes:
-    
+
+* El despliegue fue realizado en Vercel, las instrucciones son las siguientes:  
 1. Crearse una cuenta en vercel
 2. Incluir el repositorio (idealmente hacer un fork)
 3. Cambiar la carpeta raíz a "frontend"
