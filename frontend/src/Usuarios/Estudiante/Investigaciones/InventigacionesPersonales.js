@@ -10,8 +10,6 @@ import ModalNuevaInvestigacion from './Personales/Investigacion/Componentes/Moda
 const InvestigacionesPersonales = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // IMPORTAR DESDE BACKEND
-
 
   return (
     <Container>
@@ -39,7 +37,7 @@ const InvestigacionesPersonales = () => {
       
 
       <div>
-        <TablaInvestigacionesPersonales />
+        <TablaInvestigacionesPersonales searchTerm={searchTerm} />
       </div>
     </Container>
   );

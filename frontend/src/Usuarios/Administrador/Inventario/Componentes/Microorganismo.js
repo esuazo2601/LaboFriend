@@ -7,18 +7,10 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import ModalStockMicroorganismo from './ModalStockMicroorganismo';
 import ModalDescriptionMicroorganismo from './ModalDescriptionMicroorganismo';
 import ModalEliminarConfirmar from './ModalEliminarConfirmar';
-import { deleteMicroorganismo, getAllMicroorg, postMicroorganismo } from '../../../../api_service/microorganismo_api';
+import { deleteMicroorganismo, getAllMicroorg} from '../../../../api_service/microorganismo_api';
 
 const Microorganismo = ({ searchTerm, refreshMicroorganismos }) => {
-  const microorganismosData = [
-    {
-      
-      nombre: 'Microorganismo 1',
-      nombreCientifico: 'Cientifico 1',
-      procedencia: 'Origen 1',
-      detalles: 'Detalles 1',
-    },
-  ];
+ 
   const [microorganismos, setMicroorganismos] = useState([]);
   const [newStock, setNewStock] = useState(0);
   const [loading, setLoading] =useState(true);

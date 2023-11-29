@@ -1,151 +1,174 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Container, Spinner } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Table } from 'react-bootstrap';
+import '../../Estudiante/Investigaciones/Personales/Investigacion/Estilos/tabla-avances.css';
+import '../../Estudiante/Investigaciones/Personales/Investigacion/Estilos/paginacion.css';
+import '../../../EstilosGlobales/basicos.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import './investigaciones.css';
-import { getInvestigacionById, getTrabajandoEmail } from '../../../api_service/investigaciones_api.js'
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import ModalNuevaInvestigacion from './Personales/Investigacion/Componentes/ModalNuevaInvestigacion'
+import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+import DetalleAvance from './Personales/Investigacion/Componentes/ModalDetalle';
+import EliminarAvance from '../../Estudiante/Investigaciones/Personales/Investigacion/Componentes/ModalEliminacion';
+import { getTrabajandoEmail } from '../../../api_service/investigaciones_api';
+import { getInvestigacionById } from '../../../api_service/investigaciones_api';
 
+const TablaInvestigacionesPersonales = ({ searchTerm }) => {
 
-const InvestigacionesPersonales = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [investigacionesPersonales, setInvestigacionesPersonales] = useState([]);
-  const [loading, setLoading] = useState(true);
-  //const [personalInv, setPersonalInv] = useEffect
-  /*   const {data,error,loading} = useAxios({
-      url:""
-    }) */
-
-
-  useEffect(() => {
-    try {
-      const getData = async () => {
-        const data = await getTrabajandoEmail(localStorage.getItem('email'));
-        let investigacion_list = [];
-        if(data){
-          for (var i = 0; i < data.length; ++i) {
-            const id = data[i].id_investigacion
-            const investigacion = await getInvestigacionById(id)
-            investigacion_list.push(investigacion)
-            console.log('Investigacion list: ', investigacion_list)
-          }
-          setInvestigacionesPersonales(investigacion_list)
-          setLoading(false)
-        }else{
-          setInvestigacionesPersonales([])
-          setLoading(false)
+    const [InvestigacionesPersonales,setInvestigacionesPersonales] = useState([])
+    const [loading, setLoading] = useState(false)
+    useEffect(() => {
+        try {
+            const getData = async () => {
+                setLoading(true);
+                const data = await getTrabajandoEmail(localStorage.getItem('email'));
+                let investigacion_list = [];
+    
+                console.log('Data:', data);
+    
+                if (data) {
+                    await Promise.all(data.map(async (item) => {
+                        const id = item.id_investigacion;
+                        const investigacionArray = await getInvestigacionById(id);
+                        
+                        if (investigacionArray && investigacionArray.length > 0) {
+                            const investigacion = investigacionArray[0];
+                            investigacion_list.push(investigacion);
+                        }
+                    }));
+    
+                    console.log('Investigacion list:', investigacion_list);
+    
+                    setInvestigacionesPersonales(investigacion_list);
+                    setLoading(false);
+                } else {
+                    setInvestigacionesPersonales([]);
+                    setLoading(false);
+                }
+            };
+    
+            getData();
+        } catch (error) {
+            console.log("Se encontró un error: ", error);
+            setLoading(false);
+            setInvestigacionesPersonales([]);
         }
-      };
-      getData();
+    }, []);
 
-    } catch (error) {
-      console.log("se encontro un error: ",error);
-      setLoading(false);
-      setInvestigacionesPersonales([])
-    }
-  }, []);
+    console.log("Inv",InvestigacionesPersonales)
+
+    const [showModalDetalle, setShowModalDetalle] = useState(false);
+    const [showModalEliminacion, setShowModalEliminacion] = useState(false);
+    const [selectedAvance, setSelectedAvance] = useState(null);
+
+    //Visualizacion de confirmacion de eliminacion
+    const handleEliminationClick = (avance) => {
+        setShowModalEliminacion(true);
+        setSelectedAvance(avance);
+    };
+
+    //Eliminar avance
+    const handleEliminarAvance = (avance) => {
+        setShowModalEliminacion(false);
+        setSelectedAvance(avance);
+    };
+
+    const normalizeText = (text) => {
+        if (text) {
+            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+        return '';
+    };
 
 
-  const normalizeText = (text) => {
-    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  };
+    const filteredAvances = InvestigacionesPersonales.filter((investigaciones) =>
+        normalizeText(investigaciones.titulo).includes(normalizeText(searchTerm))
+    );
 
-  const filteredInvestigaciones = investigacionesPersonales.filter(investigacion =>
-    normalizeText(investigacion[0].titulo).includes(normalizeText(searchTerm))
-  );
+    const itemsPerPage = 10; // Cantidad de elementos por pág
+    const [currentPage, setCurrentPage] = useState(1);
 
-  const itemsPerPage = 20;
-  const totalItems = filteredInvestigaciones.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const totalItems = filteredAvances.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  // Página actual
-  const paginatedInvestigaciones = filteredInvestigaciones.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+    // Calcula los elementos para la pág actual
+    const paginatedAvances = filteredAvances.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
-  const handlePreviousPage = () => {
-    setCurrentPage(prev => Math.max(prev - 1, 1));
-  };
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
 
-  const handleNextPage = () => {
-    setCurrentPage(prev => Math.min(prev + 1, totalPages));
-  };
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
 
-  return (
-    <Container>
-      <h1 className="letra-grande">Investigaciones Personales</h1>
-      <hr className="linea-divisora" />
-      <Row>
-        <Col>
-          {loading ? (
-            <div className='loading-spinner'>
-              <Spinner animation="border" role="status" size="lg">
-                <span className="visually-hidden">Cargando...</span>
-              </Spinner>
-            </div>
-          ) : (
-            investigacionesPersonales.length > 0 && (
-              <div className="search-container-investigaciones">
-                <input
-                  type="text"
-                  placeholder="Buscar por nombre"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-input"
-                />
-                <span className="search-icon">
-                  <FontAwesomeIcon icon={faSearch} />
-                </span>
-              </div>
-            )
-          )}
-        </Col>
-        <Col>
-          <ModalNuevaInvestigacion />
-        </Col>
-      </Row>
+    const formatFecha = (fecha) => {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        return new Date(fecha).toLocaleDateString(undefined, options);
+    };
 
-      {loading ? (
-        <p>Cargando...</p>
-      ) : (
+    return (
+
         <div>
-          {investigacionesPersonales.length === 0 ? (
-            <p>No hay investigaciones disponibles.</p>
-          ) : (
-            paginatedInvestigaciones.map((investigacion, index) => (
-              <Button key={index} className="boton-investigacion" onClick={() => { window.location.href = '/administrador/investigaciones/personales/investigacion'; }}>
-                {investigacion[0].titulo.length > 50
-                  ? `${investigacion[0].titulo.substring(0, 50)}...`
-                  : investigacion[0].titulo}
-              </Button>
-            ))
-          )}
-        </div>
-      )}
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>#</th>
+                        <th className="encabezado-tabla text-center align-middle" style={{ width: '40%' }}>Nombre</th>
+                        <th className="encabezado-tabla text-center align-middle" style={{ width: '10%' }}>Fecha</th>
+                        <th colspan="2" className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {paginatedAvances.map((investigacion, index) => (
+                        <tr key={index}>
+                            <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
+                            <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
+                            <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
+                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle" onClick={() => window.location.href = '/ayudante/investigaciones/personales/investigacion'}><FontAwesomeIcon icon={faEye} /></td>
+                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+            <div className="pagination">
+                <button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                    Anterior
+                </button>
+                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page, index) => (
+                    <button
+                        key={index}
+                        onClick={() => setCurrentPage(page)}
+                        className={currentPage === page ? "active" : ""}
+                    >
+                        {page}
+                    </button>
+                ))}
+                <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+                    Siguiente
+                </button>
+            </div>
 
-      <div className="pagination">
-        <button onClick={handlePreviousPage} disabled={currentPage === 1}>
-          Anterior
-        </button>
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentPage(index + 1)}
-            className={currentPage === index + 1 ? "active" : ""}
-          >
-            {index + 1}
-          </button>
-        ))}
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-          Siguiente
-        </button>
-      </div>
-    </Container>
-  );
+
+            <DetalleAvance
+                show={showModalDetalle}
+                avance={selectedAvance}
+                onHide={() => setShowModalDetalle(false)}
+            />
+            <EliminarAvance
+                show={showModalEliminacion}
+                avance={selectedAvance}
+                onHide={() => setShowModalEliminacion(false)}
+                onEliminarAvance={handleEliminarAvance}
+            />
+        </div >
+
+
+    );
 };
 
-export default InvestigacionesPersonales;
+export default TablaInvestigacionesPersonales;

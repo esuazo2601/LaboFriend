@@ -7,7 +7,7 @@ import ModalReserva from './Componentes/ModalReserva';
 import ModalCancelarReserva from './Componentes/ModalCancelarReserva';
 import { getBloques } from '../../../api_service/bloque_api';
 import { getSalas } from '../../../api_service/salas_api';
-import { checkAvailability } from '../../../api_service/agenda_api';
+import { checkAvailability, deleteAgenda, getAgenda, postAgenda } from '../../../api_service/agenda_api';
 
 const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
   const [modalReservaOpen, setModalReservaOpen] = useState(false);
@@ -18,11 +18,11 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
     { sala: 'Sala B', fecha: fechaSeleccionada, hora: '03:00' },
     { sala: 'Sala B', fecha: fechaSeleccionada, hora: '04:00' },
   ]);
-
+  const [refreshDelete, setRefreshDelete] = useState(false)
   const [todasLasHoras, setTodasLasHoras]  = useState([])
   const [salasLab, setSalasLab] = useState([])
   const [bloquesDisponibles, setBloquesDisponibles] = useState([]) 
-
+  const [horasAgendadasPorUsuario, setHorasAgendadasPorUsuario] = useState([])
   useEffect (() => {
     try {
       const getData = async () => {
@@ -55,11 +55,23 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
           setBloquesDisponibles([])
         }
       }
+      const getHorasAgendadas = async() =>{
+        const data = await getAgenda(localStorage.getItem("email"))
+        if(data){
+          console.log("horas agendadas usuario: ",data)
+          setHorasAgendadasPorUsuario(data)
+        }else{
+          console.log("No hay datos para mostrar")
+          setHorasAgendadasPorUsuario([])
+        }
+      }
       const getTodo = async () => {
         try {
           await Promise.all([getData(), getSalasLabo(), getDisponibilidad()])
+          await Promise.all([getHorasAgendadas()])
         } finally {
           // Independientemente de si hay un error o no, se llama a handleLoading(false)
+          setRefreshDelete(false)
           handleLoading(false)
         }
       };
@@ -68,8 +80,11 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
       console.log(error)
       setTodasLasHoras([])
       setSalasLab([])
+      setBloquesDisponibles([])
+      setHorasAgendadasPorUsuario([])
+      setRefreshDelete(false)
     }    
-  },[loading])
+  },[loading, refreshDelete])
     
 
   const salas = [
@@ -81,25 +96,47 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
     }
   ];
 
-  const handleHoraSeleccionada = (hora, nombreSala) => {
-    const fechaReserva = format(fechaSeleccionada, 'dd/MM/yy', { locale: esLocale });
-    setFechaHoraReserva({ fecha: fechaReserva, hora, nombreSala });
+  const handleHoraSeleccionada = (hora, sala) => {
+    const horaAgenda = format(fechaSeleccionada, 'dd/MM/yy', { locale: esLocale });
+    setFechaHoraReserva({id_hora: hora.id, id_sala: sala.id, fecha: horaAgenda,fecha_api:fechaSeleccionada, hora: formatearHora(hora.hora_inicio), nombre: sala.nombre});
     setModalReservaOpen(true);
   };
 
   const handleCancelarHoraSeleccionada = (agenda) => {
-    const fechaReserva = format(agenda.fecha, 'dd/MM/yy', { locale: esLocale });
-    setFechaHoraReserva({ fecha: fechaReserva, hora: agenda.hora, sala: agenda.sala });
+    const horaAgenda = formatearHora(todasLasHoras.find(bloque => bloque.id === agenda.id_bloque)?.hora_inicio)
+    setFechaHoraReserva({ id:agenda.id, fecha: agenda.fecha, hora: horaAgenda, sala: 1 });
     setModalCancelarReservaOpen(true);
   };
 
-  const handleReservar = () => {
+  const handleReservar = async () => {
     // Editar para reservar la hora
+    //console.log(fechaHoraReserva.id)
+    try{
+      console.log(localStorage.getItem("email"),fechaHoraReserva.id_sala,fechaHoraReserva.id_hora,fechaHoraReserva.fecha_api)
+      const resp = await postAgenda(localStorage.getItem("email"),fechaHoraReserva.id_sala,fechaHoraReserva.id_hora,fechaHoraReserva.fecha_api)
+
+      console.log(resp)
+      setRefreshDelete(true)
+    }catch(error){
+      console.log(error)
+    }
+    //console.log("Hora Reservada"); 
+    setFechaHoraReserva('')
     setModalReservaOpen(false);
   };
 
-  const handleCancelarReserva = () => {
+  const handleCancelarReserva = async () => {
     // Editar para cancelar la reserva
+    console.log(fechaHoraReserva.id)
+    try{
+      const resp = await deleteAgenda(fechaHoraReserva.id)
+      //console.log(resp)
+      setRefreshDelete(true)
+    }catch(error){
+      console.log(error)
+    }
+    //console.log("cancelar reserva eliminado"); 
+    setFechaHoraReserva('')
     setModalCancelarReservaOpen(false);
   };
 
@@ -111,8 +148,7 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
     const [horas, minutos] = hora.split(':');
     return `${horas}:${minutos}`;
   };
-    //disabled={sala.horasNoDisponibles.includes(hora) || horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.salaId === sala.id)}
-    //className={`hora-disponible${sala.horasNoDisponibles.includes(hora) || horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.salaId === sala.id) ? ' no-disponible' : ' '}`}
+    
     return (
       <div className="hora-reserva-container d-flex" >
       {loading ? (
@@ -132,9 +168,10 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
                 <div key={horaIndex} className="hora-item">
                   <span>{formatearHora(hora.hora_inicio)} - {formatearHora(hora.hora_fin)}</span>
                   <Button
-                    onClick={() => handleHoraSeleccionada(hora, sala.nombre)}
+                    onClick={() => handleHoraSeleccionada(hora,sala)}
+                    disabled={!bloquesDisponibles.includes(hora.id)}
                   >
-                    {horasAgendadasUsuario.some(agendada => agendada.hora === hora && agendada.sala === sala.nombre) ? 'Reservado' : 'Reservar'}
+                    Reservar
                   </Button>
                 </div>
               ))}
@@ -142,9 +179,9 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
           ))}
           <div className="horas-column-agendadas ml-4">
             <h2 className='letra-mediana'>Horas agendadas del usuario</h2>
-            {horasAgendadasUsuario.map((agenda, index) => (
+            {horasAgendadasPorUsuario.map((agenda, index) => (
               <div key={index} className="hora-agendada d-flex align-items-center">
-                <span>{format(agenda.fecha, "dd/MM/yy")} - {agenda.hora}</span>
+                <span>{agenda.fecha} - {formatearHora(todasLasHoras.find(bloque => bloque.id === agenda.id_bloque)?.hora_inicio)}</span>
                 <Button
                   variant="danger"
                   className="ml-2"
@@ -158,9 +195,7 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
           <ModalReserva
             show={modalReservaOpen}
             handleClose={handleCloseModals}
-            fecha={fechaHoraReserva.fecha}
-            hora={fechaHoraReserva.hora}
-            sala={fechaHoraReserva.nombreSala}
+            horaReserva ={fechaHoraReserva}
             onReservar={handleReservar}
           />
           <ModalCancelarReserva
@@ -168,7 +203,7 @@ const HoraReserva = ({ fechaSeleccionada, handleLoading, loading  }) => {
             handleClose={handleCloseModals}
             fecha={fechaHoraReserva.fecha}
             hora={fechaHoraReserva.hora}
-             sala={fechaHoraReserva.sala}
+            sala={fechaHoraReserva.sala}
             onCancelarReserva={handleCancelarReserva}
           />
         </>

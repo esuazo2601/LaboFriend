@@ -1,6 +1,6 @@
 function AdministradorCuenta() {
     return (
-      <h1>AdministradorCuenta</h1>
+      <h1 style={{textAlign:'center'}} >En construcción . . .</h1>
     );
   }
   

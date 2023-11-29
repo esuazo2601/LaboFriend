@@ -1,6 +1,6 @@
 function EstudianteCuenta() {
     return (
-      <h1>EstudianteCuenta</h1>
+      <h1 style={{textAlign:'center'}}>En construcción . . .</h1>
     );
   }
   

@@ -3,6 +3,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import '../Estilos/modal.css';
 
 const ModalDescriptionFungible = ({ show, onHide, fungible }) => {
+  console.log(fungible)
   return (
     <Modal show={show} onHide={onHide} centered={true} dialogClassName="modal-wider">
       <Modal.Header closeButton className="modal-header-custom">
@@ -17,15 +18,11 @@ const ModalDescriptionFungible = ({ show, onHide, fungible }) => {
             <div className="text-container">
               <div className="data-item">
                 <p>Procedencia:</p>
-                <div className="scrollable-text">{fungible.procedencia}</div>
+                <div className="scrollable-text">{fungible.nombre}</div>
               </div>
               <div className="data-item">
-                <p>Ubicación:</p>
-                <div className="scrollable-text">{fungible.ubicacion}</div>
-              </div>
-              <div className="data-item">
-                <p>Detalles:</p>
-                <div className="scrollable-text">{fungible.detalles}</div>
+                <p>Tipo:</p>
+                <div className="scrollable-text">{fungible.tipo}</div>
               </div>
             </div>
           </div>
