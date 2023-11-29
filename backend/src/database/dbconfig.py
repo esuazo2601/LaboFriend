@@ -10,18 +10,17 @@ load_dotenv(dotenv_path)
 # Obtener el entorno actual (por defecto, establecerlo en "development" si no está definido)
 environment = os.environ.get("ENVIRONMENT", "development")
 
-url:str = os.environ.get("SUPABASE_URL")
-key:str = os.environ.get("SUPABASE_KEY")
-
-
-
 # Ajustar la configuración según el entorno
 if environment == "test":
-    url = os.environ.get("TEST_SUPABASE_URL")
-    key = os.environ.get("TEST_SUPABASE_KEY")
+    url:str = os.environ.get("SUPABASE_TEST_URL")
+    key:str = os.environ.get("SUPABASE_TEST_KEY")
 else:
-    url = os.environ.get("SUPABASE_URL")
-    key = os.environ.get("SUPABASE_KEY")
+    url:str = os.environ.get("SUPABASE_URL")
+    key:str = os.environ.get("SUPABASE_KEY")
+
+print(url)
+print(key)
+
 
 
 # Crear cliente de Supabase
