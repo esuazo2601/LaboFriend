@@ -87,7 +87,7 @@ export async function postTrabjando(email, id_investigacion) {
         "id_investigacion":id_investigacion
     }
 
-    const response = await client.post("investigacion/"+id_investigacion, trabajando_data)
+    const response = await client.post("trabajando/", trabajando_data)
     .then(response => response)
     .catch(error => console.log("Error en la petición a la api: ",error))
     return response
