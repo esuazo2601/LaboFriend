@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  lightcurve_tests:
+  integration_tests:
     uses: ./.github/workflows/test_template.yaml
     with:
         python-version: '3.11'
