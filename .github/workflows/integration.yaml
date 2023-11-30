@@ -34,4 +34,4 @@ jobs:
         echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
 
     - name: Run Tests
-      run: poetry run pytest -W ignore tests/integration/ -v
+      run: poetry run pytest -W ignore tests/integration/
