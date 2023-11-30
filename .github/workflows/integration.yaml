@@ -1,17 +1,37 @@
-name: Tests
+name: Run Tests
 
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
-  integration_tests:
-    uses: ./.github/workflows/test_template.yaml
-    with:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      SUPABASE_TEST_URL: ${{ secrets.SUPABASE_TEST_URL }}
+      SUPABASE_TEST_KEY: ${{ secrets.SUPABASE_TEST_KEY }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
         python-version: '3.11'
-        sources-folder: 'backend'
-        test-folder: 'tests'
-    secrets:
-      SUPABASE_TEST_URL: "${{ secrets.SUPABASE_TEST_URL }}"
-      SUPABASE_TEST_KEY: "${{ secrets.SUPABASE_TEST_KEY }}"
+
+    - name: Install dependencies
+      run: |
+        pip install poetry
+        poetry install
+
+    - name: Export PYTHONPATH
+      run: |
+        echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
+
+    - name: Run Tests
+      run: poetry run pytest -W ignore tests/integration/ -v
