@@ -24,7 +24,7 @@ const ModalAgregarEquipo = (props) => {
         console.log(resp)
         props.onAddEquipo()
       }catch(error){
-        alert('Error al agregar microorganismo')
+        alert('Error al agregar Equipo')
         console.log(error);
       }
     }

@@ -11,7 +11,7 @@ import { getTrabajandoEmail } from '../../../../../../api_service/investigacione
 import { getInvestigacionById, deleteInvestigacion } from '../../../../../../api_service/investigaciones_api';
 import { Link } from 'react-router-dom';
 
-const TablaInvestigacionesPersonales = ({ searchTerm }) => {
+const TablaInvestigacionesPersonales = ({ searchTerm, refreshInvestigaciones }) => {
 
     const [InvestigacionesPersonales, setInvestigacionesPersonales] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -24,15 +24,16 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
         try {
             const getData = async () => {
                 const data = await getTrabajandoEmail(localStorage.getItem('email'));
-                let investigacion_list = [];
     
-                console.log('Data:', data);
+                if (Array.isArray(data)) {
+                    let investigacion_list = [];
     
-                if (data) {
+                    console.log('Data:', data);
+    
                     await Promise.all(data.map(async (item) => {
                         const id = item.id_investigacion;
                         const investigacionArray = await getInvestigacionById(id);
-                        
+    
                         if (investigacionArray && investigacionArray.length > 0) {
                             const investigacion = investigacionArray[0];
                             investigacion_list.push(investigacion);
@@ -57,7 +58,8 @@ const TablaInvestigacionesPersonales = ({ searchTerm }) => {
             setInvestigacionesPersonales([]);
             setRefreshDelete(false);
         }
-    }, [refreshDelete]);
+    }, [refreshDelete, refreshInvestigaciones]);
+    
 
     console.log("Inv",InvestigacionesPersonales)
 

@@ -9,8 +9,12 @@ import ModalNuevaInvestigacion from './Personales/Investigacion/Componentes/Moda
 
 const InvestigacionesPersonales = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [refreshInvestigaciones, setRefreshInvestigaciones] = useState(false)
 
-
+  const handleRefresh = () => {
+    // Cambia el estado para forzar la actualización de la lista de fungibles
+    setRefreshInvestigaciones((prev) => !prev);
+  };
   return (
     <Container>
       <h1 className="letra-grande">Investigaciones Personales</h1>
@@ -31,13 +35,13 @@ const InvestigacionesPersonales = () => {
           </div>
         </Col>
         <Col>
-          <ModalNuevaInvestigacion />
+          <ModalNuevaInvestigacion onAddInvestigacion ={handleRefresh} />
         </Col>
       </Row>
       
 
       <div>
-        <TablaInvestigacionesPersonales searchTerm={searchTerm} />
+        <TablaInvestigacionesPersonales searchTerm={searchTerm} refreshInvestigaciones={refreshInvestigaciones} />
       </div>
     </Container>
   );
