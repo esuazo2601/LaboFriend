@@ -7,6 +7,7 @@ import '../../../../../../EstilosGlobales/basicos.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faFile, faTrash } from '@fortawesome/free-solid-svg-icons';
 import DetalleAvance from './ModalDetalle';
+import EliminarAvance from './ModalEliminacion';
 
 
 
@@ -91,6 +92,18 @@ const TablaAvances = ({ searchTerm }) => {
         setSelectedAvance(avance);
     };
 
+    //Visualizacion de confirmacion de eliminacion
+    const handleEliminationClick = (avance) => {
+        setShowModalEliminacion(true);
+        setSelectedAvance(avance);
+    };
+
+    //Eliminar avance
+    const handleEliminarAvance = (avance) => {
+        setShowModalEliminacion(false);
+        setSelectedAvance(avance);
+    };
+
     const normalizeText = (text) => {
         if (text) {
             return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -137,7 +150,7 @@ const TablaAvances = ({ searchTerm }) => {
                         <th className="encabezado-tabla text-center align-middle" style={{ width: '35%' }}>Avance</th>
                         <th className="encabezado-tabla text-center align-middle" style={{ width: '15%' }}>Fecha</th>
                         <th className="encabezado-tabla text-center align-middle" style={{ maxWidth: '15%' }}>Archivo</th>
-                        <th className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>Acción</th>
+                        <th colspan="2" className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>Acción</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -148,6 +161,7 @@ const TablaAvances = ({ searchTerm }) => {
                             <td className="celdas-restantes-tabla text-center align-middle">{avance.fecha}</td>
                             <td className="celdas-restantes-tabla text-center align-middle" > <FontAwesomeIcon icon={faFile} style={{ color: "#507E9D", }} />&nbsp;&nbsp;<a href='#'>{avance.archivo}</a></td>
                             <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleVisualizacionClick(avance)}><FontAwesomeIcon icon={faEye} /></td>
+                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(avance)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" }} /></td>
                         </tr>
                     ))}
                 </tbody>
@@ -175,6 +189,12 @@ const TablaAvances = ({ searchTerm }) => {
                 show={showModalDetalle}
                 avance={selectedAvance}
                 onHide={() => setShowModalDetalle(false)}
+            />
+            <EliminarAvance
+                show={showModalEliminacion}
+                avance={selectedAvance}
+                onHide={() => setShowModalEliminacion(false)}
+                onEliminarAvance={handleEliminarAvance}
             />
         </div >
 
