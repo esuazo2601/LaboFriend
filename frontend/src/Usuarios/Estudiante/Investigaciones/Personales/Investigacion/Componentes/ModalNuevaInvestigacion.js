@@ -4,9 +4,9 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import '../Estilos/boton-modal-avance.css';
 import '../Estilos/modal-avance.css';
-import { postInvestigacion, postTrabjando } from '../../../../../../api_service/investigaciones_api';
+import { postInvestigacion, postTrabajando } from '../../../../../../api_service/investigaciones_api';
 
-function ModalAvance(props) {
+function ModalNuevaInvestigacion(props) {
     const [show, setShow] = useState(false);
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
@@ -31,7 +31,7 @@ function ModalAvance(props) {
               if(resp && resp[0].id){
                 const emailTrabajador = localStorage.getItem('email')
                 const idAgenda = resp[0].id 
-                const respTrabajando = await postTrabjando(emailTrabajador, idAgenda)
+                const respTrabajando = await postTrabajando(emailTrabajador, idAgenda)
                 console.log("trabajando: ",respTrabajando)
                 if(respTrabajando){
                     console.log('Investigación y asociación exitosas:', resp, respTrabajando)
@@ -39,20 +39,28 @@ function ModalAvance(props) {
                     setSuccess(true)
                     setShowAlert(false)
                     setShow(false)
+                    setTitulo('')
+                    setDescripcion('')
                 }else{
                     console.error('Error al asociar la investigación al usuario')
                     setSuccess(false)
                     setShowAlert(true)
+                    setTitulo('')
+                    setDescripcion('')
                 }
               }else{
                 console.error('Error al crear la investigación');
                 setSuccess(false);
                 setShowAlert(true);
+                setTitulo('')
+                setDescripcion('')
               }
             }catch(error){
                 console.error('Error en la función handleNewInvestigacion:', error);
                 setSuccess(false);
                 setShowAlert(true);
+                setTitulo('')
+                setDescripcion('')
             }
           }
     }
@@ -103,4 +111,4 @@ function ModalAvance(props) {
     );
 }
 
-export default ModalAvance;
+export default ModalNuevaInvestigacion;

@@ -12,7 +12,8 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
       const getData = async () => {
         if(equipo && equipo.id_sala){
           const nombre = await getSala(equipo.id_sala)
-          console.log("nombre sala: ",nombre.nombre)
+          console.log("id sala: ",equipo.id_sala)
+          console.log("nombre sala: ",nombre)
           if(nombre){
             setNombreSala(nombre.nombre)
           }else{
@@ -28,7 +29,9 @@ const ModalDescriptionEquipo = ({ show, onHide, equipo, onSave }) => {
       setNombreSala('')
     }
   },[equipo])
+
   const handleEditClick = () => {
+    console.log(equipo)
     setIsEditing(true);
     setEditedEquipo({
       nombre: equipo.nombre,

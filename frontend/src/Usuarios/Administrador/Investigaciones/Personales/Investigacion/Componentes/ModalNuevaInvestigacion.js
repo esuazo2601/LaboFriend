@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import '../Estilos/boton-modal-avance.css';
 import '../Estilos/modal-avance.css';
-import { postInvestigacion, postTrabjando } from '../../../../../../api_service/investigaciones_api';
+import { postInvestigacion, postTrabajando } from '../../../../../../api_service/investigaciones_api';
 
 function ModalAvance(props) {
     const [show, setShow] = useState(false);
@@ -30,7 +30,7 @@ function ModalAvance(props) {
               if(resp && resp[0].id){
                 const emailTrabajador = localStorage.getItem('email')
                 const idAgenda = resp[0].id 
-                const respTrabajando = await postTrabjando(emailTrabajador, idAgenda)
+                const respTrabajando = await postTrabajando(emailTrabajador, idAgenda)
                 console.log("trabajando: ",respTrabajando)
                 if(respTrabajando){
                     console.log('Investigación y asociación exitosas:', resp, respTrabajando)

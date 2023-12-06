@@ -73,7 +73,7 @@ async def new_room(sala: Sala):
 
 async def get_rooms():
     try:
-        response = supabase.table("Sala").select("*").execute()
+        response = supabase.table("Sala").select("*").order('nombre',desc=True).execute()
         print(response)
         return response
     except Exception as e:
@@ -97,6 +97,13 @@ async def delete_room(sala_nombre: str):
             status_code=500, detail="No se encuentra la sala con este nombre"
         )
 
+async def get_room_id(id):
+    try:
+        response = supabase.table("Sala").select("nombre").eq('id',id).execute()
+        print(response)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 ################################### MICROORGANISMOS METHODS ###################################
 
@@ -118,7 +125,7 @@ async def add_microorg(microorganismo: Microorganismo):
 
 
 async def get_all_microorg():
-    response = supabase.table("Microorganismo").select("*").execute()
+    response = supabase.table("Microorganismo").select("*").order('nombre_comun').execute()
     return response
 
 
@@ -320,7 +327,7 @@ async def get_producto_nm(name_prod: str):
 
 
 async def get_productos():
-    response = supabase.table("Producto").select("*").execute()
+    response = supabase.table("Producto").select("*").order('nombre').execute()
     return response
 
 
@@ -610,6 +617,7 @@ async def add_incidencia(incidencia: Incidencia):
         supabase.table("Incidencia")
         .insert(
             {
+                "titulo":incidencia.titulo,
                 "observacion": incidencia.observacion,
                 "fecha": incidencia.fecha,
                 "id_investigacion": incidencia.id_investigacion,
@@ -626,12 +634,7 @@ async def get_incidencias():
 
 
 async def get_incidencias_inv(id_inv: int):
-    response = (
-        supabase.table("Incidencia")
-        .select("*")
-        .eq("id_investigacion", id_inv)
-        .execute()
-    )
+    response = supabase.table("Incidencia").select("*").eq("id_investigacion", id_inv).execute()
     return response
 
 
@@ -688,7 +691,7 @@ async def get_equipo_nm(name_equip: str):
 
 
 async def get_equipos():
-    response = supabase.table("Equipo").select("*").execute()
+    response = supabase.table("Equipo").select("*").order('nombre').execute()
     return response
 
 

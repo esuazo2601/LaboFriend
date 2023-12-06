@@ -2,39 +2,27 @@ import React, { useState } from 'react';
 import Calendario from './Calendario';
 import { Container } from 'react-bootstrap';
 import HoraReserva from './HoraReserva';
+import { format } from 'date-fns';
+import esLocale from 'date-fns/locale/es';
 import './Estilos/AdministradorReservaHoras.css';
 
 const EstudianteReservaHoras = () => {
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
-  const [horaSeleccionada, setHoraSeleccionada] = useState(null);
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
+  const [loading, setLoading] = useState(true);
 
   const handleFechaSeleccionada = (fecha) => {
     setFechaSeleccionada(fecha);
+    setLoading(true)
   };
-
-  const handleHoraSeleccionada = (hora) => {
-    setHoraSeleccionada(hora);
-  };
-
   return (
     <Container>
       <h1 className="letra-grande">Calendario de Reservas</h1>
       <hr className="linea-divisora" />
+      <h2 className="letra-mediana">Horas para el {format(fechaSeleccionada, "EEEE d 'de' MMMM 'de' yyyy", { locale: esLocale })}</h2>
       <div style={{ display: 'flex' }}>
         <Calendario onFechaSeleccionada={handleFechaSeleccionada} />
-        {fechaSeleccionada && (
-          <HoraReserva
-            fechaSeleccionada={fechaSeleccionada}
-            onHoraSeleccionada={handleHoraSeleccionada}
-          />
-        )}
+        <HoraReserva fechaSeleccionada={fechaSeleccionada} handleLoading={setLoading} loading={loading}/>
       </div>
-      {horaSeleccionada && (
-        <div>
-          <p>Fecha seleccionada: {fechaSeleccionada.toDateString()}</p>
-          <p>Hora seleccionada: {horaSeleccionada}</p>
-        </div>
-      )}
     </Container>
   );
 };

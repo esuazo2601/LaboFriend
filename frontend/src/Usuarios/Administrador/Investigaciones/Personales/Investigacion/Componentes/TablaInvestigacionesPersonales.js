@@ -155,7 +155,7 @@ const TablaInvestigacionesPersonales = ({ searchTerm, refreshInvestigaciones}) =
                                             <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
-                                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle"><Link to = {`/estudiante/investigaciones/personales/${investigacion.id}`}><FontAwesomeIcon icon={faEye} style={{color:"black"}} /></Link></td>
+                                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle"><Link to = {`/administrador/investigaciones/personales/${investigacion.id}`}><FontAwesomeIcon icon={faEye} style={{color:"black"}} /></Link></td>
                                             <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" , cursor: 'pointer'}} /></td>
                                         </tr>
                                     ))}

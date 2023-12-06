@@ -50,7 +50,8 @@ class Equipo(BaseModel):
 
 class Incidencia(BaseModel):
     id: Optional[int] = None
-    observacion: str
+    titulo: str 
+    observacion: Optional[str] = None
     fecha: Optional[str] = None
     id_investigacion: int
 
