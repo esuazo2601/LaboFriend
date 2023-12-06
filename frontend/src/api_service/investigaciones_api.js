@@ -81,7 +81,7 @@ export async function getTrabajandoEmail(email) {
     return response
 }
 
-export async function postTrabjando(email, id_investigacion) {
+export async function postTrabajando(email, id_investigacion) {
     const trabajando_data = {
         "email_usuario": email,
         "id_investigacion":id_investigacion
@@ -95,3 +95,30 @@ export async function postTrabjando(email, id_investigacion) {
 
 
 //console.log(await deleteInvestigacion(9))
+
+export async function getIncidencias(id){
+    const response = await client.get("incidencias_inv/"+id)
+    .then(response => response.data.data)
+    .catch(error => console.log("Error en la petición a la api: ",error))
+    return response
+}
+
+export async function deleteIncidencia(id){
+    const response = await client.delete("incidencia/"+id)
+    .then(response => response)
+    .catch(error => console.log("Error en la petición a la api: ",error))
+    return response
+}
+
+export async function postIncidencia(titulo, descripcion,fecha,id){
+    const incidencia_data ={
+        "observacion":descripcion,
+        "fecha":fecha,
+        "id_investigacion":id,
+        "titulo":titulo
+    }
+    const response = await client.post("incidencia/", incidencia_data)
+    .then(response => response)
+    .catch(error => console.log("Error en la petición a la api: ",error))
+    return response
+}
