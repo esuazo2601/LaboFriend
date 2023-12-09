@@ -152,7 +152,7 @@ const TablaInvestigacionesPersonales = ({ searchTerm, refreshInvestigaciones}) =
                                 <tbody>
                                     {paginatedAvances.map((investigacion, index) => (
                                         <tr key={index}>
-                                            <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
+                                            <td className="columna-nombre-tabla text-center align-middle">{(index+1) + (itemsPerPage*(currentPage-1))}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
                                             <td className="celdas-restantes-tabla opcion-accion text-center align-middle"><Link to = {`/administrador/investigaciones/personales/${investigacion.id}`}><FontAwesomeIcon icon={faEye} style={{color:"black"}} /></Link></td>

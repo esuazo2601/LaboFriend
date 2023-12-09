@@ -9,8 +9,7 @@ import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 import DetalleAvance from './ModalDetalle';
 import EliminarInvestigacion from './ModalEliminacion';
 import { getInvestigaciones, deleteInvestigacion } from '../../../../../../api_service/investigaciones_api'; 
-
-
+import { Link } from 'react-router-dom';
 
 const TablaAvances = ({ searchTerm }) => {
 
@@ -141,10 +140,10 @@ const TablaAvances = ({ searchTerm }) => {
                                 <tbody>
                                     {paginatedAvances.map((investigacion, index) => (
                                         <tr key={index}>
-                                            <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
+                                            <td className="columna-nombre-tabla text-center align-middle">{(index+1) + (itemsPerPage*(currentPage-1))}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
-                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => window.location.href = '/ayudante/investigaciones/terceros/investigacion'}><FontAwesomeIcon style={{cursor:'pointer'}} icon={faEye} /></td>
+                                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle"><Link to = {`/administrador/investigaciones/terceros/${investigacion.id}`}><FontAwesomeIcon icon={faEye} style={{color:"black"}} /></Link></td>
                                             <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" , cursor: 'pointer'}} /></td>
                                         </tr>
                                     ))}

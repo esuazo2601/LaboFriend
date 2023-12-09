@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import TablaAvances from './Componentes/TablaAvances';
-import ModalAvance from './Componentes/ModalAvance';
 import { Container } from 'react-bootstrap';
 import '../../../../../EstilosGlobales/basicos.css';
 import ModalDetalle from './Componentes/ModalDetalle';
@@ -11,15 +10,9 @@ import Col from 'react-bootstrap/Col';
 import { useParams } from 'react-router-dom';
 
 
-function Investigacion() {
+function InvestigacionTercero() {
     const [searchTerm, setSearchTerm] = useState('');
     const {investigacionId} = useParams();
-    const [refreshInvestigaciones, setRefreshInvestigaciones] = useState(false)
-    const handleRefresh = () => {
-        // Cambia el estado para forzar la actualización de la lista de fungibles
-        setRefreshInvestigaciones((prev) => !prev);
-      };
-    console.log(investigacionId)
     return (
         <Container>
             <h1 className="letra-grande">Investigación</h1>
@@ -40,15 +33,11 @@ function Investigacion() {
                         </span>
                     </div>
                 </Col>
-                <Col>
-                    <ModalAvance id = {investigacionId} onAddInvestigacion ={handleRefresh} />
-                </Col>
             </Row>
-
             <ModalDetalle />
-            <TablaAvances searchTerm={searchTerm} investigacionId={investigacionId} refreshInvestigaciones={refreshInvestigaciones}/>
+            <TablaAvances searchTerm={searchTerm} investigacionId={investigacionId}/>
         </Container>
     );
 }
 
-export default Investigacion;
+export default InvestigacionTercero;

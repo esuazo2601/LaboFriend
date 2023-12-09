@@ -10,6 +10,7 @@ import AdministradorEditarUsuarios from '../Usuarios/Administrador/Editar/Admini
 import InvestigacionesPersonales from '../Usuarios/Administrador/Investigaciones/InventigacionesPersonales';
 import InvestigacionesTerceros from '../Usuarios/Administrador/Investigaciones/InventigacionesTerceros';
 import Investigacion from '../Usuarios/Administrador/Investigaciones/Personales/Investigacion/Investigacion';
+import InvestigacionTercero from '../Usuarios/Administrador/Investigaciones/Personales/Investigacion/InvestigacionTercero';
 
 import AyudanteLayout from '../Usuarios/Ayudante/AyudanteLayout';
 import AyudanteCuenta from '../Usuarios/Ayudante/Cuenta/AyudanteCuenta';
@@ -44,8 +45,8 @@ const AppRoutes = () => {
         <Route path="editarUsuarios" element={<AdministradorEditarUsuarios />} />
         <Route path="investigaciones/personales" element={<InvestigacionesPersonales />} />
         <Route path="investigaciones/terceros" element={<InvestigacionesTerceros />} />
-        <Route path="investigaciones/terceros/insvestigacion" element={<Investigacion />} />
-        <Route path="investigaciones/personales/investigacion" element={<Investigacion />} />
+        <Route path="investigaciones/terceros/:investigacionId" element={<InvestigacionTercero />} />
+        <Route path="investigaciones/personales/:investigacionId" element={<Investigacion />} />
       </Route>
 
       <Route path="/ayudante/*" element={<AyudanteLayout />}>
@@ -58,6 +59,7 @@ const AppRoutes = () => {
         <Route path="investigaciones/terceros" element={<AyudanteInvestigacionesTerceros />} />
         <Route path="investigaciones/terceros/investigacion" element={<AyudanteInvestigacionTerceros />} />
         <Route path="investigaciones/personales/investigacion" element={<AyudanteInvestigacion />} />
+        
       </Route>
       
       <Route path="/estudiante/*" element={<EstudianteLayout />}>
