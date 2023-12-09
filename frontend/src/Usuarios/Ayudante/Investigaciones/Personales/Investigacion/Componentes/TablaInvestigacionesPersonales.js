@@ -1,55 +1,88 @@
 import React, { useState, useEffect } from 'react';
-//import MUIDataTable from 'mui-datatables';
-import { Table, Button, Spinner } from 'react-bootstrap';
+import { Table, Spinner } from 'react-bootstrap';
 import '../Estilos/tabla-avances.css';
 import '../Estilos/paginacion.css';
 import '../../../../../../EstilosGlobales/basicos.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
-import DetalleAvance from './ModalDetalle';
-import { getInvestigaciones, deleteInvestigacion } from '../../../../../../api_service/investigaciones_api';
+import DetalleAvance from '../Componentes/ModalDetalle';
+import EliminarInvestigacion from '../Componentes/ModalEliminacion';
+import { getTrabajandoEmail, getInvestigacionById,deleteInvestigacion } from '../../../../../../api_service/investigaciones_api';
 import { Link } from 'react-router-dom';
 
+const TablaInvestigacionesPersonales = ({ searchTerm, refreshInvestigaciones}) => {
 
-
-const TablaAvances = ({ searchTerm }) => {
-
-    const [investigaciones, setInvestgaciones] = useState([]);
+    const [InvestigacionesPersonales, setInvestigacionesPersonales] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [showModalDetalle, setShowModalDetalle] = useState(false);
     const [refreshDelete, setRefreshDelete] = useState(false)
+    const [showModalDetalle, setShowModalDetalle] = useState(false);
+    const [showModalEliminacion, setShowModalEliminacion] = useState(false);
+    const [selectedInvestigacion, setSelectedInvestigacion] = useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const data = await getInvestigaciones();
-                console.log(data)
-                if (data) {
-                    setInvestgaciones(data);
+        try {
+            const getData = async () => {
+                const data = await getTrabajandoEmail(localStorage.getItem('email'));
+    
+                if (Array.isArray(data)) {
+                    let investigacion_list = [];
+    
+                    console.log('Data:', data);
+    
+                    await Promise.all(data.map(async (item) => {
+                        const id = item.id_investigacion;
+                        const investigacionArray = await getInvestigacionById(id);
+    
+                        if (investigacionArray && investigacionArray.length > 0) {
+                            const investigacion = investigacionArray[0];
+                            investigacion_list.push(investigacion);
+                        }
+                    }));
+    
+                    console.log('Investigacion list:', investigacion_list);
+                    setInvestigacionesPersonales(investigacion_list);
+                    setLoading(false);
+                    setRefreshDelete(false);
+                } else {
+                    setInvestigacionesPersonales([]);
                     setLoading(false);
                     setRefreshDelete(false);
                 }
-                else {
-                    setInvestgaciones([]);
-                    setLoading(false);
-                    setRefreshDelete(false);
+            };
+    
+            getData();
+        } catch (error) {
+            console.log("Se encontró un error: ", error);
+            setLoading(false);
+            setInvestigacionesPersonales([]);
+            setRefreshDelete(false);
+        }
+    }, [refreshDelete, refreshInvestigaciones]);
+    
 
-                }
-
-            } catch (error) {
-                console.error(error);
-                setLoading(false);
-                setInvestgaciones([]);
-                setRefreshDelete(false);
-            }
-        };
-
-        fetchData();
-    }, [refreshDelete]);
-
-    //console.log("investigaciones",investigaciones);
+    console.log("Inv",InvestigacionesPersonales)
 
 
+    //Visualizacion de confirmacion de eliminacion
+    const handleEliminationClick = (investigacion) => {
+        setShowModalEliminacion(true);
+        setSelectedInvestigacion(investigacion);
+    };
+
+    //Eliminar avance
+    const handleEliminarInvestigacion = async(id) => {
+        console.log(id)
+        try{
+            const resp = await deleteInvestigacion(id)
+            console.log(resp)
+            setRefreshDelete(true)
+          }catch(error){
+            console.log(error)
+          }
+          console.log("Investigación eliminada");
+        //MANEJAR ELIMINACION DE AVNACE CON LLAMADA A API
+        // await deleteInvestigacion(avance.id)
+    };
 
     const normalizeText = (text) => {
         if (text) {
@@ -59,7 +92,7 @@ const TablaAvances = ({ searchTerm }) => {
     };
 
 
-    const filteredAvances = investigaciones.filter((investigaciones) =>
+    const filteredAvances = InvestigacionesPersonales.filter((investigaciones) =>
         normalizeText(investigaciones.titulo).includes(normalizeText(searchTerm))
     );
 
@@ -91,18 +124,19 @@ const TablaAvances = ({ searchTerm }) => {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         return new Date(fecha).toLocaleDateString(undefined, options);
     };
+
     return (
         <div>
             {loading ? (
                 <div className='loading-spinner'>
                     <Spinner animation="border" role="status" size="lg">
-                        <span className="visually-hidden">Cargando...</span>
+                    <span className="visually-hidden">Cargando...</span>
                     </Spinner>
                 </div>
-
+                
             ) : (
                 <div>
-                    {investigaciones.length === 0 ? (
+                    {InvestigacionesPersonales.length === 0 ? (
                         <p>No hay investigaciones disponibles.</p>
                     ) : (
                         <>
@@ -112,17 +146,17 @@ const TablaAvances = ({ searchTerm }) => {
                                         <th className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>#</th>
                                         <th className="encabezado-tabla text-center align-middle" style={{ width: '40%' }}>Nombre</th>
                                         <th className="encabezado-tabla text-center align-middle" style={{ width: '10%' }}>Fecha</th>
-                                        <th className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>Acción</th>
+                                        <th colspan="2" className="encabezado-tabla text-center align-middle" style={{ width: '5%' }}>Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {paginatedAvances.map((investigacion, index) => (
                                         <tr key={index}>
-                                            <td className="columna-nombre-tabla text-center align-middle">{investigacion.id}</td>
+                                            <td className="columna-nombre-tabla text-center align-middle">{(index+1) + (itemsPerPage*(currentPage-1))}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{investigacion.titulo}</td>
                                             <td className="celdas-restantes-tabla text-center align-middle">{formatFecha(investigacion.fecha)}</td>
-                                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle"><Link to = {`/ayudante/investigaciones/terceros/${investigacion.id}`}><FontAwesomeIcon icon={faEye} style={{color:"black"}} /></Link></td>
-
+                                            <td className="celdas-restantes-tabla opcion-accion text-center align-middle"><Link to = {`/ayudante/investigaciones/personales/${investigacion.id}`}><FontAwesomeIcon icon={faEye} style={{color:"black"}} /></Link></td>
+                                            <td className="celdas-restantes-tabla text-center align-middle" onClick={() => handleEliminationClick(investigacion)}><FontAwesomeIcon icon={faTrash} style={{ color: "red" , cursor: 'pointer'}} /></td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -148,6 +182,12 @@ const TablaAvances = ({ searchTerm }) => {
                             <DetalleAvance
                                 onHide={() => setShowModalDetalle(false)}
                             />
+                            <EliminarInvestigacion
+                                show={showModalEliminacion}
+                                id={selectedInvestigacion? selectedInvestigacion.id:''}
+                                onHide={() => setShowModalEliminacion(false)}
+                                onDelete={handleEliminarInvestigacion}
+                            />
                         </>
                     )}
                 </div>
@@ -156,4 +196,4 @@ const TablaAvances = ({ searchTerm }) => {
     );
 };
 
-export default TablaAvances;
+export default TablaInvestigacionesPersonales;

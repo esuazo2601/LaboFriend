@@ -4,64 +4,65 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import '../Estilos/boton-modal-avance.css';
 import '../Estilos/modal-avance.css';
-
-import { postIncidencia } from '../../../../../../api_service/investigaciones_api';
+import { postInvestigacion, postTrabajando } from '../../../../../../api_service/investigaciones_api';
 
 function ModalAvance(props) {
     const [show, setShow] = useState(false);
-    const [showAlert, setShowAlert] = useState(false);
-    const [success, setSuccess] = useState(false);
-
     const [titulo, setTitulo] = useState('');
     const [descripcion, setDescripcion] = useState('');
-    
+    const [success, setSuccess] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const handleNewAvance = async()=> {
-        if(!titulo){
+
+    const handleNewInvestigacion = async() => {
+        if (!titulo || !descripcion) {
             setShowAlert(true);
-            setShow(false);
-            return
+            setSuccess(false);
+            return;
         }else{
             try{
-                const fechaActual = new Date()
-                fechaActual.setMilliseconds(0)
-                console.log(titulo)
-                console.log(descripcion)
-                const resp = await postIncidencia(titulo, descripcion, fechaActual,props.id)
-                console.log("resp: ",resp)
-                if(resp){
-                    console.log('Avance creado con exito:', resp)
+              const fechaActual = new Date()
+              fechaActual.setMilliseconds(0)
+              const resp = await postInvestigacion(titulo, descripcion, fechaActual)
+              console.log("resp: ",resp[0].id)
+              if(resp && resp[0].id){
+                const emailTrabajador = localStorage.getItem('email')
+                const idAgenda = resp[0].id 
+                const respTrabajando = await postTrabajando(emailTrabajador, idAgenda)
+                console.log("trabajando: ",respTrabajando)
+                if(respTrabajando){
+                    console.log('Investigación y asociación exitosas:', resp, respTrabajando)
                     props.onAddInvestigacion()
                     setSuccess(true)
                     setShowAlert(false)
                     setShow(false)
-                    setTitulo('')
-                    setDescripcion('')
                 }else{
-                    console.error('Error en la creación del avance')
+                    console.error('Error al asociar la investigación al usuario')
                     setSuccess(false)
                     setShowAlert(true)
-                    setTitulo('')
-                    setDescripcion('')
                 }
-            }catch(error){
-                console.error('Error en la función handleNewAvance: ', error);
+              }else{
+                console.error('Error al crear la investigación');
                 setSuccess(false);
                 setShowAlert(true);
-                setTitulo('')
-                setDescripcion('')
+              }
+            }catch(error){
+                console.error('Error en la función handleNewInvestigacion:', error);
+                setSuccess(false);
+                setShowAlert(true);
             }
-        }
+          }
     }
 
     return (
         <>
-            <Button className='boton-modal-avance' onClick={handleShow}>Agregar Avance</Button>
+            <Button className='boton-modal-avance' onClick={handleShow}>Agregar Investigación</Button>
 
             <Modal className='modal-avance' show={show} onHide={handleClose}>
                 <Modal.Header className='modal-header-custom' closeButton>
-                    <Modal.Title className="ms-auto header-name">Agregar Avance</Modal.Title>
+                    <Modal.Title className="ms-auto header-name">Agregar Investigación</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="modal-body-custom-description">
                     <Form style={{ width: "100%" }}>
@@ -73,7 +74,7 @@ function ModalAvance(props) {
                                 autoFocus
                                 required
                                 value={titulo}
-                                onChange={(e)=>{setTitulo(e.target.value)}}
+                                onChange={(e) => setTitulo(e.target.value)}
                             />
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -82,20 +83,8 @@ function ModalAvance(props) {
                                 as="textarea"
                                 rows={6}
                                 placeholder='Descripción'
-                                value={descripcion}
-                                onChange={(e)=>{setDescripcion(e.target.value)}}
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlFile_archivo">
-                            <Form.Label className='label-custom'>Archivo</Form.Label>
-                            <Form.Control
-                                type="file"
-                            />
-                        </Form.Group>
-                        <Form.Group className="mb-3" controlId="exampleForm.ControlFile_imagen">
-                            <Form.Label className='label-custom'>Imagen</Form.Label>
-                            <Form.Control
-                                type="file"
+                                value={descripcion} 
+                                onChange={(e) => setDescripcion(e.target.value)}    
                             />
                         </Form.Group>
                     </Form>
@@ -104,8 +93,8 @@ function ModalAvance(props) {
                     <Button className="modal-button btn-cancel" onClick={handleClose}>
                         Cerrar
                     </Button>
-                    <Button className="modal-button btn-save" onClick={handleNewAvance}>
-                        Agregar Avance
+                    <Button className="modal-button btn-save" onClick={handleNewInvestigacion}>
+                        Agregar Investigación
                     </Button>
                 </Modal.Footer>
             </Modal>

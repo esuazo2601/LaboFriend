@@ -31,7 +31,7 @@ const DetalleAvance = ({ show, avance, onHide }) => {
                         </div>
                         <div className="col-6">
                             <p className='descripcion-modal'>
-                                {avance ? avance.descripcion : "No hay descipción disponible"}
+                                {avance ? avance.observacion : "No hay descipción disponible"}
                             </p>
                         </div>
                     </div>

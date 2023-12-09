@@ -8,11 +8,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useParams } from 'react-router-dom';
 
 
 function AyudanteInvestigacionTerceros() {
     const [searchTerm, setSearchTerm] = useState('');
-
+    const {investigacionId} = useParams();
     return (
         <Container>
             <h1 className="letra-grande">Investigación</h1>
@@ -33,13 +34,9 @@ function AyudanteInvestigacionTerceros() {
                         </span>
                     </div>
                 </Col>
-                <Col>
-                    <ModalAvance />
-                </Col>
             </Row>
-
             <ModalDetalle />
-            <TablaAvances searchTerm={searchTerm} />
+            <TablaAvances searchTerm={searchTerm} investigacionId={investigacionId}/>
         </Container>
     );
 }

@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 
-const EliminarInvestigacion = ({ show, onHide, id, onDelete }) => {
+
+const EliminarAvance = ({ show, onHide, avance, onDelete }) => {
     const [showModal, setShowModal] = useState(false);
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [isDeleted, setIsDeleted] = useState(false);
 
-    const handleDelete = () => {
+    const handleDelete = async () => {
         setIsConfirmed(true);
-        onDelete(id);
+        console.log("id:",avance)
+        onDelete(avance.id);
         setIsDeleted(true);
     };
 
@@ -53,4 +55,4 @@ const EliminarInvestigacion = ({ show, onHide, id, onDelete }) => {
     );
 };
 
-export default EliminarInvestigacion;
+export default EliminarAvance;
