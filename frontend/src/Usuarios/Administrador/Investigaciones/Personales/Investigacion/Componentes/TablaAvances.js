@@ -7,7 +7,7 @@ import '../../../../../../EstilosGlobales/basicos.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faFile, faTrash } from '@fortawesome/free-solid-svg-icons';
 import DetalleAvance from './ModalDetalle';
-import EliminarAvance from './ModalEliminacion';
+import EliminarAvance from './ModalEliminacionAvance';
 import { deleteIncidencia, getIncidencias } from '../../../../../../api_service/investigaciones_api';
 
 

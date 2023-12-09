@@ -57,8 +57,8 @@ const AppRoutes = () => {
         <Route path="notificaciones" element={<AyudanteNotificaciones />} />
         <Route path="investigaciones/personales" element={<AyudanteInvestigacionesPersonales />} />
         <Route path="investigaciones/terceros" element={<AyudanteInvestigacionesTerceros />} />
-        <Route path="investigaciones/terceros/investigacion" element={<AyudanteInvestigacionTerceros />} />
-        <Route path="investigaciones/personales/investigacion" element={<AyudanteInvestigacion />} />
+        <Route path="investigaciones/terceros/:investigacionId" element={<AyudanteInvestigacionTerceros />} />
+        <Route path="investigaciones/personales/:investigacionId" element={<AyudanteInvestigacion />} />
         
       </Route>
       
