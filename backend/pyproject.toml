@@ -15,9 +15,13 @@ passlib = "^1.7.4"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 python-multipart = "^0.0.6"
 pydantic-settings = "^2.0.3"
+pytest = "^7.4.3"
 pydantic = {extras = ["email"], version = "^2.5.0"}
 bcrypt = "^4.0.1"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest-asyncio = "^0.21.1"
 
 [build-system]
 requires = ["poetry-core"]
